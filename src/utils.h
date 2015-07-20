@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cassert>
 
 
 #define RED     "\x1b[31m"
@@ -53,7 +54,7 @@ class Utils
         static void q_sort(int *number, int left, int right);
         static void get_file_name(const char *full_path_name, char *file_name, int16_t size);
         static void get_file_name(const char *full_path_name, int16_t size1, char *file_name, int16_t size2);
-        static void concate_path(const char *path, const char *full_path_name, int16_t size2, const char* concated, int size3);
+        static void concate_path(const char *path, const char *full_path_name, int16_t size2, char* concated, int size3);
 };
 
 #endif
