@@ -20,10 +20,21 @@ public:
     bool is_computing_bound;
     int score;
     FILE *logger;
+
+    typedef enum
+    {
+        OPTKIT_INS_MC,
+        OPTKIT_INS_DIS,
+        OPTKIT_INS_KNAP,
+        OPTKIT_INS_MED
+    }
+    OPTKIT_INSTANCE_ID;
+
 public:
     Instance();
     Instance(const Instance &other);
     Instance(const char* lf = NULL);
+    static Instance *make_instance(int choice, const char *lf = NULL);
     virtual ~Instance();
     virtual void to_branch(int which_branch);
     virtual void from_branch();

@@ -246,3 +246,29 @@ void Utils::concate_path(const char *path, const char *full_path_name, int16_t s
 }
 
 
+int Utils::ede1(int invdist, int ngene)
+{
+    double ll, tt, kk, pp, dval;
+    int newvalue;
+
+    kk = invdist / ( ngene + 0.0 );
+
+    if ( kk >= 0.999999999999 )
+    {                           
+        /* the distance correction has singularity at 1 */
+        kk = 0.999999999999;
+    }
+    if ( kk <= 1 - OPTKIT_EDEC )
+        return invdist;
+
+    ll = OPTKIT_EDEC * kk - OPTKIT_EDEA;
+    tt = 4 * OPTKIT_EDEA * ( 1 - kk ) * kk + ll * ll;
+    tt = ll + sqrt ( tt );
+    pp = tt / ( 2 * ( 1 - kk ) );
+    pp *= ngene;
+
+    dval = pp;
+    newvalue = ( int ) ceil ( dval );
+    /*if (newvalue-dval > 0) return newvalue-1; */
+    return newvalue;
+}

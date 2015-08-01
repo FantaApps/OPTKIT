@@ -12,10 +12,6 @@
 static int verbose_flag;
 void
 print_help();
-int 
-read_opt(char *opt_file);
-int
-ede1 ( int invdist, int ngene );
 
 int parallel_mode = -1;
 
@@ -24,8 +20,6 @@ int which_med;
 
 #define DIS_MODE_EXEM 1
 #define DIS_MODE_MATC 2
-#define ede_a   0.595639
-#define ede_c   0.457748
 
 int main(int argc , char *argv[]){
 
@@ -50,7 +44,7 @@ int main(int argc , char *argv[]){
     int num_t             = 1;
     int c                 = -1;
     char *opt_file        = NULL;
-    char *logger          = NULL;
+    char *logger_path     = NULL;
 
     while (1)
     {
@@ -82,7 +76,7 @@ int main(int argc , char *argv[]){
             {"opt_file",    required_argument,       0, 'O'},
             {"seq_len",     required_argument,       0, 'L'},
             {"tmp_folder",  required_argument,       0, '1'},
-            {"logger",      required_argument,       0, '2'},
+            {"logger_path", required_argument,       0, '2'},
             {"help",        no_argument,             0, 'h'},
             {0,             0,                       0,  0 }
         }; 
@@ -205,7 +199,7 @@ int main(int argc , char *argv[]){
                 }
             case '2':
                 {
-                    logger = optarg;
+                    logger_path = optarg;
                     break;
                 }
             case '?':
@@ -226,20 +220,20 @@ int main(int argc , char *argv[]){
     }
     if(is_mc == true)
     {
-        printf("Start initialization of instances!\n");
+        printf("Start initialization of MC instances...\n");
 
-        Instance** ins = (Instance**)malloc(sizeof(InsMC*)*2);
-        if(logger != NULL)
+        Instance** ins = new InsMC*[2];
+        if(logger_path != NULL)
         {
-            char lf_insmc[OPTKIT_FILE_SIZE];
-            char input_f[OPTKIT_FILE_SIZE];
-            //Utils::get_file_name(logger, input_f, OPTKIT_FILE_SIZE);
-            snprintf(lf_insmc, OPTKIT_FILE_SIZE, "%s%s", logger, input_f);
+            char condated[OPTKIT_FILE_SIZE];
+            Utils::concate_path(logger_path, input_file, OPTKIT_FILE_SIZE, concated, OPTKIT_FILE_SIZE);
             ins[0] = new InsMC(input_file, NULL, lf_insmc);
         }
         ins[1] = new InsMC(input_file);
 
         printf("finished initialization of instances!\n");
+
+        printf("Start allocating search list...\n");
 
         int buck_size    = ins[0]->upper_bound - ins[0]->lower_bound + 2;
         int list_size    = 100000;
@@ -252,7 +246,9 @@ int main(int argc , char *argv[]){
                                     base,      num_t, 
                                     is_ub,     num_elem, 
                                     &is_enum_all);
-        exit(1);
+
+        printf("Start allocating search list...\n");
+
         list->bnb(ins, 0);
     }
     if(is_dis == true)
@@ -494,7 +490,7 @@ print_help(){
            "        --cal_bij                              |\n" 
            "        --mc --input_file <graph_file>         |\n" 
            "        --CC                                   >\n"
-           "       [--logger <log folder>]\n\n\n"
+           "       [--logger_path <log folder>]\n\n\n"
           );
     printf("--dis       is calculate dcj distance with unequal content genomes\n");
     printf("--dcj       is calculate dcj\n");
@@ -503,15 +499,15 @@ print_help(){
     printf("--cal_bij   is calculate bijection accuracy\n");
     printf("--mc        is calculate maximum clique problem\n");
     printf("--CC        is calculate connected component problem\n");
-    printf("--dis_mode <1|2>            0:exemplar distance 1:matching distance\n");
-    printf("--num_t <num threads>       assign number of threads\n");
-    printf("--input_file <file name>    assign input file\n");
-    printf("--output_file <file name>   assign output file\n");
-    printf("--bij_file <file_name>      assign bijection output file\n");
-    printf("--dict_file <file_name>     assign mapping dictionary file\n");
-    printf("--output_dir <dir_name>     assign output directory name\n");
-    printf("--logger <logger_folder>    logger folder position\n");
-    printf("--p_mode <1|2|3>            1:sequential " 
+    printf("--dis_mode <1|2>             0:exemplar distance 1:matching distance\n");
+    printf("--num_t <num threads>        assign number of threads\n");
+    printf("--input_file <file name>     assign input file\n");
+    printf("--output_file <file name>    assign output file\n");
+    printf("--bij_file <file_name>       assign bijection output file\n");
+    printf("--dict_file <file_name>      assign mapping dictionary file\n");
+    printf("--output_dir <dir_name>      assign output directory name\n");
+    printf("--logger_path <logger_path_> logger_path folder position\n");
+    printf("--p_mode <1|2|3>             1:sequential " 
             "2:parallel_bucket " 
             "3:parallel_threading\n");
     printf("--heu_level <heuristic level> "   
@@ -535,50 +531,3 @@ print_help(){
             "      --p_mode <1|2|3> --seq_len <seq_len> --tmp_folder <tmp_folder> \n\n" );
 }
 
-int 
-read_opt(char *opt_file){
-    FILE *reader = fopen(opt_file, "r");
-    char str[1000];
-    float num;
-    float result = 0;
-    fscanf(reader, "%s %f\n", &str, &num);
-    result += num;
-    fscanf(reader, "%s %f\n", &str, &num);
-    result += num;
-    fclose(reader);
-    return (int)result;
-}
-
-int 
-extimate_ede(int dis){
-    double d = (double)dis;
-    double ede_dis = (pow(d,2)+0.5956*d)/(pow(d,2)+0.4577*d+0.5956);
-    return (int)ede_dis;
-}
-
-    int
-ede1 ( int invdist, int ngene )
-{
-    double ll, tt, kk, pp, dval;
-    int newvalue;
-
-    kk = invdist / ( ngene + 0.0 );
-
-    if ( kk >= 0.999999999999 )
-    {                           /* the distance correction has singularity at 1 */
-        kk = 0.999999999999;
-    }
-    if ( kk <= 1 - ede_c )
-        return invdist;
-
-    ll = ede_c * kk - ede_a;
-    tt = 4 * ede_a * ( 1 - kk ) * kk + ll * ll;
-    tt = ll + sqrt ( tt );
-    pp = tt / ( 2 * ( 1 - kk ) );
-    pp *= ngene;
-
-    dval = pp;
-    newvalue = ( int ) ceil ( dval );
-    /*if (newvalue-dval > 0) return newvalue-1; */
-    return newvalue;
-}

@@ -43,6 +43,9 @@ typedef enum
 }
 OPTKIT_DEF;
 
+#define OPTKIT_EDEA 0.595639
+#define OPTKIT_EDEC 0.457748
+
 using namespace std;
 
 class Utils
@@ -55,6 +58,7 @@ class Utils
         static void get_file_name(const char *full_path_name, char *file_name, int16_t size);
         static void get_file_name(const char *full_path_name, int16_t size1, char *file_name, int16_t size2);
         static void concate_path(const char *path, const char *full_path_name, int16_t size2, char* concated, int size3);
+        static int  ede1(int invdist, int ngene);
 };
 
 #endif
