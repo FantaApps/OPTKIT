@@ -3,8 +3,9 @@
 #define _H_INSDIS
 
 #include "instance.h"
-#include <cstdio>
-#include <cstdlib>
+#include "utils.h"
+#include <cstring>
+#include <iostream>
 
 #define MAX_VET_SIZE 32768
 #define PI_OPEN 1

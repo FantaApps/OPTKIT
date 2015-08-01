@@ -1,9 +1,4 @@
 #include "insdis.h"
-#include "utils.h"
-#include <string>
-#include <iostream>
-#include <cstring>
-#include <string>
 
 using namespace std;
 
@@ -36,6 +31,7 @@ string map[7] = {"","pi_open","gamma_open","cycle","end","none","out"};
 InsDis::InsDis(const char *f, bool is_exe, const char *lf, const char* fd, const char* fbi, const bool *is_cal_bij) : 
     Instance(lf)
 {
+#ifdef ZERO
     if(f != NULL)
     {
         file = new char[OPTKIT_FILE_SIZE];
@@ -89,6 +85,7 @@ InsDis::InsDis(const char *f, bool is_exe, const char *lf, const char* fd, const
         /* read dictionary files */
         read_dict();
     }
+#endif
 }
 
 
@@ -97,6 +94,7 @@ InsDis::InsDis(const char *f, bool is_exe, const char *lf, const char* fd, const
  * **/
 InsDis::~InsDis()
 {
+#ifdef ZERO
     /* free files */
     free(file);
     free(bij_file);
@@ -140,6 +138,7 @@ InsDis::~InsDis()
     free(bijection[1]);
     free(bijection);
     free(bij_idx);
+#endif
 }
 
 
@@ -151,10 +150,12 @@ InsDis::~InsDis()
     void 
 InsDis::to_branch(int which_branch)
 {
+#ifdef ZERO
     /* do nothing here */
     branch_id = which_branch;
     /* then update upper and lower bound */
     compute_bound();
+#endif
 }
 
 /**
@@ -164,8 +165,10 @@ InsDis::to_branch(int which_branch)
 void 
 InsDis::from_branch()
 {
+#ifdef ZERO
     //no need to do anything
     avail_id = v_size;
+#endif
 }
 
 /**
@@ -174,6 +177,7 @@ InsDis::from_branch()
     void 
 InsDis::compute_bound()
 {
+#ifdef ZERO
     /* get adjs first */
     if(is_exem==true)
     {
@@ -210,6 +214,7 @@ InsDis::compute_bound()
             lower_bound = upper_bound;
         }
     }
+#endif
 }
 
 /**
@@ -219,6 +224,7 @@ InsDis::compute_bound()
 int 
 InsDis::get_num_branches()
 {
+#ifdef ZERO
     /* first find the first available branch */
     for(int i=0; i<v_size; i++)
     {
@@ -241,6 +247,8 @@ InsDis::get_num_branches()
     }
     num_branch = comb.size();
     return num_branch;
+#endif
+    return 0;
 }
 
 /**
@@ -251,6 +259,7 @@ InsDis::get_num_branches()
 int 
 InsDis::get_encode(int *encode)
 {
+#ifdef ZERO
     /* turn adj into CSR first */
     /* fill into tmp adj */
     for(int c=0; c<2; c++)
@@ -465,6 +474,8 @@ InsDis::get_encode(int *encode)
         start = append_bijection_encode(encode, start);
     }
     return start;
+#endif
+    return 0;
 }
 
 /**
@@ -476,6 +487,7 @@ InsDis::get_encode(int *encode)
 void 
 InsDis::to_encode(int *encode, int size)
 {
+#ifdef ZERO
     /* the first entry of encode is e_size[0] the second is e_size[1] */
     v_size = encode[0];
     e_size[0] = encode[1];
@@ -514,6 +526,7 @@ InsDis::to_encode(int *encode, int size)
     {
         get_bijection_encode(encode, g_start);
     }
+#endif
 }
 
 /**
@@ -522,6 +535,7 @@ InsDis::to_encode(int *encode, int size)
 void 
 InsDis::print_encode()
 {
+#ifdef ZERO
     int encode[30000];
     get_encode(encode);
     printf("num_v %d num_e1 %d num_e2 %d\n", encode[0], encode[1], encode[2]);
@@ -562,6 +576,7 @@ InsDis::print_encode()
         }
         fclose(writer);
     }
+#endif
 }
 
 /**

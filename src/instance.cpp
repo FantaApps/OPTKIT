@@ -1,6 +1,4 @@
 #include "instance.h"
-#include <cstdio>
-
 
 Instance::Instance()
 {
@@ -29,26 +27,6 @@ Instance::Instance(const char* lf)
     }
 }
 
-/**
- * Factory pattern implementation.
-**/
-Instance *make_instance(int choice, const char *f, const char *od, const char *lf)
-{
-    if(choice == OPTKIT_INS_MC)
-    {
-        return new InsMC(f, od, lf);
-    }
-    else if(choice == OPTKIT_INS_DIS)
-    {
-        return new InsDis(f, is_exe, lf, const char* fd, const char* fbi, const bool *is_cal_bij) : 
-    }
-    else if(choice == OPTKIT_INS_KNAP)
-    {
-    }
-    else if(choice == OPTKIT_INS_MED)
-    {
-    }
-}
 
 /**
  * Virtual functions.

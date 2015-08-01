@@ -213,13 +213,14 @@ int main(int argc , char *argv[]){
                 }
         }
     }
-    if(is_CC_separation == true)
-    {
-        Instance *ins = new InsMC(input_file, output_file, output_dir);
-        printf("finished separation of Connected Components\n");
-    }
-    if(is_mc == true)
-    {
+}
+
+void process_options()
+{
+}
+
+void execute_seq()
+{
         printf("Start initialization of MC instances...\n");
 
         Instance** ins = new InsMC*[2];
@@ -250,284 +251,40 @@ int main(int argc , char *argv[]){
         printf("Start allocating search list...\n");
 
         list->bnb(ins, 0);
-    }
-    if(is_dis == true)
-    {
-        printf("is_cal_bij %s\n", is_cal_bij?"true":"false");
-        Instance** ins = (Instance**)malloc(sizeof(InsDis*)*2);
-        if(dis_mode == DIS_MODE_EXEM)
-        {
-            for(int i=0; i<2; i++)
-            {
-                if(is_cal_bij)
-                {
-                    bool is_cal_bij = true;
-                    ins[i] = new InsDis(input_file, true, NULL, dict_file, bij_file, &is_cal_bij);
-                }
-                else
-                {
-                    ins[i] = new InsDis(input_file, true);
-                }
-            }
-        }
-        else if(dis_mode == DIS_MODE_MATC)
-        {
-            for(int i=0; i<2; i++)
-            {
-                if(is_cal_bij)
-                {
-                    ins[i] = new InsDis(input_file, false, NULL, dict_file, bij_file, &is_cal_bij);
-                }
-                else
-                {
-                    ins[i] = new InsDis(input_file, false);
-                }
-            }
-        }
-        printf("finished initialization of instances!\n");
-        if(ins[0]->upper_bound == ins[0]->lower_bound)
-        {
-            printf("num_extern_comp: %d\n", 
-                  (ins[0]->lower_bound+ins[0]->upper_bound)/2);
-            exit(1);
-        }
-        int buck_size = ins[0]->upper_bound - ins[0]->lower_bound + 2;
-        int list_size = 100000;
-        int base = ins[0]->lower_bound-1;
-        int num_t = 1;
-        int num_elem = ins[0]->num_count;
-        /*TODO check this patch*/
-        if(num_elem>1000)
-        {
-            num_elem = 1000;
-        }
-        IntList *list = new IntList(buck_size, list_size, 
-                        base, num_t, true, num_elem);
-        list->bnb(ins, 0);
-        FILE *writer = fopen(opt_file, "a");
-        fprintf(writer, "num_extern_comp: %d\n", 
-                    (list->lower_bound+list->upper_bound)/2);
-        printf("num_extern_comp: %d\n", 
-                    (list->lower_bound+list->upper_bound)/2);
-        fclose(writer);
-    }
-    if(is_med == true)
-    {
-        if(parallel_mode == MODE_PAR)
-        {
-            // TODO change the parallel mode
-            //test sequential algorithm for dcj distance
-            //test 10 times
-            int dis = 10000000;
-            int dis0;
-            for(int j=0; j<10; j++)
-            {
-                printf("start parallel bucket processing!\n");
-                Instance** ins = (Instance**)malloc(sizeof(InsMed*)*num_t+1);
-                for(int i=0; i<num_t+1; i++)
-                {
-                    ins[i] = new InsMed(input_file, tmp_folder, i);
-                }
-                printf("initial upper_bound %d lower_bound %d!\n", 
-                            ins[0]->upper_bound, ins[0]->lower_bound);
-                int buck_size = term_move+2; //the bucket size is smaller
-                int list_size = 100000;
-                int base = 0; //based will be 0 as there is no need to control position by upper or lower bound
-                int num_elem = ins[0]->num_count;
-                IntList *list = new IntList(buck_size, list_size, 
-                                base, num_t, true, num_elem);
-                list->upper_bound = ins[0]->upper_bound;
-                if(j==0)
-                    ins[0]->print_encode();
-                dis0= ins[0]->score;
-                list->lk(ins, heu_level, term_move, is_opt);
-                if(list->upper_bound< dis)
-                    dis = list->upper_bound;
-            }
-            printf("dis0 %d dis1 %d \n", dis0, dis);
-            printf("end parallel bucket processing!\n");
-        }
-        if(parallel_mode == MODE_SEQ)
-        {
-            /* test sequential algorithm for dcj distance */
-            printf("start sequential bucket processing! num_t %d\n", num_t);
-            Instance** ins = (Instance**)malloc(sizeof(InsMed*)*(num_t+1));
-            for(int i=0; i<num_t+1; i++)
-            {
-                printf("init %d\n", i);
-                which_med = i;
-                bool uh = true;
-                int th = 2;
-                ins[i] = new InsMed(input_file, tmp_folder, i, NULL, &dis_mode, &uh, &th);
-            }
-            printf("initial upper_bound %d lower_bound %d!\n", 
-                    ins[0]->upper_bound, ins[0]->lower_bound);
-            /* the bucket size is smaller */
-            int buck_size = term_move+2; 
-            int list_size = 100000;
-            /* base will be 0 as there is no need to 
-               control position by upper or lower bound */
-            int base = 0; 
-            int num_elem = ins[0]->num_count;
-            IntList *list = new IntList(buck_size, list_size, 
-                            base, num_t, true, num_elem);
-            list->upper_bound = ins[0]->upper_bound;
-            /* compute the real score */
-            int dis0 = ins[0]->score;
-            printf("start computing median using lk method!\n");
-            list->lk(ins, heu_level, term_move, is_opt);
-            printf("the optimal solution distance is %d\n", list->upper_bound);
-        }
-    }
-    if(is_knap == true)
-    {
-        if(parallel_mode == MODE_SEQ)
-        {
-            //test sequential algorithm
-            printf("start sequential processing!\n");
-            Instance** ins = (Instance**)malloc(sizeof(Instance*)*2);
-            for(int i=0; i<2; i++)
-                ins[i] = new InsKnapsack(input_file, 0);
-            int buck_size = ins[0]->upper_bound - ins[0]->lower_bound + 2;
-            int list_size = 100000;
-            int base = ins[0]->lower_bound-1;
-            int num_elem = ins[0]->num_count; 
-            IntList *list = new IntList(buck_size, list_size, 
-                                base, num_t, true, num_elem);	
-            list->bnb(ins, 0);	
-            //printf("time taken %f  %f %f %f %f %f \n", 
-            //        list->t.list[0].time, list->t.list[1].time, 
-            //        list->t.list[2].time, list->t.list[3].time, 
-            //        list->t.list[4].time, list->t.list[5].time);
-#ifdef USE_SPC
-            printf("search space %d\n", list->search_space);
-#endif
-            printf("end sequential processing!\n");
-        }
-        else if(parallel_mode == MODE_PAR)
-        {
-            //test parallel algorithm
-            printf("satrt parallel processing!\n");
-            Instance** p_ins = (Instance**)malloc(sizeof(Instance*)*(num_t+1));
-            for(int i=0; i<=num_t; i++)
-                p_ins[i] = new InsKnapsack(input_file, i);
-            printf("finished initialization!\n");
-            int buck_size = p_ins[0]->upper_bound - p_ins[0]->lower_bound + 2;
-            int list_size = 1000000;
-            int base = p_ins[0]->lower_bound-1; 
-            int num_elem = p_ins[0]->num_count;
-            IntList *p_list = new IntList(buck_size, list_size, 
-                                base, num_t, true, num_elem);
-            p_list->parallel_base = 100;
-            p_list->bnb_parallel_bucket(p_ins);	
-            printf("time taken %f  %f %f %f %f %f \n", 
-                        p_list->t.list[0].time, p_list->t.list[1].time, 
-                        p_list->t.list[2].time, p_list->t.list[3].time, 
-                        p_list->t.list[4].time, p_list->t.list[5].time);
-#ifdef USE_SPC
-            printf("search space %d\n", p_list->search_space);
-#endif
-#ifdef USE_BW
-            long long bytes=0;
-            bytes += (2*p_list->read_cnt + p_list->read_num +
-                    3*p_list->write_cnt + 2*p_list->write_num);
-            printf("bytes %lld\n", bytes*4);
-#endif
-            printf("end parallel processing!\n");
-        }
-        else if(parallel_mode == MODE_TPAR)
-        {
-            printf("start parallel thread processing!\n");
-            Instance** p_ins = (Instance**)malloc(sizeof(Instance*)*(num_t+1));
-            for(int i=0; i<=num_t; i++) 
-                p_ins[i] = new InsKnapsack(input_file, i); 
-            int buck_size = p_ins[0]->upper_bound - p_ins[0]->lower_bound + 2;
-            int list_size = 1000000;
-            int base = p_ins[0]->lower_bound-1;
-            int num_elem = p_ins[0]->num_count; 
-            PList *pl = new PList(p_ins[0]->lower_bound, 
-                        p_ins[0]->upper_bound, num_t);
-            pl->base = base;
-            pl->num_threads = num_t;
-            pl->p_lists = (List**)malloc(sizeof(List*)*num_t);
-            for(int i=0; i<num_t; i++)
-            {
-                pl->p_lists[i] = new IntList(buck_size, 
-                                    list_size, base, num_t, true, num_elem);
-                pl->p_lists[i]->parallel_base = 100;
-            }
-            pl->bnb_parallel_threads_ub(p_ins);
-#ifdef USE_SPC
-            int space = 0;
-            for(int i=0; i<num_t; i++)
-            {
-                space += pl->p_lists[i]->search_space;
-            }
-            printf("search space %d\n", space);
-#endif
-#ifdef USE_BW
-            long long int bytes=0;
-            for(int i=0; i<num_t; i++)
-            {
-                bytes += (2*pl->p_lists[i]->read_cnt + pl->p_lists[i]->read_num +
-                        3*pl->p_lists[i]->write_cnt + 2*pl->p_lists[i]->write_num);
-            }
-            printf("bytes %lld\n", bytes*4);
-#endif
-            printf("end parallel thread processing!\n");
-        }
-    }
 }
 
-void
-print_help(){
-    printf("\n\nOPTKit: Optimization Tool-kit for Prallellizing Discrete Combinatoric Problems in Emerging Platforms (2013-2015)\n\n"); 
-    printf("usage:\n"
-           "optkit <--dis                                  |\n" 
-           "        --dcj                                  |\n" 
-           "        --median                               |\n" 
-           "        --knap                                 |\n" 
-           "        --cal_bij                              |\n" 
-           "        --mc --input_file <graph_file>         |\n" 
-           "        --CC                                   >\n"
-           "       [--logger_path <log folder>]\n\n\n"
-          );
-    printf("--dis       is calculate dcj distance with unequal content genomes\n");
-    printf("--dcj       is calculate dcj\n");
-    printf("--median    is calculate median\n");
-    printf("--knap      is calculate knapsack problem\n");
-    printf("--cal_bij   is calculate bijection accuracy\n");
-    printf("--mc        is calculate maximum clique problem\n");
-    printf("--CC        is calculate connected component problem\n");
-    printf("--dis_mode <1|2>             0:exemplar distance 1:matching distance\n");
-    printf("--num_t <num threads>        assign number of threads\n");
-    printf("--input_file <file name>     assign input file\n");
-    printf("--output_file <file name>    assign output file\n");
-    printf("--bij_file <file_name>       assign bijection output file\n");
-    printf("--dict_file <file_name>      assign mapping dictionary file\n");
-    printf("--output_dir <dir_name>      assign output directory name\n");
-    printf("--logger_path <logger_path_> logger_path folder position\n");
-    printf("--p_mode <1|2|3>             1:sequential " 
-            "2:parallel_bucket " 
-            "3:parallel_threading\n");
-    printf("--heu_level <heuristic level> "   
-            "uesed in lin-kernighan algorithm\n");
-    printf("--term_move <terminal move>"
-            "used in lin-kernighan algorithm\n");
-    printf("--is_opt <true|false>       used in lin-kernighan algorithm\n");
-    printf("--opt_file <file_name>      write optimal result to file\n");
-    printf("--seq_len <length of seq>   assign length of the sequence\n");
-    printf("--tmp_folder <tmp folder>   folder to keep temporary files\n");
-    printf("--help      print this help file\n\n");
+void print_help()
+{
+    FILE *reader = fopen("./HELP.txt", "r");
+    if(reader == NULL)
+    {
+        printf("the file %s does not exists!\n", "HELP.txt");
+        exit(1);
+    }
+    /* obtain file size: */
+    fseek (pFile , 0 , SEEK_END);
+    lSize = ftell (pFile);
+    rewind (pFile);
+    /* allocate memory to contain the whole file: */
+    buffer = new char[lSize];
+    if (buffer == NULL) 
+    {
+        fputs ("Memory error",stderr); 
+        exit (2);
+    }
 
-    printf("Examples: \n");
-    printf("optkit --dis --cal_bij --input_file <input_file> --dis_mode <1|2>\n"
-            "       --dict_file <dict_file> --opt_file <opt_file> --p_mode <1|2|3>\n"
-            "       --seq_len <seq_len> --bij_file <bij_file>\n\n" );
-    printf("optkit --dis --input_file <input_file> --dis_mode <1|2>\n"
-            "       --opt_file <opt_file> --p_mode <1|2|3>\n"
-            "       --seq_len <seq_len>\n\n" );
-    printf("optkit --median --input_file <input_file> --dis_mode <1|2>\n"
-            "      --p_mode <1|2|3> --seq_len <seq_len> --tmp_folder <tmp_folder> \n\n" );
+    /* copy the file into the buffer: */
+    result = fread (buffer,1,lSize,pFile);
+    if (result != lSize) 
+    {
+        fputs ("Reading error",stderr); 
+        exit (3);
+    }
+
+    /* the whole file is now loaded in the memory buffer. */
+    printf("%s", buffer);
+
+    /* terminate */
+    fclose (pFile);
+    free (buffer);
 }
-
