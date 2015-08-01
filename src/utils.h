@@ -1,12 +1,20 @@
 #pragma once
-
 #ifndef _H_UTILS
 #define _H_UTILS
+
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ * @brief    This file includes some basic utility functions and definitions.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/01/15 - Creation
+ *
+**/
+
 #include <cstdio>
 #include <cstdlib>
-#include <cstring>
 #include <cassert>
-
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
