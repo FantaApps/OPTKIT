@@ -4,6 +4,7 @@
  * @brief    This file defines the class for configuration reading.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Fix bugs to make it work.
  *  stplaydog   08/01/15 - Creation
  *
 **/
@@ -119,10 +120,10 @@ public:
         /** 
          * Getters 
         **/
-        const char* get_file_dict();      const { return s_file_dict;      }
-        const char* get_file_bijection(); const { return s_file_bijection; }
-        bool        get_is_exemplar();    const { return s_is_exemplar;    }
-        bool        get_is_cal_bij();     const { return s_is_cal_bij;     }
+        const char* get_file_dict()      const { return s_file_dict;      }
+        const char* get_file_bijection() const { return s_file_bijection; }
+        bool        get_is_exemplar()    const { return s_is_exemplar;    }
+        bool        get_is_cal_bij()     const { return s_is_cal_bij;     }
 
         /** 
          * Setters 
@@ -173,7 +174,7 @@ public:
          * Constructor 
         **/
         med_config() :
-            s_dis_mode(OPTKIT_NULL),
+            s_dis_model(OPTKIT_NULL),
             s_heu_thresh(OPTKIT_NULL),
             s_use_heu(OPTKIT_NULL)
         {
@@ -191,7 +192,7 @@ public:
          * Getters 
         **/
         const char* get_tmp_dir()    const { return s_tmp_dir;    }
-        int         get_dis_model()  const { return s_dis_mode;   }
+        int         get_dis_model()  const { return s_dis_model;   }
         int         get_heu_thresh() const { return s_heu_thresh; }
         bool        get_use_heu()    const { return s_use_heu;    }
 
@@ -205,13 +206,13 @@ public:
 
         void set_dis_model(int _dis_model)
         { 
-            if(dis_model != OPTKIT_DIS_EXEM && dis_model != OPTKIT_DIS_MATC)
+            if(s_dis_model != OPTKIT_DIS_EXEM && s_dis_model != OPTKIT_DIS_MATC)
             {
                 fprintf(stderr, "You input the wrong distance model, "
                                 "please check.");
                 ERROR_PRINT();
             }
-            s_dis_mode = _dis_model;
+            s_dis_model = _dis_model;
         }
 
         void set_heu_thresh(int _heu_thresh)
@@ -230,20 +231,20 @@ public:
      * Constructor
     **/
     Config() :
-        num_threads(OPTKIT_NULL),
-        heu_level(2),
-        term_move(3),
-        is_opt(false)
+        m_num_threads(OPTKIT_NULL),
+        m_heu_level(2),
+        m_term_move(3),
+        m_is_opt(false)
     {
-        inst_logger = new char[OPTKIT_FILE_SIZE];
-        list_logger = new char[OPTKIT_FILE_SIZE];
-        input_file  = new char[OPTKIT_FILE_SIZE];
-        output_file = new char[OPTKIT_FILE_SIZE];
+        m_inst_logger = new char[OPTKIT_FILE_SIZE];
+        m_list_logger = new char[OPTKIT_FILE_SIZE];
+        m_input_file  = new char[OPTKIT_FILE_SIZE];
+        m_output_file = new char[OPTKIT_FILE_SIZE];
 
-        mc_cfg   = new mc_config();
-        dis_cfg  = new dis_cfg();
-        knap_cfg = new knap_cfg();
-        med_cfg  = new med_cfg();
+        m_mc_cfg   = new mc_config();
+        m_dis_cfg  = new dis_config();
+        m_knap_cfg = new knap_config();
+        m_med_cfg  = new med_config();
     }
 
     /**
@@ -251,15 +252,15 @@ public:
     **/
     ~Config()
     {
-        free(inst_logger);
-        free(list_logger);
-        free(input_file);
-        free(output_file);
+        free(m_inst_logger);
+        free(m_list_logger);
+        free(m_input_file);
+        free(m_output_file);
 
-        free(mc_cfg);
-        free(dis_cfg);
-        free(knap_cfg);
-        free(med_cfg);
+        free(m_mc_cfg);
+        free(m_dis_cfg);
+        free(m_knap_cfg);
+        free(m_med_cfg);
     }
 
     /**
@@ -278,10 +279,10 @@ public:
     int  get_term_move()   const { return m_term_move;   }
     bool get_is_opt()      const { return m_is_opt;      }
 
-    const mc_config*   get_mc_cfg()   const { return m_mc_config;   }
-    const dis_config*  get_dis_cfg()  const { return m_dis_config;  }
-    const knap_config* get_knap_cfg() const { return m_knap_config; }
-    const med_config*  get_med_cfg()  const { return m_med_config;  }
+    mc_config*   get_mc_cfg()   const { return m_mc_cfg;   }
+    dis_config*  get_dis_cfg()  const { return m_dis_cfg;  }
+    knap_config* get_knap_cfg() const { return m_knap_cfg; }
+    med_config*  get_med_cfg()  const { return m_med_cfg;  }
 
     /**
      * Setters.
@@ -293,7 +294,7 @@ public:
 
     void set_list_logger(const char* _list_logger) 
     {  
-        snprintf(m_list_logger, OPTKIT_FILE_SIZE, "%s", _inst_logger);
+        snprintf(m_list_logger, OPTKIT_FILE_SIZE, "%s", _list_logger);
     } 
 
     void set_input_file(const char*  _input_file)  
