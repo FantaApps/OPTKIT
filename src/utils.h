@@ -23,6 +23,8 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <cmath>
 #include <cassert>
 
 #define RED     "\x1b[31m"

@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Fixed bugs to make it compile.
  *  stplaydog   08/01/15 - Creation
  *
 **/
@@ -25,7 +26,7 @@
 #include <getopt.h>
 
 
-void process_options(Config *cfg);
+int process_options(int argc, char* argv[], Config *cfg);
 void execute_sequential();
 void print_help();
 
@@ -33,11 +34,15 @@ void print_help();
 int main(int argc , char *argv[])
 {
     Config *cfg = new Config();
-    process_options(cfg);
-    return 0;
+    int ret = process_options(argc, argv, cfg);
+    return ret;
 }
 
-void process_options(Config *cfg)
+/**
+ *
+ *
+**/
+int process_options(int argc, char* argv[], Config *cfg)
 {
     static int verbose_flag;
     while (1)
@@ -75,7 +80,7 @@ void process_options(Config *cfg)
         }; 
 
         int option_index = 0;
-        c = getopt_long (argc, argv, "b:cCd:D1:hH:i:I:2:kl:mMn:o:O:3:p:t:T:"
+        int c = getopt_long (argc, argv, "b:cCd:D1:hH:i:I:2:kl:mMn:o:O:3:p:t:T:",
                 long_options, &option_index);
         if (c == -1)
             break;	
@@ -83,32 +88,32 @@ void process_options(Config *cfg)
         {
             case 'b':
                 {
-                    config->get_dis_cfg()->set_file_bijection(optarg);
+                    cfg->get_dis_cfg()->set_file_bijection(optarg);
                     break;
                 }
             case 'c':
                 {
-                    config->get_dis_cfg()->set_is_cal_bij(true);
+                    cfg->get_dis_cfg()->set_is_cal_bij(true);
                     break;
                 }
             case 'C':
                 {
-                    config->set_type_task(OPTKIT_INS_CC);
+                    cfg->set_type_task(OPTKIT_INS_CC);
                     break;
                 }
             case 'd':
                 {
-                    config->get_dis_cfg()->set_file_dict(optarg);
+                    cfg->get_dis_cfg()->set_file_dict(optarg);
                     break;
                 }
             case 'D':
                 {
-                    config->set_type_task(OPTKIT_INS_DIS);
+                    cfg->set_type_task(OPTKIT_INS_DIS);
                     break;
                 }
             case '1':
                 {
-                    config->get_med_cfg()->set_dis_model(atoi(optarg));
+                    cfg->get_med_cfg()->set_dis_model(atoi(optarg));
                     break;
                 }
             case 'h':
@@ -118,77 +123,77 @@ void process_options(Config *cfg)
                 }
             case 'H':
                 {
-                    config->set_heu_level(atoi(optarg));
+                    cfg->set_heu_level(atoi(optarg));
                     break;
                 }
             case 'i':
                 {
-                    config->set_input_file(optarg);
+                    cfg->set_input_file(optarg);
                     break;
                 }
             case 'I':
                 {
-                    config->set_inst_logger(optarg);
+                    cfg->set_inst_logger(optarg);
                     break;
                 }
             case '2':
                 {
-                    config->set_is_opt(true);
+                    cfg->set_is_opt(true);
                     break;
                 }
             case 'k':
                 {
-                    config->set_type_task(OPTKIT_INS_KNAP);
+                    cfg->set_type_task(OPTKIT_INS_KNAP);
                     break;
                 }
             case 'l':
                 {
-                    config->set_list_logger(optarg);
+                    cfg->set_list_logger(optarg);
                     break;
                 }
             case 'm':
                 {
-                    config->set_type_task(OPTKIT_INS_MED);
+                    cfg->set_type_task(OPTKIT_INS_MED);
                     break;
                 }
             case 'M':
                 {
-                    config->set_type_task(OPTKIT_INS_MC);
+                    cfg->set_type_task(OPTKIT_INS_MC);
                     break;
                 }
             case 'n':
                 {
-                    config->set_num_threads(atoi(optarg));
+                    cfg->set_num_threads(atoi(optarg));
                     break;
                 }
             case 'o':
                 {
-                    config->set_optim_file(optarg);
+                    cfg->set_optim_file(optarg);
                     break;
                 }
             case 'O':
                 {
-                    config->set_output_file(optarg);
+                    cfg->set_output_file(optarg);
                     break;
                 }
             case '3':
                 {
-                    config->get_mc_cfg()->set_output_dir(optarg);
+                    cfg->get_mc_cfg()->set_output_dir(optarg);
                     break;
                 }
             case 'p':
                 {
-                    config->set_par_mode(atoi(optarg));
+                    cfg->set_par_mode(atoi(optarg));
                     break;
                 }
             case 't':
                 {
-                    config->set_term_move(atoi(optarg));
+                    cfg->set_term_move(atoi(optarg));
                     break;
                 }
             case 'T':
                 {
-                    config->get_med_cfg()->set_tmp_dir(optarg);
+                    cfg->get_med_cfg()->set_tmp_dir(optarg);
                     break;
                 }
             case '?':
@@ -206,36 +211,36 @@ void process_options(Config *cfg)
 
 void execute_sequential()
 {
-        printf("Start initialization of MC instances...\n");
+    //printf("Start initialization of MC instances...\n");
 
-        Instance** ins = new InsMC*[2];
-        if(logger_path != NULL)
-        {
-            char condated[OPTKIT_FILE_SIZE];
-            Utils::concate_path(logger_path, input_file, OPTKIT_FILE_SIZE, concated, OPTKIT_FILE_SIZE);
-            ins[0] = new InsMC(input_file, NULL, lf_insmc);
-        }
-        ins[1] = new InsMC(input_file);
+    //Instance** ins = new InsMC*[2];
+    //if(logger_path != NULL)
+    //{
+    //    char condated[OPTKIT_FILE_SIZE];
+    //    Utils::concate_path(logger_path, input_file, OPTKIT_FILE_SIZE, concated, OPTKIT_FILE_SIZE);
+    //    ins[0] = new InsMC(input_file, NULL, lf_insmc);
+    //}
+    //ins[1] = new InsMC(input_file);
 
-        printf("finished initialization of instances!\n");
+    //printf("finished initialization of instances!\n");
 
-        printf("Start allocating search list...\n");
+    //printf("Start allocating search list...\n");
 
-        int buck_size    = ins[0]->upper_bound - ins[0]->lower_bound + 2;
-        int list_size    = 100000;
-        int base         = ins[0]->lower_bound-1;
-        int num_t        = 1;
-        int num_elem     = ins[0]->num_count;
-        bool is_ub       = true;
-        bool is_enum_all = true;
-        IntList *list = new IntList(buck_size, list_size, 
-                                    base,      num_t, 
-                                    is_ub,     num_elem, 
-                                    &is_enum_all);
+    //int buck_size    = ins[0]->upper_bound - ins[0]->lower_bound + 2;
+    //int list_size    = 100000;
+    //int base         = ins[0]->lower_bound-1;
+    //int num_t        = 1;
+    //int num_elem     = ins[0]->num_count;
+    //bool is_ub       = true;
+    //bool is_enum_all = true;
+    //IntList *list = new IntList(buck_size, list_size, 
+    //                            base,      num_t, 
+    //                            is_ub,     num_elem, 
+    //                            &is_enum_all);
 
-        printf("Start allocating search list...\n");
+    //printf("Start allocating search list...\n");
 
-        list->bnb(ins, 0);
+    //list->bnb(ins, 0);
 }
 
 void print_help()
@@ -244,32 +249,32 @@ void print_help()
     if(reader == NULL)
     {
         printf("the file %s does not exists!\n", "HELP.txt");
-        exit(1);
+        ERROR_PRINT();
     }
     /* obtain file size: */
-    fseek (pFile , 0 , SEEK_END);
-    lSize = ftell (pFile);
-    rewind (pFile);
+    fseek (reader, 0 , SEEK_END);
+    size_t lSize = ftell (reader);
+    rewind (reader);
     /* allocate memory to contain the whole file: */
-    buffer = new char[lSize];
+    char *buffer = new char[lSize];
     if (buffer == NULL) 
     {
         fputs ("Memory error",stderr); 
-        exit (2);
+        ERROR_PRINT();
     }
 
     /* copy the file into the buffer: */
-    result = fread (buffer,1,lSize,pFile);
+    size_t result = fread (buffer,1,lSize,reader);
     if (result != lSize) 
     {
         fputs ("Reading error",stderr); 
-        exit (3);
+        ERROR_PRINT();
     }
 
     /* the whole file is now loaded in the memory buffer. */
     printf("%s", buffer);
 
     /* terminate */
-    fclose (pFile);
+    fclose (reader);
     free (buffer);
 }

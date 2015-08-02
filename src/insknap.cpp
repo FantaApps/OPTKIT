@@ -18,9 +18,10 @@ InsKnapsack::InsKnapsack(const char *file, int id, const char *lf) :
 {
     int i;
     FILE *reader = fopen(file, "r");
-    if(reader==NULL){
+    if(reader==NULL)
+    {
         printf("file %s not exits!\n", file);
-        exit(1);
+        ERROR_PRINT();
     }
     int total_item, space_limit; 
     fscanf(reader, "%d %d\n", &total_item, &space_limit);

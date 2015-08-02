@@ -11,7 +11,8 @@
 #include "list.h"
 #include "insknap.h"
 
-extern int parallel_mode; 
+//TODO need to change this hard code.
+int parallel_mode = MODE_SEQ; 
 extern int which_med;
 int g_count;
 bool control;
