@@ -1,51 +1,45 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ * @brief    This is the main entry of OPTKIT. 
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/01/15 - Creation
+ *
+**/
+
+#include "utils.h"
+#include "config.h"
+#include "factory.h"
+
 #include "list.h"
+#include "listint.h"
+#include "plist.h"
+
+#include "instance.h"
+#include "insdis.h"
 #include "insknap.h"
 #include "insmed.h"
 #include "insmc.h"
-#include "listint.h"
-#include "instance.h"
-#include "plist.h"
-#include "insdis.h"
+
 #include <getopt.h>
 
 
-static int verbose_flag;
-void
-print_help();
-
-int parallel_mode = -1;
-
-int which_med;
+void process_options(Config *cfg);
+void execute_sequential();
+void print_help();
 
 
-#define DIS_MODE_EXEM 1
-#define DIS_MODE_MATC 2
+int main(int argc , char *argv[])
+{
+    Config *cfg = new Config();
+    process_options(cfg);
+    return 0;
+}
 
-int main(int argc , char *argv[]){
-
-    int seq_len;
-    bool is_CC_separation = false;
-    bool is_dis           = false;
-    bool is_dcj           = false;
-    bool is_med           = false;
-    bool is_knap          = false;
-    bool is_mc            = false;
-    bool is_cal_bij       = false;
-    int heu_level         = 2;
-    int term_move         = 3;
-    bool is_opt           = false;
-    char *input_file      = NULL;
-    char *output_file     = NULL;
-    char *output_dir      = NULL;
-    char *bij_file        = NULL;
-    char *dict_file       = NULL;
-    char *tmp_folder      = NULL;
-    int dis_mode          = 1;
-    int num_t             = 1;
-    int c                 = -1;
-    char *opt_file        = NULL;
-    char *logger_path     = NULL;
-
+void process_options(Config *cfg)
+{
+    static int verbose_flag;
     while (1)
     {
         static struct option long_options[] =
@@ -55,86 +49,66 @@ int main(int argc , char *argv[]){
             {"brief",       no_argument,       &verbose_flag, 0}, 
             /* These options don't set a flag.
              * We distinguish them by their indices. */
+            {"bij_file",    required_argument,       0, 'b'},
+            {"cal_bij",     no_argument,             0, 'c'},
+            {"CC",          no_argument,             0, 'C'},
+            {"dict_file",   required_argument,       0, 'd'},
             {"dis",         no_argument,             0, 'D'},
-            {"dcj",         no_argument,             0, 'd'},
-            {"median",      no_argument,             0, 'm'},
-            {"knap",        no_argument,             0, 'k'},
-            {"cal_bij",     no_argument,             0, 'j'},
-            {"mc",          no_argument,             0, 'C'},
-            {"CC",          no_argument,             0, 'c'},
-            {"dis_mode",	required_argument, 	     0, 'M'},
-            {"num_t",       required_argument,       0, 't'},
-            {"input_file",  required_argument,       0, 'f'},
-            {"output_file", required_argument,       0, 'F'},
-            {"bij_file",    required_argument,       0, 'J'},
-            {"dict_file",   required_argument,       0, 'T'},
-            {"output_dir",  required_argument,       0, 'r'},
-            {"p_mode",      required_argument,       0, 'p'},
-            {"heu_level",   required_argument,       0, 'l'},
-            {"term_move",   required_argument,       0, 'v'},
-            {"is_opt",      required_argument,       0, 'o'},
-            {"opt_file",    required_argument,       0, 'O'},
-            {"seq_len",     required_argument,       0, 'L'},
-            {"tmp_folder",  required_argument,       0, '1'},
-            {"logger_path", required_argument,       0, '2'},
+            {"dis_mode",	required_argument, 	     0, '1'},
             {"help",        no_argument,             0, 'h'},
+            {"heu_level",   required_argument,       0, 'H'},
+            {"input_file",  required_argument,       0, 'i'},
+            {"inst_logger", required_argument,       0, 'I'},
+            {"is_opt",      no_argument,             0, '2'},
+            {"knap",        no_argument,             0, 'k'},
+            {"list_logger", required_argument,       0, 'l'},
+            {"median",      no_argument,             0, 'm'},
+            {"mc",          no_argument,             0, 'M'},
+            {"num_t",       required_argument,       0, 'n'},
+            {"opt_file",    required_argument,       0, 'o'},
+            {"output_file", required_argument,       0, 'O'},
+            {"output_dir",  required_argument,       0, '3'},
+            {"p_mode",      required_argument,       0, 'p'},
+            {"term_move",   required_argument,       0, 't'},
+            {"tmp_folder",  required_argument,       0, 'T'},
             {0,             0,                       0,  0 }
         }; 
+
         int option_index = 0;
-        c = getopt_long (argc, argv, "df:hjJ:kl:mo:p:t:T:v:1:", 
+        c = getopt_long (argc, argv, "b:cCd:D1:hH:i:I:2:kl:mMn:o:O:3:p:t:T:"
                 long_options, &option_index);
         if (c == -1)
             break;	
         switch (c)
         {
-            case 'r':
+            case 'b':
                 {
-                    output_dir = optarg;
+                    config->get_dis_cfg()->set_file_bijection(optarg);
                     break;
                 }
-            case 'D':
+            case 'c':
                 {
-                    is_dis = true;
+                    config->get_dis_cfg()->set_is_cal_bij(true);
                     break;
                 }
-            case 'L':
+            case 'C':
                 {
-                    seq_len = atoi(optarg);
-                    break;
-                }
-            case 'M':
-                {
-                    dis_mode = atoi(optarg);
+                    config->set_type_task(OPTKIT_INS_CC);
                     break;
                 }
             case 'd':
                 {
-                    is_dcj = true;
+                    config->get_dis_cfg()->set_file_dict(optarg);
                     break;
                 }
-            case 'f':
+            case 'D':
                 {
-                    input_file = optarg;
+                    config->set_type_task(OPTKIT_INS_DIS);
                     break;
                 }
-            case 'j':
+            case '1':
                 {
-                    is_cal_bij = true;
-                    break;
-                }
-            case 'J':
-                {
-                    bij_file = optarg;
-                    break;
-                }
-            case 'F':
-                {
-                    output_file = optarg;
-                    break;
-                }
-            case 'O':
-                {
-                    opt_file = optarg;
+                    config->get_med_cfg()->set_dis_model(atoi(optarg));
                     break;
                 }
             case 'h':
@@ -142,64 +116,79 @@ int main(int argc , char *argv[]){
                     print_help();
                     return 1;
                 }
-            case 'k':
+            case 'H':
                 {
-                    is_knap = true;
+                    config->set_heu_level(atoi(optarg));
                     break;
                 }
-            case 'l':
+            case 'i':
                 {
-                    heu_level = atoi(optarg);
+                    config->set_input_file(optarg);
                     break;
                 }
-            case 'm':
+            case 'I':
                 {
-                    is_med = true;
-                    break;
-                }
-            case 'C':
-                {
-                    is_mc = true;
-                    break;
-                }
-            case 'c':
-                {
-                    is_CC_separation = true;
-                    break;
-                }
-            case 'o':
-                {
-                    is_opt = atoi(optarg)==0?true:false; 
-                    break;
-                }
-            case 'p':
-                {
-                    parallel_mode = atoi(optarg);
-                    break;
-                }
-            case 't':
-                {
-                    num_t = atoi(optarg);
-                    break;
-                }
-            case 'T':
-                {
-                    dict_file = optarg;
-                    break;
-                }
-            case 'v':
-                {
-                    term_move = atoi(optarg);
-                    break;
-                }
-            case '1':
-                {
-                    tmp_folder = optarg;
+                    config->set_inst_logger(optarg);
                     break;
                 }
             case '2':
                 {
-                    logger_path = optarg;
+                    config->set_is_opt(true);
+                    break;
+                }
+            case 'k':
+                {
+                    config->set_type_task(OPTKIT_INS_KNAP);
+                    break;
+                }
+            case 'l':
+                {
+                    config->set_list_logger(optarg);
+                    break;
+                }
+            case 'm':
+                {
+                    config->set_type_task(OPTKIT_INS_MED);
+                    break;
+                }
+            case 'M':
+                {
+                    config->set_type_task(OPTKIT_INS_MC);
+                    break;
+                }
+            case 'n':
+                {
+                    config->set_num_threads(atoi(optarg));
+                    break;
+                }
+            case 'o':
+                {
+                    config->set_optim_file(optarg);
+                    break;
+                }
+            case 'O':
+                {
+                    config->set_output_file(optarg);
+                    break;
+                }
+            case '3':
+                {
+                    config->get_mc_cfg()->set_output_dir(optarg);
+                    break;
+                }
+            case 'p':
+                {
+                    config->set_par_mode(atoi(optarg));
+                    break;
+                }
+            case 't':
+                {
+                    config->set_term_move(atoi(optarg));
+                    break;
+                }
+            case 'T':
+                {
+                    config->get_med_cfg()->set_tmp_dir(optarg);
                     break;
                 }
             case '?':
@@ -215,11 +204,7 @@ int main(int argc , char *argv[]){
     }
 }
 
-void process_options()
-{
-}
-
-void execute_seq()
+void execute_sequential()
 {
         printf("Start initialization of MC instances...\n");
 

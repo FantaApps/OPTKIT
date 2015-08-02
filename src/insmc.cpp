@@ -1,20 +1,19 @@
-/* Copyright (c) 2015, YMSys and/or its affiliates. All rights reserved.*/
-
 /**
-  @file     insmc.cpp
-
-  @brief    Instance for solving maximum clique problem.
- 
-   TODO Change all neccessary const arguments.
-   TODO Change all neccessary const functions. 
-   TODO printf to fprintf STDOUT
-   TODO Separate debug functions into util
-
-   MODIFIED   (MM/DD/YY)
-       zyin    07/10/15 - Test initial graph and assign color using janc.gr
-       zyin    07/07/15 - Some basic formatting and the test of assign_C 
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Instance for solving maximum clique problem.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  zyin        07/10/15 - Test initial graph and assign color using janc.gr
+ *  zyin        07/07/15 - Some basic formatting and the test of assign_C 
+ *  stplaydog   07/01/15 - Creation
+ *
+ *  TODO Change all neccessary const arguments.
+ *  TODO Change all neccessary const functions. 
+ *  TODO printf to fprintf STDOUT
+ *  TODO Separate debug functions into util
+ *
 **/
-
 
 #include "insmc.h"
 #include "utils.h"

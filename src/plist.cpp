@@ -1,3 +1,13 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Parallel list implementation.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
+
+
 #include "plist.h"
 #include <iostream>
 #include <unistd.h>

@@ -1,3 +1,13 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ * @brief    This is the header of DCJ distance methods. 
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/01/15 - Creation
+ *
+**/
+
 #pragma once
 #ifndef _H_INSDIS
 #define _H_INSDIS

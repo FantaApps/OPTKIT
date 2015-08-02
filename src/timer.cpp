@@ -1,18 +1,25 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Timer implementation.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
+
 #include "timer.h"
 
-
-
-	unsigned long long
-time_list::timer_ser ()
+unsigned long long time_list::timer_ser ()
 {
 	return rdtsc();
 }
 
-void 
-time_list::init_timer(int size){
+void time_list::init_timer(int size)
+{
 	num = size;
 	int i;
-	for(i=0; i<size; i++){
+	for(i=0; i<size; i++)
+    {
 		list[i].start = 0;
 		list[i].end = 0;
 		list[i].cycle = 0;
@@ -22,15 +29,12 @@ time_list::init_timer(int size){
 	}	
 }
 
-
-	void
-time_list::tic_ser (int id)
+void time_list::tic_ser (int id)
 {
 	list[id].start = timer_ser ();
 }
 
-	void
-time_list::toc_ser (int id)
+void time_list::toc_ser (int id)
 {
 	list[id].end = timer_ser ();
 	list[id].cycle += (list[id].end - list[id].start);

@@ -1,3 +1,12 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Some utility implementations.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
+
 #pragma once
 #ifndef _H_UTILS
 #define _H_UTILS

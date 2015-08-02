@@ -1,5 +1,14 @@
-#pragma once
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Parallel list implementation.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
 
+
+#pragma once
 #ifndef _PLIST_H
 #define _PLIST_H
 

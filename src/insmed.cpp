@@ -1,3 +1,12 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Instance for solving DCJ median problem. 
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/01/15 - Creation
+**/
+
 #include "insmed.h"
 #include "listint.h"
 #include <fstream>

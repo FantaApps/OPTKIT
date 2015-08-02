@@ -1,14 +1,12 @@
-/* Copyright (c) 2015, YMSys and/or its affiliates. All rights reserved.*/
-
 /**
-  @file     insmc.cpp
-
-  @brief    Instance for solving maximum clique problem.
-
-  MODIFIED   (MM/DD/YY)
-  zyin    07/15/15 - creation
- **/
-
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ * @brief    This is the implementation of maximum clique methods. 
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   07/15/15 - Creation
+ *
+**/
 
 #pragma once
 #ifndef _H_INSMC
