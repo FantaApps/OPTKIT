@@ -1,3 +1,13 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    List of interger elements implementation.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
+
+
 #include "listint.h"
 #include "instance.h"
 

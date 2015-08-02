@@ -1,11 +1,18 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    Timer implementation.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
+
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
 #include <vector>
-//#include <cimmintrin>
 
 using namespace std;
-
 
 class time_elem
 {

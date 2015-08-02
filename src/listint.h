@@ -1,9 +1,17 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ *  @brief    List of interger elements implementation.
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/02/15 - Creation
+**/
+
 #pragma once
-
-#include "list.h"
-
 #ifndef _H_LISTMC
 #define _H_LISTMC
+
+#include "list.h"
 
 using namespace std;
 

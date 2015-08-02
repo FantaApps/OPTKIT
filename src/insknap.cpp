@@ -1,3 +1,13 @@
+/**
+ * Copy right YMSys, 2015, Zhaoming Yin
+ *
+ * @brief    This is the implementation of knapsack methods. 
+ *
+ *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/01/15 - Creation
+ *
+**/
+
 #include "insknap.h"
 #include "utils.h"
 #include <cmath>
