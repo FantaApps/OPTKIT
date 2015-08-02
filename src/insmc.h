@@ -1,7 +1,7 @@
 /**
  * Copy right YMSys, 2015, Zhaoming Yin
  *
- * @brief    This is the implementation of DCJ distance methods. 
+ * @brief    This is the implementation of maximum clique methods. 
  *
  *  MODIFIED   (MM/DD/YY)
  *  stplaydog   07/15/15 - Creation
