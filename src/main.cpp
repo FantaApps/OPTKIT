@@ -26,11 +26,13 @@
 #include <getopt.h>
 
 
-int process_options(int argc, char* argv[], Config *cfg);
+int  process_options(int argc, char* argv[], Config *cfg);
 void execute_sequential();
 void print_help();
 
-
+/**
+ *
+**/
 int main(int argc , char *argv[])
 {
     Config *cfg = new Config();
@@ -243,6 +245,11 @@ void execute_sequential()
     //list->bnb(ins, 0);
 }
 
+
+/**
+ *
+ *
+**/
 void print_help()
 {
     FILE *reader = fopen("./HELP.txt", "r");
