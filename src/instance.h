@@ -7,7 +7,6 @@
  *  stplaydog   08/02/15 - Creation
 **/
 
-
 #pragma once
 #ifndef _H_INSTANCE_
 #define _H_INSTANCE_

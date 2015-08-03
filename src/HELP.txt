@@ -1,0 +1,46 @@
+
+
+OPTKit: Optimization Tool-kit for Prallellizing Discrete Combinatoric Problems in Emerging Platforms (2013-2015) 
+
+usage:
+optkit <--dis | --dcj | --median | --knap | --cal_bij | --mc | --CC> [options]
+
+Options list:
+
+--dis                          is calculate dcj distance with unequal content genomes
+--dcj                          is calculate dcj
+--median                       is calculate median
+--knap                         is calculate knapsack problem
+--cal_bij                      is calculate bijection accuracy
+--mc                           is calculate maximum clique problem
+--CC                           is calculate connected component problem
+
+--dis_mode <1|2>               0:exemplar distance 1:matching distance
+--num_t <num threads>          assign number of threads
+--input_file <file name>       assign input file
+--output_file <file name>      assign output file
+--bij_file <file_name>         assign bijection output file
+--dict_file <file_name>        assign mapping dictionary file
+--output_dir <dir_name>        assign output directory name
+--logger_path <logger_path_>   logger_path folder position
+--p_mode <1|2|3>               1:sequential 2:parallel_bucket 3:parallel_threading
+--heu_level <heuristiclevel>   used in lin-kernighan algorithm
+--term_move <terminal move>    used in lin-kernighan algorithm
+--is_opt <true|false>          used in lin-kernighan algorithm
+--opt_file <file_name>         write optimal result to file
+--seq_len <length of seq>      assign length of the sequence
+--tmp_folder <tmp folder>      folder to keep temporary files
+--help      print this help    file
+
+Examples: 
+
+optkit --dis --cal_bij --input_file <input_file> --dis_mode <1|2>
+        --dict_file <dict_file> --opt_file <opt_file> --p_mode <1|2|3>
+        --seq_len <seq_len> --bij_file <bij_file>
+
+optkit --dis --input_file <input_file> --dis_mode <1|2>
+        --opt_file <opt_file> --p_mode <1|2|3>
+        --seq_len <seq_len>
+
+optkit --median --input_file <input_file> --dis_mode <1|2>
+       --p_mode <1|2|3> --seq_len <seq_len> --tmp_folder <tmp_folder>

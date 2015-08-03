@@ -35,7 +35,6 @@ enum
     OPTKIT_PAR_BUCKET
 };
 
-
 /**
  *  @class      Configuration class.
  *
