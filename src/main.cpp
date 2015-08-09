@@ -10,6 +10,7 @@
 **/
 
 #include "utils.h"
+#include "graph_util.h"
 #include "config.h"
 #include "factory.h"
 
@@ -28,10 +29,11 @@
 
 int  process_options(int argc, char* argv[], Config *cfg);
 void execute_sequential();
+void execute_graph_utils(const Config *cfg);
 void print_help();
 
 /**
- *
+ * Main function of OPTKIT
 **/
 int main(int argc , char *argv[])
 {
@@ -41,8 +43,13 @@ int main(int argc , char *argv[])
 }
 
 /**
+ * Process to command line options for OPTKIT.
  *
+ * @param[in]       argc        Number of arguments.
+ * @param[in]       argv        Arguments in the form of array.
+ * @param[in]       cfg         Configuration file.
  *
+ * @return      N/A
 **/
 int process_options(int argc, char* argv[], Config *cfg)
 {
@@ -209,6 +216,19 @@ int process_options(int argc, char* argv[], Config *cfg)
                 }
         }
     }
+
+    if(cfg->get_type_task() == OPTKIT_INS_CC) 
+    {
+        execute_graph_utils(cfg);
+    }
+
+    return 1;
+}
+
+void execute_graph_utils(const Config *cfg)
+{
+    GraphUtils::connected_comps(cfg->get_input_file(), 
+            cfg->get_mc_cfg()->get_output_dir());
 }
 
 void execute_sequential()
