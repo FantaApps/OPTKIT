@@ -1,6 +1,7 @@
 AC_INIT([optkit], 1.0)
 AM_INIT_AUTOMAKE
-AC_PROG_CXX(g++)
+AC_PROG_CXX(g++-4.8.1 g++)
+
 CXXFLAGS=
 #debug related
 AC_ARG_ENABLE(debug,
@@ -17,5 +18,5 @@ AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
 #for libraries
 LT_INIT
 
-AC_CONFIG_FILES(Makefile src/Makefile)
+AC_CONFIG_FILES(Makefile test/Makefile src/Makefile)
 AC_OUTPUT
