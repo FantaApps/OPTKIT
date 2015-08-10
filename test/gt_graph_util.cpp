@@ -4,6 +4,7 @@
  *  @brief    Unittest of graph utilies.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   08/10/15 - Add validation code Success.
  *  stplaydog   08/09/15 - Creation
 **/
 
@@ -18,10 +19,11 @@ TEST(InitGraphTest, Success)
     /* Some basic setup */
     char file[OPTKIT_FILE_SIZE];
     snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "/Users/zhaomingyin/gitlocal/OPTKIT/data/CC/graphs/crimepair_0");
+            "../data/CC/graphs/crimepair_0");
     Graph g;
     GraphUtils::init_graph(file, g);
 
     /* Test some basic graph properties */
+    ASSERT_EQ(num_edges(g), 903);
 }
 
