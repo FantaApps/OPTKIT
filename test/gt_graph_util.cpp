@@ -12,12 +12,6 @@
 #include "graph_util.h"
 #include "utils.h"
 
-#include <boost/config.hpp>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <boost/graph/adjacency_list.hpp>
-
 using namespace boost;
 
 TEST(InitGraphTest, Success)
