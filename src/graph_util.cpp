@@ -30,9 +30,14 @@ void GraphUtils::init_graph(const char* file, Graph& g)
     int32_t e_color = OPTKIT_NULL;
 
     FILE *reader = fopen(file, "r");
+    if(reader == NULL)
+    {
+        fprintf(stderr, "The file %s does not exsits.");
+        ERROR_PRINT();
+    }
     
     /* Read the general information of the graph. */
-    fscanf(reader, "%d %d %d\n", &num_v, &num_c, &num_e);
+    fscanf(reader, "%d %d %d\n", &num_v, &num_e, &num_c);
     
     /* Read each edge of the graph. */
     for(int i=0; i<num_e; ++i)
