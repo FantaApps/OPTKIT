@@ -20,7 +20,7 @@ TEST(InitGraphTest, Success)
     char file[OPTKIT_FILE_SIZE];
     snprintf(file, OPTKIT_FILE_SIZE, "%s", 
             "../data/CC/graphs/crimepair_0");
-    Graph g;
+    Adj g;
     GraphUtils::init_graph(file, g);
 
     /* Test some basic graph properties */
