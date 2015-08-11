@@ -15,6 +15,7 @@ RAW_DIR=${HOME}/../../data/CC/dr_shi_format/
 EDGE_DIR=${RAW_DIR}edges/
 VET_DIR=${RAW_DIR}vertices/
 GRAPH_DIR=${HOME}/../../data/CC/graphs/
+MAP_DIR=${HOME}/../../data/CC/maps/
 
 for EDGE_FILE in $( ls ${EDGE_DIR} );
 do
@@ -23,7 +24,9 @@ do
     GRAPH_FILE=${GRAPH_DIR}${EDGE_FILE}
     TMP_FILE=${GRAPH_DIR}tmp
     PASTE_FILE=${GRAPH_DIR}paste
-   
+    MAP_FILE=${MAP_DIR}${EDGE_FILE}
+  
+
     # Process the format
     echo processing file ${EDGE_DIR}${EDGE_FILE}
     cat ${EDGE_DIR}${EDGE_FILE} | sed -e 's/(//g' | \
@@ -44,4 +47,7 @@ do
     
     # Insert meta info in front.
     echo -e "${NUM_V} ${NUM_E} ${NUM_C}\n$(cat ${GRAPH_FILE})" > ${GRAPH_FILE} 
+
+    # Create map
+    ${HOME}/testscripts/create_vertex_map.sh ${GRAPH_FILE} ${MAP_FILE}
 done
