@@ -27,6 +27,7 @@
 #include <cstring>
 #include <cmath>
 #include <cassert>
+#include <vector>
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -59,7 +60,8 @@ typedef enum
 {
     OPTKIT_NULL = -1,
     OPTKIT_ZERO = 0, 
-    OPTKIT_FILE_SIZE = 512 
+    OPTKIT_FILE_SIZE = 512,
+    OPTKIT_GTEST_SIZE = 100000 
 }
 OPTKIT_DEF;
 
@@ -70,15 +72,24 @@ using namespace std;
 
 class Utils
 {
-    public:
-        static char *readLine(FILE *file);
-        static int  str_split(char* a_str, const char a_delim, char **result);
-        static void q_sort_two(int *key, int *val, int left, int right);
-        static void q_sort(int *number, int left, int right);
-        static void get_file_name(const char *full_path_name, char *file_name, int16_t size);
-        static void get_file_name(const char *full_path_name, int16_t size1, char *file_name, int16_t size2);
-        static void concate_path(const char *path, const char *full_path_name, int16_t size2, char* concated, int size3);
-        static int  ede1(int invdist, int ngene);
+public:
+    static char *readLine(FILE *file);
+    static int  str_split(char* a_str, const char a_delim, char **result);
+    static void q_sort_two(int *key, int *val, int left, int right);
+    static void q_sort(int *number, int left, int right);
+    static void get_file_name(const char *full_path_name, char *file_name, int16_t size);
+    static void get_file_name(const char *full_path_name, int16_t size1, char *file_name, int16_t size2);
+    static void concate_path(const char *path, const char *full_path_name, int16_t size2, char* concated, int size3);
+    static int  ede1(int invdist, int ngene);
+
+    static void gtest_log_vector(const std::vector<int> &vec)
+    {
+        for(int i=0; i<vec.size(); ++i)
+        {
+            printf("%d ", vec[i]);
+        }
+        printf("\n");
+    }
 };
 
 #endif

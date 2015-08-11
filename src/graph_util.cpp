@@ -67,9 +67,24 @@ void GraphUtils::connected_comps(const char* file, const char* output_dir)
    std::vector<int> component(num_vertices(g));
    int num = connected_components(g, &component[0]);
 
+#ifdef USE_GTEST
+   Utils::gtest_log_vector(component);
+#endif
    /* Print stats. */
 
    /* Write to file */
+}
+
+/**
+ * @brief   a wrapper for listing all cliques.
+ *
+ * Based on this example:
+ * http://www.boost.org/doc/libs/1_55_0/libs/graph/example/bron_kerbosch_print_cliques.cpp
+ * http://www.math.ucla.edu/~mbshort/papers/crime2.pdf
+ *
+**/
+void all_cliques(const char* file, const char* output_dir)
+{
 }
 
 void GraphUtils::adjacency_list_to_file(const char* file)
