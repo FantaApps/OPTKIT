@@ -21,7 +21,7 @@ TEST(InitGraphTest, Success)
     snprintf(file, OPTKIT_FILE_SIZE, "%s", 
             "../data/CC/graphs/crimepair_0");
     Adj g;
-    GraphUtils::init_graph(file, g);
+    GraphUtils::init_adj(file, g);
 
     /* Test some basic graph properties */
     ASSERT_EQ(num_edges(g), 903);
