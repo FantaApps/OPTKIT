@@ -11,6 +11,7 @@ before_script:
   - sudo make
   - sudo cp *.a /usr/lib
   - sudo apt-get install libboost-graph-dev
+  - cd /home/travis/build/${USER}/OPTKIT
   - chmod +x init.sh 
   - ./init.sh 
 script: make
