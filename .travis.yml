@@ -10,8 +10,7 @@ before_script:
   - sudo make
   - sudo cp *.a /usr/lib
   - sudo apt-get install libboost-graph-dev
-  - printenv | grep stplaydog 
-  - cd /home/travis/build/stplaydog/OPTKIT
+  - cd ${TRAVIS_BUILD_DIR} 
   - chmod +x init.sh 
   - ./init.sh 
 script: 
