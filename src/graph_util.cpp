@@ -128,7 +128,7 @@ void GraphUtils::all_cliques(const char* file, const char* output_dir)
     init_adj(file, a);
     //Udi g(a);
     clique_printer<ostream> vis(std::cout);
-    bron_kerbosch_all_cliques(a, vis);
+//    bron_kerbosch_all_cliques(a, vis);
 }
 
 void GraphUtils::adjacency_list_to_file(const char* file)
