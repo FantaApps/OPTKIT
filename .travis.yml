@@ -1,10 +1,14 @@
 language: cpp
 compiler:
 - g++
-- clang
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libgtest-dev
+  - sudo apt-get install cmake 
+  - cd /usr/src/gtest
+  - sudo cmake CMakeLists.txt
+  - sudo make
+  - sudo cp *.a /usr/lib
   - sudo apt-get install libboost-graph-dev
   - chmod +x init.sh 
   - ./init.sh 
