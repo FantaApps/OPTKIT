@@ -1,4 +1,4 @@
-noinst_HEADERS=insknap.h insmed.h list.h timer.h insdis.h instance.h plist.h utils.h insmc.h listint.h factory.h config.h graph_util.h 
+noinst_HEADERS=insknap.h insmed.h list.h timer.h insdis.h instance.h plist.h utils.h insmc.h listint.h factory.h config.h graph_util.h csr.h truss.h 
 bin_PROGRAMS=optkit
 optkit_SOURCES=insdis.cpp insmed.cpp plist.cpp timer.cpp insdis.h list.cpp insknap.cpp instance.cpp main.cpp utils.cpp insmc.cpp listint.cpp graph_util.cpp 
 optkit_LDADD=$(OPENMP_LIBi) 
