@@ -4,6 +4,7 @@
  * @brief    This is the header for truss decomposition. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Add the basic truss decomposition algorithm. 
  *  stplaydog   09/03/15 - Creation
  *
@@ -28,11 +29,11 @@ public:
      *
      *
     **/
-    void truss_decomosition(CSR &g, const char* outfile, int k_max)
+    void truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32_t c = 0)
     {
         FILE *writer = fopen(outfile, "w");
 
-        int k = 3;
+        int32_t k = 3;
 
         compute_sup(g, c);
 
@@ -63,21 +64,21 @@ private:
      *
      * @return  N/A
     **/
-    bool sup_e_opr(CSR &g, int k, int c = 0)
+    bool sup_e_opr(CSR &g, int32_t k, int32_t c = 0)
     {
         bool ret = false;
-        for(int i=0; i<g.get_num_v(); ++i)
+        for(int32_t i=0; i<g.get_num_v(); ++i)
         {
             pair<int32_t, int32_t> rg = g.get_e_range(i);
 
-            for(int j=rg.first; j<rg.second; ++j)
+            for(int32_t j=rg.first; j<rg.second; ++j)
             {
                 if(e_sup[c][j] > (k - 2))
                 {
-                    reduce_one_edge(i);
-                    reduce_one_edge(get_to_v(j));
+                    reduce_one_edge(g, i);
+                    reduce_one_edge(g, g.get_to_v(j));
 
-                    set_rmvd(j);
+                    g.set_rmvd(j);
                     e_sup[c][j] = 0;
 
                     ret = true;
@@ -93,17 +94,17 @@ private:
      *
      * @return  N/A
     **/
-    void compute_sup(CSR &g, int c = 0)
+    void compute_sup(CSR &g, int32_t c = 0)
     {
-        for(int i=0; i<num_v; i++)
+        for(int32_t i=0; i<g.get_num_v(); i++)
         {
             pair<int32_t, int32_t> rg1 = g.get_e_range(i);
-            for(int j=start1; j<end1; j++)
+            for(int32_t j=rg1.first; j<rg1.second; j++)
             {
-                pair<int32_t, int32_t> rg2 = g.get_e_range(g.e_idx[c][j]);
+                pair<int32_t, int32_t> rg2 = g.get_e_range(g.get_to_v(j));
 
                 /* Update the support value */
-                g.e_sup[c][j] = g.compute_num_edge_intersect(rg1, rg2);
+                e_sup[c][j] = g.compute_num_edge_intersect(rg1, rg2);
             }
         }
     }
@@ -115,11 +116,11 @@ private:
      *
      * @return      N/A
     **/
-    void reduce_one_edge(int v, int c=0)
+    void reduce_one_edge(CSR & g, int32_t v, int32_t c=0)
     {
         pair<int32_t, int32_t> rg = g.get_e_range(v);
 
-        for(int i=rg.first; i<rg.second; i++)
+        for(int32_t i=rg.first; i<rg.second; i++)
         {
             --e_sup[c][i];
         }

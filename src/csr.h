@@ -4,6 +4,8 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/10/15 - Add constructor
+ *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Implemented compute support 
  *  stplaydog   09/03/15 - Creation
  *
@@ -32,19 +34,132 @@ public:
         RMVD = -1
     };
 
-    typedef pair<int32_t, int32_t> e_range;
+    /**
+     * @brief   This is the constructor
+     *
+    **/
+    CSR(const char *in_file)
+    {
+        int32_t v_num = OPTKIT_NULL;
+        int32_t e_num = OPTKIT_NULL;
+        int32_t c_num = OPTKIT_NULL;
+        int32_t v_id  = OPTKIT_NULL;
+        int32_t v_to  = OPTKIT_NULL;
+        int32_t color = OPTKIT_NULL;
+        int32_t sum   = 0;
+
+        /* Read the head information, 
+           and allocate according variables */
+        FILE *reader;
+        if((reader = fopen(in_file, "r")) == NULL)
+        {
+            printf("the file %s you input does not exist!\n", in_file);
+            ERROR_PRINT();
+        }
+        else if(fscanf(reader, "%d %d %d\n", &v_num, &c_num, &e_num)==EOF)
+        {
+            ERROR_PRINT();
+        }
+
+        int32_t start_read_pos = ftell(reader);
+
+        allocate_data_structure(v_num, e_num, c_num);
+
+        /* Scan the real content */
+        for(int32_t i=0;i<e_num;i++)
+        {
+            if(fscanf(reader, "%d %d %d\n",&v_id , &v_to, &color)==EOF)
+            {
+                ERROR_PRINT();
+            }
+            ++v_idx[color][v_id];
+        }
+
+        for(int32_t c=0; c<num_c; c++)
+        {
+            sum = 0;
+            for(int32_t i=0; i<v_num; i++)
+            {
+                sum += v_idx[c][i];
+                v_idx[c][i]=sum;
+            }
+        }
+
+        /* Populate the content */
+        fseek (reader, start_read_pos, SEEK_SET);
+
+        /* this is for the start of the different postitions */
+        int32_t *idx = new int32_t[num_v+1];
+
+        for(int32_t c=0; c<num_c; c++)
+        {
+            for(int32_t i=0; i<num_v; i++)
+            {
+                idx[i] = i == 0 ? 0 : v_idx[c][i-1];
+            }
+
+            /* Real read part */
+            for(int32_t i=0; i<num_e; i++)
+            {
+                if(fscanf(reader, "%d %d %d\n",&v_id , &v_to, &color)==EOF)
+                {
+                    ERROR_PRINT();
+                }
+
+                int32_t pos = idx[v_id];
+                e_idx[c][pos] = v_to;
+                ++idx[v_id];
+            }
+
+            /* e_idx also needs to be sorted, for the purpose of join operations */
+            for(int32_t i=0; i<num_v; i++)
+            {
+                pair<int32_t, int32_t> rg = get_e_range(i);
+                sort(e_idx[c]+rg.first, e_idx[c]+rg.second);
+            }
+        }
+
+        /* Frees */
+        free(idx);
+        fclose(reader);
+    }
+
+    /**
+     * Allocate memory for basic graph data structures. 
+     *
+     * @param[in]       v_num       number of vertices
+     * @param[in]       e_num       number of edges 
+     *
+     * @return      N/A
+     **/
+    void allocate_data_structure(const int32_t v_num, 
+            const int32_t e_num, const int32_t c_num)
+    {
+        num_v = v_num;
+        num_e = e_num;
+        num_c = c_num;
+
+        v_idx = new int32_t*[num_c];
+        e_idx = new int32_t*[num_c];
+
+        for(int32_t i=0; i<num_c; i++)
+        {
+            v_idx[i] = new int32_t[num_v];
+            e_idx[i] = new int32_t[num_e];
+        }
+    }
 
     /**
      *
      * @note    edge list has to be sorted.
     **/
-    int32_t compute_num_edge_intersect(int32_t start1, int32_t end1, 
-                                       int32_t start2, int32_t end2,
+    int32_t compute_num_edge_intersect(pair<int32_t, int32_t> rg1,
+                                       pair<int32_t, int32_t> rg2,
                                        int32_t c = 0)
     {
         int32_t ret = 0;
-        int32_t i(start1), j(start2);
-        while(i<end1 && j<end2)
+        int32_t i(rg1.first), j(rg2.first);
+        while(i<rg1.second && j<rg2.second)
         {
             if(e_idx[c][i] == e_idx[c][j])
             {
@@ -79,14 +194,14 @@ public:
         return num_e;
     }
 
-    int32_t get_to_v(int32_t pos, int c = 0)
+    int32_t get_to_v(int32_t pos, int32_t c = 0)
     {
         return e_idx[c][pos];
     }
 
-    void set_rmvd(int32_t pos, int c = 0)
+    void set_rmvd(int32_t pos, int32_t c = 0)
     {
-        e_idx[c][j] = RMVD;
+        e_idx[c][pos] = RMVD;
     }
 
     /**
@@ -94,21 +209,20 @@ public:
      *
      * @return  N/A
     **/
-    void reconstruct(int c = 0)
+    void reconstruct(int32_t c = 0)
     {
         assert(c < num_c);
 
         /* update v_idx */
-        int32_t *prefix_sum = new int[num_v];
+        int32_t *prefix_sum = new int32_t[num_v];
         int32_t sum = 0; 
 
-        for(int i=0; i<v_idx; i++)
+        for(int32_t i=0; i<num_v; i++)
         {
-            int32_t start = get_start(i);
-            int32_t end   = get_end(i);
             int32_t count = 0;
 
-            for(int32_t j=start; j<end; ++j)
+            pair<int32_t, int32_t> rg = get_e_range(i);
+            for(int32_t j=rg.first; j<rg.second; ++j)
             {
                 if(e_idx[c][j] != RMVD)
                 {
@@ -126,17 +240,16 @@ public:
         delete [] prefix_sum;
 
         /* moving elements in e_idx */
-        int cur=0, nxt=0;
+        int32_t cur=0, nxt=0;
         while(nxt < num_e)
         {
-            if(e_idx[j] == RMVD) 
+            if(e_idx[c][nxt] == RMVD) 
             {
                 ++nxt;
             }
             else
             {
                 e_idx[cur] = e_idx[nxt];
-                e_sup[cur] = e_sup[nxt];
                 ++cur;
                 ++nxt;
             }
@@ -150,13 +263,15 @@ public:
      *
      * @return      N/A
      **/
-    void output_all_CC(FILE *writer, int c = 0)
+    void output_all_CC(FILE *writer, int32_t c = 0)
     {
         assert(c < num_c);
         assert(writer  != NULL);
 
-        int count = 0;
-        for(int i=0; i<num_v; i++)
+        bool *visited = new bool[num_v];
+
+        int32_t count = 0;
+        for(int32_t i=0; i<num_v; i++)
         {
             if(!visited[i])
             {
@@ -165,6 +280,8 @@ public:
                 fprintf(writer, "\n");
             }
         }
+
+        delete [] visited;
     }
 
     pair<int32_t, int32_t> get_e_range(int32_t v, int32_t c = 0)
@@ -193,7 +310,7 @@ private:
      *
      * @return      N/A
      **/
-    void output_one_CC(FILE *writer, int32_t v, bool *visited, int c = 0)
+    void output_one_CC(FILE *writer, int32_t v, bool *visited, int32_t c = 0)
     {
         assert(c < num_c);
         assert(writer  != NULL);
@@ -210,11 +327,10 @@ private:
             return;
         }
 
-        int32_t start = get_start(v);
-        int32_t end   = get_end(v);
-        for(int i=start; i<end; ++i)
+        pair<int32_t, int32_t> rg = get_e_range(v);
+        for(int32_t i=rg.first; i<rg.second; ++i)
         {
-            output_one_CC(writer, e_idx[c][j], visited);
+            output_one_CC(writer, e_idx[c][i], visited);
         }
     }
 };

@@ -24,6 +24,9 @@
 #include "insmed.h"
 #include "insmc.h"
 
+#include "csr.h"
+#include "truss.h"
+
 #include <getopt.h>
 
 
