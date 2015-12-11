@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/10/15 - Add constructor
  *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Implemented compute support 
  *  stplaydog   09/03/15 - Creation
@@ -32,6 +33,121 @@ public:
     {
         RMVD = -1
     };
+
+    /**
+     * @brief   This is the constructor
+     *
+    **/
+    CSR(const char *in_file)
+    {
+        int32_t v_num = OPTKIT_NULL;
+        int32_t e_num = OPTKIT_NULL;
+        int32_t c_num = OPTKIT_NULL;
+        int32_t v_id  = OPTKIT_NULL;
+        int32_t v_to  = OPTKIT_NULL;
+        int32_t color = OPTKIT_NULL;
+        int32_t sum   = 0;
+
+        /* Read the head information, 
+           and allocate according variables */
+        FILE *reader;
+        if((reader = fopen(in_file, "r")) == NULL)
+        {
+            printf("the file %s you input does not exist!\n", in_file);
+            ERROR_PRINT();
+        }
+        else if(fscanf(reader, "%d %d %d\n", &v_num, &c_num, &e_num)==EOF)
+        {
+            ERROR_PRINT();
+        }
+
+        int32_t start_read_pos = ftell(reader);
+
+        allocate_data_structure(v_num, e_num, c_num);
+
+        /* Scan the real content */
+        for(int32_t i=0;i<e_num;i++)
+        {
+            if(fscanf(reader, "%d %d %d\n",&v_id , &v_to, &color)==EOF)
+            {
+                ERROR_PRINT();
+            }
+            ++v_idx[color][v_id];
+        }
+
+        for(int32_t c=0; c<num_c; c++)
+        {
+            sum = 0;
+            for(int32_t i=0; i<v_num; i++)
+            {
+                sum += v_idx[c][i];
+                v_idx[c][i]=sum;
+            }
+        }
+
+        /* Populate the content */
+        fseek (reader, start_read_pos, SEEK_SET);
+
+        /* this is for the start of the different postitions */
+        int32_t *idx = new int32_t[num_v+1];
+
+        for(int32_t c=0; c<num_c; c++)
+        {
+            for(int32_t i=0; i<num_v; i++)
+            {
+                idx[i] = i == 0 ? 0 : v_idx[c][i-1];
+            }
+
+            /* Real read part */
+            for(int32_t i=0; i<num_e; i++)
+            {
+                if(fscanf(reader, "%d %d %d\n",&v_id , &v_to, &color)==EOF)
+                {
+                    ERROR_PRINT();
+                }
+
+                int32_t pos = idx[v_id];
+                e_idx[c][pos] = v_to;
+                ++idx[v_id];
+            }
+
+            /* e_idx also needs to be sorted, for the purpose of join operations */
+            for(int32_t i=0; i<num_v; i++)
+            {
+                pair<int32_t, int32_t> rg = get_e_range(i);
+                sort(e_idx[c]+rg.first, e_idx[c]+rg.second);
+            }
+        }
+
+        /* Frees */
+        free(idx);
+        fclose(reader);
+    }
+
+    /**
+     * Allocate memory for basic graph data structures. 
+     *
+     * @param[in]       v_num       number of vertices
+     * @param[in]       e_num       number of edges 
+     *
+     * @return      N/A
+     **/
+    void allocate_data_structure(const int32_t v_num, 
+            const int32_t e_num, const int32_t c_num)
+    {
+        num_v = v_num;
+        num_e = e_num;
+        num_c = c_num;
+
+        v_idx = new int32_t*[num_c];
+        e_idx = new int32_t*[num_c];
+
+        for(int32_t i=0; i<num_c; i++)
+        {
+            v_idx[i] = new int32_t[num_v];
+            e_idx[i] = new int32_t[num_e];
+        }
+    }
 
     /**
      *
