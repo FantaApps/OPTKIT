@@ -145,10 +145,12 @@ public:
         v_idx = new int32_t*[num_c];
         e_idx = new int32_t*[num_c];
 
-        for(int32_t i=0; i<num_c; i++)
+        for(int32_t c=0; c<num_c; c++)
         {
-            v_idx[i] = new int32_t[num_v];
-            e_idx[i] = new int32_t[num_e];
+            v_idx[c] = new int32_t[num_v];
+            e_idx[c] = new int32_t[num_e];
+            memset(v_idx[c], 0, sizeof v_idx[c] * sizeof(int));
+            memset(e_idx[c], 0, sizeof e_idx[c] * sizeof(int));
         }
     }
 
@@ -301,6 +303,42 @@ public:
         ret.first  = v == 0 ? 0 : v_idx[c][v-1];
         ret.second = v_idx[c][v];
         return ret;
+    }
+
+    /**
+     * @brief   visualize CSR using graphviz format
+     *
+    **/
+    void visualize()
+    {
+        FILE *writer = fopen("./csr.dot", "w");
+        fprintf(writer, "graph{\n");
+        for(int c=0; c<num_c; c++)
+        {
+            char *color;
+            if(c==0)
+            {
+                color = (char*)"red";
+            }
+            if(c==1)
+            {
+                color = (char*)"blue";
+            }
+            if(c==2)
+            {
+                color = (char*)"green";
+            }
+            for(int i=0; i<num_v; i++)
+            {
+                pair<int32_t, int32_t> rg = get_e_range(i);
+                for(int j=rg.first; j<rg.second; j++)
+                {
+                    fprintf(writer, "%d -- %d [color=%s];\n", i, e_idx[c][j], color);
+                }
+            }
+        }
+        fprintf(writer, "}\n");
+        fclose(writer);
     }
 
 private:

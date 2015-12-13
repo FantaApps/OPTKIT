@@ -9,6 +9,7 @@
 
 #include <gtest/gtest.h>
 #include "csr.h"
+#include "test_util.h" 
 
 /**
  * @brief   Test the allocate_data_structure 
@@ -36,6 +37,9 @@ TEST(InitGraphTest_1, Success)
     ASSERT_EQ(g.get_num_c(), 26);
 
     /* Test the content of the graph */
+    g.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 }
 
 /**

@@ -90,7 +90,7 @@ int32_t process_options(int32_t argc, char* argv[], Config *cfg)
             {"p_mode",      required_argument,       0, 'p'},
             {"term_move",   required_argument,       0, 't'},
             {"tmp_folder",  required_argument,       0, 'T'},
-            {"truss",       required_argument,       0, '4'},
+            {"truss",       no_argument,             0, '4'},
             {0,             0,                       0,  0 }
         }; 
 
@@ -99,7 +99,6 @@ int32_t process_options(int32_t argc, char* argv[], Config *cfg)
                 long_options, &option_index);
         if (c == OPTKIT_NULL)
         {
-            print_help();
             break;	
         }
         switch (c)
@@ -214,7 +213,7 @@ int32_t process_options(int32_t argc, char* argv[], Config *cfg)
                     cfg->get_med_cfg()->set_tmp_dir(optarg);
                     break;
                 }
-            case '5':
+            case '4':
                 {
                     cfg->set_type_task(OPTKIT_INS_TRUSS);
                     break;
@@ -238,7 +237,7 @@ int32_t process_options(int32_t argc, char* argv[], Config *cfg)
     }
     else if(cfg->get_type_task() == OPTKIT_INS_TRUSS) 
     {
-        execute_graph_utils(cfg);
+        execute_truss_decomposition(cfg);
     }
 
     return 1;
@@ -253,6 +252,7 @@ void execute_graph_utils(const Config *cfg)
 void execute_truss_decomposition(const Config *cfg)
 {
     CSR g(cfg->get_input_file());
+    g.visualize();
 }
 
 void execute_sequential()
