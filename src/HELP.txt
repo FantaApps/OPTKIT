@@ -3,7 +3,7 @@
 OPTKit: Optimization Tool-kit for Prallellizing Discrete Combinatoric Problems in Emerging Platforms (2013-2015) 
 
 usage:
-optkit <--dis | --dcj | --median | --knap | --cal_bij | --mc | --CC> [options]
+optkit <--dis | --dcj | --median | --knap | --cal_bij | --mc | --CC | --truss> [options]
 
 Options list:
 
@@ -14,6 +14,7 @@ Options list:
 --cal_bij                      is calculate bijection accuracy
 --mc                           is calculate maximum clique problem
 --CC                           is calculate connected component problem
+--truss                        is calculate truss decomposition problem 
 
 --dis_mode <1|2>               0:exemplar distance 1:matching distance
 --num_t <num threads>          assign number of threads

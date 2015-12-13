@@ -1593,6 +1593,7 @@ void InsMed::vis_csr()
     fprintf(writer, "}\n");
     fclose(writer);
 }
+
 void InsMed::vis_adj()
 {
     FILE *writer = fopen("./med_adj.dot", "w");

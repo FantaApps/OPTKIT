@@ -9,6 +9,7 @@
 
 #include <gtest/gtest.h>
 #include "csr.h"
+#include "test_util.h" 
 
 /**
  * @brief   Test the allocate_data_structure 
@@ -32,10 +33,13 @@ TEST(InitGraphTest_1, Success)
 
     /* Test some basic graph properties */
     ASSERT_EQ(g.get_num_v(), 8);
-    ASSERT_EQ(g.get_num_e(), 1);
-    ASSERT_EQ(g.get_num_c(), 26);
+    ASSERT_EQ(g.get_num_e(), 26);
+    ASSERT_EQ(g.get_num_c(), 1);
 
     /* Test the content of the graph */
+    g.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 }
 
 /**
@@ -60,18 +64,6 @@ TEST(InitGraphTest_3, Success)
 **/
 TEST(InitGraphTest_4, Success)
 {
-    /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/CC/graphs/crimepair_0");
-    CSR g(file);
-
-    /* Test some basic graph properties */
-    ASSERT_EQ(g.get_num_v(), 903);
-    ASSERT_EQ(g.get_num_e(), 903);
-    ASSERT_EQ(g.get_num_c(), 903);
-
-    /* Test the content of the graph */
 }
 
 /**
