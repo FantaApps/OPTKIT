@@ -21,7 +21,8 @@ enum
     OPTKIT_INS_CC,
     OPTKIT_INS_DIS,
     OPTKIT_INS_KNAP,
-    OPTKIT_INS_MED
+    OPTKIT_INS_MED,
+    OPTKIT_INS_TRUSS
 };
 
 enum

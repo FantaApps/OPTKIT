@@ -1,5 +1,5 @@
 noinst_PROGRAMS = graphutiltest 
-graphutiltest_SOURCES=gt_graph_util.cpp ../src/graph_util.cpp
+graphutiltest_SOURCES=gt_graph_util.cpp ../src/graph_util.cpp gt_csr.cpp ../src/csr.h 
 TESTS=graphutiltest
 
 if DEBUG

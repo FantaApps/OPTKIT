@@ -31,18 +31,19 @@
 #include <getopt.h>
 
 
-int  process_options(int argc, char* argv[], Config *cfg);
+int32_t  process_options(int32_t argc, char* argv[], Config *cfg);
 void execute_sequential();
 void execute_graph_utils(const Config *cfg);
+void execute_truss_decomposition(const Config *cfg);
 void print_help();
 
 /**
  * Main function of OPTKIT
 **/
-int main(int argc , char *argv[])
+int32_t main(int32_t argc , char *argv[])
 {
     Config *cfg = new Config();
-    int ret = process_options(argc, argv, cfg);
+    int32_t ret = process_options(argc, argv, cfg);
     return ret;
 }
 
@@ -55,9 +56,9 @@ int main(int argc , char *argv[])
  *
  * @return      N/A
 **/
-int process_options(int argc, char* argv[], Config *cfg)
+int32_t process_options(int32_t argc, char* argv[], Config *cfg)
 {
-    static int verbose_flag;
+    static int32_t verbose_flag;
     while (1)
     {
         static struct option long_options[] =
@@ -89,11 +90,12 @@ int process_options(int argc, char* argv[], Config *cfg)
             {"p_mode",      required_argument,       0, 'p'},
             {"term_move",   required_argument,       0, 't'},
             {"tmp_folder",  required_argument,       0, 'T'},
+            {"truss",       required_argument,       0, '4'},
             {0,             0,                       0,  0 }
         }; 
 
-        int option_index = 0;
-        int c = getopt_long (argc, argv, "b:cCd:D1:hH:i:I:2:kl:mMn:o:O:3:p:t:T:",
+        int32_t option_index = 0;
+        int32_t c = getopt_long (argc, argv, "b:cCd:D1:hH:i:I:2:kl:mMn:o:O:3:p:t:T:4",
                 long_options, &option_index);
         if (c == OPTKIT_NULL)
         {
@@ -212,6 +214,11 @@ int process_options(int argc, char* argv[], Config *cfg)
                     cfg->get_med_cfg()->set_tmp_dir(optarg);
                     break;
                 }
+            case '5':
+                {
+                    cfg->set_type_task(OPTKIT_INS_TRUSS);
+                    break;
+                }
             case '?':
                 {
                     print_help();
@@ -229,6 +236,10 @@ int process_options(int argc, char* argv[], Config *cfg)
     {
         execute_graph_utils(cfg);
     }
+    else if(cfg->get_type_task() == OPTKIT_INS_TRUSS) 
+    {
+        execute_graph_utils(cfg);
+    }
 
     return 1;
 }
@@ -237,6 +248,11 @@ void execute_graph_utils(const Config *cfg)
 {
     GraphUtils::connected_comps(cfg->get_input_file(), 
             cfg->get_mc_cfg()->get_output_dir());
+}
+
+void execute_truss_decomposition(const Config *cfg)
+{
+    CSR g(cfg->get_input_file());
 }
 
 void execute_sequential()
@@ -256,11 +272,11 @@ void execute_sequential()
 
     //printf("Start allocating search list...\n");
 
-    //int buck_size    = ins[0]->upper_bound - ins[0]->lower_bound + 2;
-    //int list_size    = 100000;
-    //int base         = ins[0]->lower_bound-1;
-    //int num_t        = 1;
-    //int num_elem     = ins[0]->num_count;
+    //int32_t buck_size    = ins[0]->upper_bound - ins[0]->lower_bound + 2;
+    //int32_t list_size    = 100000;
+    //int32_t base         = ins[0]->lower_bound-1;
+    //int32_t num_t        = 1;
+    //int32_t num_elem     = ins[0]->num_count;
     //bool is_ub       = true;
     //bool is_enum_all = true;
     //IntList *list = new IntList(buck_size, list_size, 
