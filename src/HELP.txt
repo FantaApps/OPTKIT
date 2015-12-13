@@ -44,3 +44,4 @@ optkit --dis --input_file <input_file> --dis_mode <1|2>
 
 optkit --median --input_file <input_file> --dis_mode <1|2>
        --p_mode <1|2|3> --seq_len <seq_len> --tmp_folder <tmp_folder>
+

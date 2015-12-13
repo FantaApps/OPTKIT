@@ -4,6 +4,7 @@
  * @brief    This file defines the class for configuration reading.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Fixed null allocation bug.
  *  stplaydog   08/02/15 - Fix bugs to make it work.
  *  stplaydog   08/01/15 - Creation
  *
@@ -177,7 +178,7 @@ public:
             s_heu_thresh(OPTKIT_NULL),
             s_use_heu(OPTKIT_NULL)
         {
-            s_tmp_dir = new char[OPTKIT_NULL];
+            s_tmp_dir = new char[OPTKIT_FILE_SIZE];
         }
 
         /**

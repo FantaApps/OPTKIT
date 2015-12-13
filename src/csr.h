@@ -15,6 +15,9 @@
 #ifndef _H_CSR
 #define _H_CSR
 
+#include "utils.h"
+#include <algorithm>
+
 using namespace std; 
 
 /**
@@ -192,6 +195,14 @@ public:
     int32_t get_num_e()
     {
         return num_e;
+    }
+
+    /**
+     * @return  number of colors 
+    **/
+    int32_t get_num_c()
+    {
+        return num_c;
     }
 
     int32_t get_to_v(int32_t pos, int32_t c = 0)

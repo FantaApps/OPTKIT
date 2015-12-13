@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Fixed bugs related to print_help() 
  *  stplaydog   08/02/15 - Fixed bugs to make it compile.
  *  stplaydog   08/01/15 - Creation
  *
@@ -94,8 +95,11 @@ int process_options(int argc, char* argv[], Config *cfg)
         int option_index = 0;
         int c = getopt_long (argc, argv, "b:cCd:D1:hH:i:I:2:kl:mMn:o:O:3:p:t:T:",
                 long_options, &option_index);
-        if (c == -1)
+        if (c == OPTKIT_NULL)
+        {
+            print_help();
             break;	
+        }
         switch (c)
         {
             case 'b':
@@ -215,6 +219,7 @@ int process_options(int argc, char* argv[], Config *cfg)
                 }
             default:
                 {
+                    print_help();
                     abort ();
                 }
         }
@@ -270,7 +275,7 @@ void execute_sequential()
 
 
 /**
- *
+ * @brief   print the instruction of how to use OPTKIT
  *
 **/
 void print_help()
@@ -302,7 +307,7 @@ void print_help()
     }
 
     /* the whole file is now loaded in the memory buffer. */
-    printf("%s", buffer);
+    printf("%s\n", buffer);
 
     /* terminate */
     fclose (reader);
