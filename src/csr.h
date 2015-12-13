@@ -123,8 +123,24 @@ public:
         }
 
         /* Frees */
-        free(idx);
+        delete [] idx;
         fclose(reader);
+    }
+
+    /**
+     * @brief   Destrutor
+     *
+    **/
+    ~CSR()
+    {
+        for(int c=0; c<num_c; c++)
+        {
+            delete [] v_idx[c];
+            delete [] e_idx[c];
+        }
+
+        delete [] v_idx;
+        delete [] e_idx;
     }
 
     /**

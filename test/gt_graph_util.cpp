@@ -44,13 +44,13 @@ TEST(ConnectedCompTest, Success)
 
 
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/CC/graphs/crimepair_0");
-    GraphUtils::connected_comps(file, "aaa");
+    // char file[OPTKIT_FILE_SIZE];
+    // snprintf(file, OPTKIT_FILE_SIZE, "%s", 
+    //        "../data/CC/graphs/crimepair_0");
+    // GraphUtils::connected_comps(file, "aaa");
 
-    snprintf(file, OPTKIT_FILE_SIZE, "%s",
-            "../QA/testcase/rfc_logs/crimepair_0.log");
+    // snprintf(file, OPTKIT_FILE_SIZE, "%s",
+    //        "../QA/testcase/rfc_logs/crimepair_0.log");
     //std::ifstream t(file);
     //std::stringstream buffer1;
     //buffer1 << t.rdbuf();
