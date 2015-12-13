@@ -4,20 +4,13 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Finished InitGraphTest_1 
  *  stplaydog   12/10/15 - Creation
 **/
 
 #include <gtest/gtest.h>
 #include "csr.h"
 #include "test_util.h" 
-
-/**
- * @brief   Test the allocate_data_structure 
- *
-**/
-TEST(AllocateDataStructureTest_1, Success)
-{
-}
 
 /**
  * @brief   Test a small graph one color
@@ -40,54 +33,6 @@ TEST(InitGraphTest_1, Success)
     g.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
-}
-
-/**
- * @brief   Test a small graph multiple color, equal size of each color
- *
-**/
-TEST(InitGraphTest_2, Success)
-{
-}
-
-/**
- * @brief   Test a small graph multiple color, varied size of each color
- *
-**/
-TEST(InitGraphTest_3, Success)
-{
-}
-
-/**
- * @brief   Test a large graph one color
- *
-**/
-TEST(InitGraphTest_4, Success)
-{
-}
-
-/**
- * @brief   Test a large graph multiple color, equal size of each color
- *
-**/
-TEST(InitGraphTest_5, Success)
-{
-}
-
-/**
- * @brief   Test a large graph multiple color, varied size of each color
- *
-**/
-TEST(InitGraphTest_6, Success)
-{
-}
-
-/**
- * @brief   Negative initialization tests.
- *
-**/
-TEST(InitGraphTest_7, Success)
-{
 }
 
 /**

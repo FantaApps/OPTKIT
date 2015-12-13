@@ -18,10 +18,9 @@ using namespace std;
 #include "utils.h"
 
 /**
- * @class CSR 
+ * @class TstUtil 
  *
- * This class defines a CSR, compressed sparse row; 
- * and provides basic operations on CSR.
+ * This class give some basic funtions for testing
  *
 **/
 class TstUtil 
@@ -37,6 +36,8 @@ public:
     /**
      * @brief   Test if the content of two files are exactly the same.
      *
+     * @param[in]       f1      first file to be compared
+     * @param[in]       f2      second file to be compared
      *
     **/
     static int compareFile(const char* f1, const char* f2)
