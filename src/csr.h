@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Fixed some bugs 
  *  stplaydog   12/10/15 - Add constructor
  *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Implemented compute support 
@@ -246,13 +247,14 @@ public:
 
         /* update v_idx */
         int32_t *prefix_sum = new int32_t[num_v];
+        memset(prefix_sum, 0, num_v * sizeof(int32_t));
         int32_t sum = 0; 
 
         for(int32_t i=0; i<num_v; i++)
         {
             int32_t count = 0;
 
-            pair<int32_t, int32_t> rg = get_e_range(i);
+            pair<int32_t, int32_t> rg = get_e_range(i, c);
             for(int32_t j=rg.first; j<rg.second; ++j)
             {
                 if(e_idx[c][j] != RMVD)
@@ -266,7 +268,7 @@ public:
             prefix_sum[i] = sum;
         }
 
-        memcpy(v_idx, prefix_sum, num_v);
+        memcpy(v_idx[c], prefix_sum, num_v * sizeof(int32_t));
 
         delete [] prefix_sum;
 
@@ -280,7 +282,7 @@ public:
             }
             else
             {
-                e_idx[cur] = e_idx[nxt];
+                e_idx[c][cur] = e_idx[c][nxt];
                 ++cur;
                 ++nxt;
             }
@@ -288,9 +290,49 @@ public:
     }
 
     /**
+     * @brief       Remove one edge
+     *
+     * @param[in]       from        from vertex
+     * @param[in]       to          to vertex
+     * @param[in]       c           which color
+     *
+     * @return      Ture if there is such an edge to be removed
+     *              else return false.
+    **/
+    bool remove_e(int32_t from, int32_t to, int c = 0)
+    {
+        int8_t find = 0;
+        pair<int32_t, int32_t> rg_from = get_e_range(from, c); 
+        pair<int32_t, int32_t> rg_to   = get_e_range(to, c); 
+
+        for(int32_t i=rg_from.first; i<rg_from.second; ++i)
+        {
+            if(e_idx[c][i] == to)
+            {
+                e_idx[c][i] = RMVD;
+                ++find;
+            }
+        }
+
+        for(int32_t i=rg_to.first; i<rg_to.second; ++i)
+        {
+            if(e_idx[c][i] == from)
+            {
+                e_idx[c][i] = RMVD;
+                ++find;
+            }
+        }
+
+        if(find == 2)
+            return true;
+        return false;
+    }
+
+    /**
      * @brief   output the truss as connected components
      *
      * @param[in]       writer      the file which is going to be written
+     * @param[in]       c           which color
      *
      * @return      N/A
      **/
@@ -314,7 +356,16 @@ public:
 
         delete [] visited;
     }
-
+    
+    /**
+     * @brief   get the range of e_idxs from a given vertex
+     *
+     * @param[in]       v           given vertex
+     * @param[in]       c           which color
+     *
+     * @return      the range
+     *
+    **/
     pair<int32_t, int32_t> get_e_range(int32_t v, int32_t c = 0)
     {
         pair<int32_t, int32_t> ret;
