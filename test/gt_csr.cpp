@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Finished ReconstructTest_1, 
  *  stplaydog   12/13/15 - Finished ComputeNumEdgeIntersectTest_1 
  *  stplaydog   12/13/15 - Finished InitGraphTest_1 
  *  stplaydog   12/10/15 - Creation
@@ -72,11 +73,28 @@ TEST(ComputeNumEdgeIntersectTest_1, Success)
 }
 
 /**
- * @brief   test reconstruct  
+ * @brief   test reconstruct,
+ *          we removed three edges in the graph and
+ *          see if the reconstruction goes well or not.  
  *
 **/
 TEST(ReconstructTest_1, Success)
 {
+    /* Some basic setup */
+    char file[OPTKIT_FILE_SIZE];
+    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
+            "../data/MC/janc.gr");
+    CSR g(file);
+
+    ASSERT_EQ(g.remove_e(0, 6), true);
+    ASSERT_EQ(g.remove_e(3, 7), true);
+    ASSERT_EQ(g.remove_e(2, 5), true);
+    ASSERT_EQ(g.remove_e(2, 5), false);
+
+    g.reconstruct();
+    g.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_reconstruct.dot", 
+                "./csr.dot"), TstUtil::OPTKIT_TEST_PASS); 
 }
 
 /**
