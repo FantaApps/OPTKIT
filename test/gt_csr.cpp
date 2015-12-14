@@ -41,6 +41,33 @@ TEST(InitGraphTest_1, Success)
 **/
 TEST(ComputeNumEdgeIntersectTest_1, Success)
 {
+    /* Some basic setup */
+    char file[OPTKIT_FILE_SIZE];
+    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
+            "../data/MC/janc.gr");
+    CSR g(file);
+
+    /* Test some basic graph properties */
+    vector<pair<int32_t, int32_t> > v_rg;
+    for(int i=0; i<g.get_num_v(); i++)
+    {
+        v_rg.push_back(g.get_e_range(i));
+    }
+
+    /* Compare the correctness of intersection */
+    FILE *writer = fopen("./intersect.txt", "w"); 
+    for(int i=0; i<g.get_num_v(); i++)
+    {
+        for(int j=i+1; j<g.get_num_v(); j++)
+        {
+            fprintf(writer, "%d %d %d\n", 
+                    i, j, g.compute_num_edge_intersect(v_rg[i], v_rg[j]));
+        }
+    }
+    fclose(writer);
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/intersect.txt", 
+                "./intersect.txt"), TstUtil::OPTKIT_TEST_PASS); 
 }
 
 /**
