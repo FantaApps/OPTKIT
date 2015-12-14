@@ -185,6 +185,8 @@ public:
             if(e_idx[c][i] == e_idx[c][j])
             {
                 ++ret;
+                ++i;
+                ++j;
             }
             else if(e_idx[c][i] > e_idx[c][j])
             {
