@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Fixed some bugs 
  *  stplaydog   12/10/15 - Add constructor
  *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Implemented compute support 
