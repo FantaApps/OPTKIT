@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/13/15 - Finished OutputAllCCTest_1 
  *  stplaydog   12/13/15 - Finished ReconstructTest_1, 
  *  stplaydog   12/13/15 - Finished ComputeNumEdgeIntersectTest_1 
  *  stplaydog   12/13/15 - Finished InitGraphTest_1 
@@ -103,4 +104,24 @@ TEST(ReconstructTest_1, Success)
 **/
 TEST(OutputAllCCTest_1, Success)
 {
+    /* Some basic setup */
+    char file[OPTKIT_FILE_SIZE];
+    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
+            "../data/MC/janc.gr");
+    CSR g(file);
+
+    ASSERT_EQ(g.remove_e(0, 3), true);
+    ASSERT_EQ(g.remove_e(0, 6), true);
+    ASSERT_EQ(g.remove_e(1, 4), true);
+    ASSERT_EQ(g.remove_e(1, 6), true);
+    ASSERT_EQ(g.remove_e(2, 5), true);
+    ASSERT_EQ(g.remove_e(2, 6), true);
+
+    g.reconstruct();
+    FILE *writer = fopen("CC.txt", "w");
+    g.output_all_CC(writer);
+    fclose(writer);
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/CC.txt", 
+                "./CC.txt"), TstUtil::OPTKIT_TEST_PASS); 
 }

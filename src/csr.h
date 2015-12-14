@@ -433,7 +433,7 @@ private:
         assert(c < num_c);
         assert(writer  != NULL);
         assert(visited != NULL);
-        assert(v > 0 && v < num_v);
+        assert(v >= 0 && v < num_v);
 
         if(!visited[v])
         {
