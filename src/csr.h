@@ -41,6 +41,10 @@ public:
     /**
      * @brief   This is the constructor
      *
+     * @param[in]   in_file         graph file to read 
+     *
+     *
+     * @return      N/A
     **/
     CSR(const char *in_file)
     {
@@ -149,6 +153,7 @@ public:
      *
      * @param[in]       v_num       number of vertices
      * @param[in]       e_num       number of edges 
+     * @param[in]       _num        number of colors 
      *
      * @return      N/A
      **/
@@ -172,6 +177,13 @@ public:
     }
 
     /**
+     * @brief   compute the number of intersect edges between two vertices
+     *
+     * @param[in]       rg1         range of the first vertex
+     * @param[in]       rg2         range of the second vertex
+     * @param[in]       c           which color
+     *
+     * @return      number of intersections
      *
      * @note    edge list has to be sorted.
     **/
@@ -203,6 +215,8 @@ public:
 
     
     /**
+     * @brief   get number of vertices
+     *
      * @return  number of vertices 
     **/
     int32_t get_num_v()
@@ -211,6 +225,8 @@ public:
     }
 
     /**
+     * @brief   get number of edges 
+     *
      * @return  number of edges 
     **/
     int32_t get_num_e()
@@ -219,6 +235,8 @@ public:
     }
 
     /**
+     * @brief   get number of colors 
+     *
      * @return  number of colors 
     **/
     int32_t get_num_c()
@@ -226,6 +244,15 @@ public:
         return num_c;
     }
 
+    /**
+     * @brief       get vertex being pointed to
+     *
+     * @param[in]       pos         which position
+     * @param[in]       c           which color
+     *
+     * @return      pointed vertex
+     *
+    **/
     int32_t get_to_v(int32_t pos, int32_t c = 0)
     {
         return e_idx[c][pos];
@@ -238,6 +265,8 @@ public:
 
     /**
      * @brief   Reconstruct the graph, because some edges has been removed.
+     *
+     * @param[in]       c           which color
      *
      * @return  N/A
     **/
