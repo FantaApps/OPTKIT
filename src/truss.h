@@ -14,7 +14,7 @@
 #ifndef _H_TRUSS
 #define _H_TRUSS
 
-
+#include "csr.h"
 
 /**
  * @class Truss 
@@ -25,8 +25,32 @@
 class Truss {
 public:
 
+    Truss(int32_t e_num, int32_t c_num)
+    {
+        num_e = e_num;
+        num_c = c_num;
+
+        e_sup = new int32_t*[num_c];
+        for(int32_t c=0; c<num_c; c++)
+        {
+            e_sup[c] = new int32_t[num_e];
+            memset(e_sup[c], 0, num_e * sizeof(int32_t));
+        }
+    }
+
+    ~Truss()
+    {
+        for(int32_t c =0; c<num_c; c++)
+        {
+            delete [] e_sup[c]; 
+        }
+        delete [] e_sup;
+    }
+
     /**
+     * @brief J.Wang Truss Decomposition in Massive Networks, Algorithm 1.
      *
+     * @param[in]   
      *
     **/
     void truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32_t c = 0)
@@ -59,6 +83,26 @@ private:
     int32_t **e_sup; ///< edge support, for truss decomposition only
 
     /**
+     * @brief   Compute the support number of each edge
+     *
+     * @return  N/A
+    **/
+    void compute_sup(CSR &g, int32_t c = 0)
+    {
+        for(int32_t i=0; i<g.get_num_v(); i++)
+        {
+            pair<int32_t, int32_t> rg1 = g.get_e_range(i);
+            for(int32_t j=rg1.first; j<rg1.second; j++)
+            {
+                pair<int32_t, int32_t> rg2 = g.get_e_range(g.get_to_v(j));
+
+                /* Update the support value */
+                e_sup[c][j] = g.compute_num_edge_intersect(rg1, rg2);
+            }
+        }
+    }
+
+    /**
      * @brief   Find an edge of specific support requirement, and 
      *          perform some operations on it.
      *
@@ -89,25 +133,6 @@ private:
         return ret;
     }
 
-    /**
-     * @brief   Compute the support number of each edge
-     *
-     * @return  N/A
-    **/
-    void compute_sup(CSR &g, int32_t c = 0)
-    {
-        for(int32_t i=0; i<g.get_num_v(); i++)
-        {
-            pair<int32_t, int32_t> rg1 = g.get_e_range(i);
-            for(int32_t j=rg1.first; j<rg1.second; j++)
-            {
-                pair<int32_t, int32_t> rg2 = g.get_e_range(g.get_to_v(j));
-
-                /* Update the support value */
-                e_sup[c][j] = g.compute_num_edge_intersect(rg1, rg2);
-            }
-        }
-    }
 
     /**
      * @brief   Reduce the support number of every edge connected to v by 1.

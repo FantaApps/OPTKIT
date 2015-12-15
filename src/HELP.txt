@@ -35,6 +35,8 @@ Options list:
 
 Examples: 
 
+optkit --truss --input_file <file>
+
 optkit --dis --cal_bij --input_file <input_file> --dis_mode <1|2>
         --dict_file <dict_file> --opt_file <opt_file> --p_mode <1|2|3>
         --seq_len <seq_len> --bij_file <bij_file>
