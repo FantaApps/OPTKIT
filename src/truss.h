@@ -4,6 +4,7 @@
  * @brief    This is the header for truss decomposition. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/14/15 - Add constructor/destructor 
  *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Add the basic truss decomposition algorithm. 
  *  stplaydog   09/03/15 - Creation
@@ -25,6 +26,13 @@
 class Truss {
 public:
 
+    /**
+     * @brief Constructor
+     *
+     * @param[in]       e_num       number of edges
+     * @param[in]       c_num       number of colors 
+     *
+    **/
     Truss(int32_t e_num, int32_t c_num)
     {
         num_e = e_num;
@@ -38,6 +46,10 @@ public:
         }
     }
 
+    /**
+     * @brief   Destructor
+     *
+    **/
     ~Truss()
     {
         for(int32_t c =0; c<num_c; c++)
@@ -73,6 +85,26 @@ public:
         }
 
         fclose(writer);
+    }
+
+    /**
+     * @brief   get number of edges 
+     *
+     * @return  number of edges 
+    **/
+    int32_t get_num_e()
+    {
+        return num_e;
+    }
+
+    /**
+     * @brief   get number of colors 
+     *
+     * @return  number of colors 
+    **/
+    int32_t get_num_c()
+    {
+        return num_c;
     }
 
 

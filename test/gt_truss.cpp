@@ -17,6 +17,16 @@
 **/
 TEST(InitTrussTest_1, Success)
 {
+    /* Some basic setup */
+    char file[OPTKIT_FILE_SIZE];
+    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
+            "../data/MC/janc.gr");
+    CSR g(file);
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    /* Test some basic graph properties */
+    ASSERT_EQ(g.get_num_c(), 1);
+    ASSERT_EQ(g.get_num_e(), 26);
 }
 
 /**
