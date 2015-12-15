@@ -17,6 +17,9 @@
 
 #include "csr.h"
 
+#include "gtest/gtest_prod.h"
+
+
 /**
  * @class Truss 
  *
@@ -107,6 +110,25 @@ public:
         return num_c;
     }
 
+    /**
+     * @brief       Dump the content of support
+     *
+     * @return      N/A
+    **/
+    void print_sup()
+    {
+        FILE *writer = fopen("sup.txt", "w");
+        for(int32_t c=0; c<num_c; c++)
+        {
+            for(int32_t i=0; i<num_e; i++)
+            {
+                fprintf(writer, "%d ", e_sup[c][i]);
+            }
+            fprintf(writer, "\n");
+        }
+        fclose(writer);
+    }
+
 
 private:
     int32_t num_e;   ///< total number of edges
@@ -116,6 +138,9 @@ private:
 
     /**
      * @brief   Compute the support number of each edge
+     *
+     * @param[in]       g       graph of CSR format
+     * @param[in]       c       color
      *
      * @return  N/A
     **/
@@ -182,6 +207,10 @@ private:
             --e_sup[c][i];
         }
     }
+
+    // These are google test related
+    FRIEND_TEST(ComputeSupTest_1, Success);
+    FRIEND_TEST(SupEOprTest_1, Success);
 
 };
 
