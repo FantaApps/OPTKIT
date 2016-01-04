@@ -4,6 +4,7 @@
  *  @brief    Unittest of truss decomposition utilities 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   12/15/15 - simplified the test procedure 
  *  stplaydog   12/14/15 - Add InitTrussTest_1, ComputeSupTest_1,
  *                         SupEOprTest_1, TrussDecompositionTest_1. 
  *  stplaydog   12/14/15 - Creation
@@ -20,10 +21,7 @@
 TEST(InitTrussTest_1, Success)
 {
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/MC/janc.gr");
-    CSR g(file);
+    CSR g("../data/MC/janc.gr");
     Truss t(g.get_num_e(), g.get_num_c());
 
     /* Test some basic graph properties */
@@ -42,10 +40,7 @@ TEST(InitTrussTest_1, Success)
 TEST(ComputeSupTest_1, Success)
 {
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/MC/janc.gr");
-    CSR g(file);
+    CSR g("../data/MC/janc.gr");
     Truss t(g.get_num_e(), g.get_num_c());
 
     t.compute_sup(g);
@@ -59,14 +54,50 @@ TEST(ComputeSupTest_1, Success)
  * @brief   test sup_e_opr 
  *
 **/
-TEST(SupEOprTest_1, Success)
+TEST(ReduceOneETest_1, Success)
 {
+    /* Some basic setup */
+    CSR g("../data/MC/janc.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.compute_sup(g);
+    t.reduce_one_edge(g, 0);
+    t.reduce_one_edge(g, 1);
+
+    t.print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_reduce_e.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 }
 
 /**
- * @brief   test reduce_one_edge  
+ * @brief   test sup_e_opr 
+ *
+**/
+TEST(SupEOprTest_1, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/janc.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.compute_sup(g);
+    t.sup_e_opr(g, 3);
+
+    t.print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_e_opr.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+}
+
+/**
+ * @brief   test truss decomposition 
  *
 **/
 TEST(TrussDecompositionTest_1, Success)
 {
+    /* Some basic setup */
+    CSR g("../data/MC/janc.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.truss_decomosition(g, "truss.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/truss_alg1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 }

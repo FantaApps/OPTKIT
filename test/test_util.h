@@ -40,7 +40,7 @@ public:
      * @param[in]       f2      second file to be compared
      *
     **/
-    static int compareFile(const char* f1, const char* f2)
+    static int compareFile(const char* f1, const char* f2, bool is_wildcard=false)
     {
         FILE *file_compared;
         if((file_compared = fopen(f1, "r")) == NULL)
@@ -66,7 +66,16 @@ public:
             s1 = fread(b1, 1, OPTKIT_GTEST_SIZE, file_compared);
             s2 = fread(b2, 1, OPTKIT_GTEST_SIZE, file_checked);
 
-            if (s1 != s2 || memcmp(b1, b2, s1)) {
+            if(is_wildcard)
+            {
+                if(!isMatch(b1, b2))
+                {
+                    diff = 1;
+                    break;
+                }
+            }
+            else if (s1 != s2 || memcmp(b1, b2, s1)) 
+            {
                 diff = 1;
                 break;
             }
@@ -78,6 +87,52 @@ public:
         if (diff) return OPTKIT_TEST_FAIL;
         else return OPTKIT_TEST_PASS;
     }
+
+    static bool isMatch(const char *s, const char *p) {
+        const char* star=NULL;
+        const char* ss=s;
+
+        while (*s){
+            //advancing both pointers when (both characters match) or ('?' found in pattern)
+            //note that *p will not advance beyond its length 
+            if ((*p=='.')||(*p==*s))
+            {
+                s++;
+                p++;
+                continue;
+            } 
+
+            // * found in pattern, track index of *, only advancing pattern pointer 
+            if (*p=='*')
+            {
+                star=p++; 
+                ss=s;
+                continue;
+            } 
+
+            //current characters didn't match, last pattern pointer was *, current pattern pointer is not *
+            //only advancing pattern pointer
+            if (star)
+            { 
+                p = star+1; 
+                s=++ss;
+                continue;
+            } 
+
+            //current pattern pointer is not star, last patter pointer was not *
+            //characters do not match
+            return false;
+        }
+
+        //check for remaining characters in pattern
+        while (*p=='*')
+        {
+            p++;
+        }
+
+        return !*p;  
+    }
+
 };
 
 #endif

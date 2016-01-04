@@ -176,10 +176,10 @@ private:
             {
                 if(e_sup[c][j] > (k - 2))
                 {
+                    int32_t to = g.get_to_v(j);
                     reduce_one_edge(g, i);
-                    reduce_one_edge(g, g.get_to_v(j));
-
-                    g.set_rmvd(j);
+                    reduce_one_edge(g, to);
+                    g.remove_e(i, to);
                     e_sup[c][j] = 0;
 
                     ret = true;
@@ -200,6 +200,8 @@ private:
     **/
     void reduce_one_edge(CSR & g, int32_t v, int32_t c=0)
     {
+        assert(v>=0 && v<g.get_num_v());
+
         pair<int32_t, int32_t> rg = g.get_e_range(v);
 
         for(int32_t i=rg.first; i<rg.second; i++)
@@ -209,6 +211,7 @@ private:
     }
 
     // These are google test related
+    FRIEND_TEST(ReduceOneETest_1, Success);
     FRIEND_TEST(ComputeSupTest_1, Success);
     FRIEND_TEST(SupEOprTest_1, Success);
 

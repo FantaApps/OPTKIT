@@ -258,11 +258,6 @@ public:
         return e_idx[c][pos];
     }
 
-    void set_rmvd(int32_t pos, int32_t c = 0)
-    {
-        e_idx[c][pos] = RMVD;
-    }
-
     /**
      * @brief   Reconstruct the graph, because some edges has been removed.
      *
