@@ -4,10 +4,9 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
- *  stplaydog   12/13/15 - Finished OutputAllCCTest_1 
- *  stplaydog   12/13/15 - Finished ReconstructTest_1, 
- *  stplaydog   12/13/15 - Finished ComputeNumEdgeIntersectTest_1 
- *  stplaydog   12/13/15 - Finished InitGraphTest_1 
+ *  stplaydog   12/15/15 - simplified the test procedure 
+ *  stplaydog   12/13/15 - Finished OutputAllCCTest_1, ReconstructTest_1, 
+ *                         ComputeNumEdgeIntersectTest_1, InitGraphTest_1 
  *  stplaydog   12/10/15 - Creation
 **/
 
@@ -22,10 +21,7 @@
 TEST(InitGraphTest_1, Success)
 {
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/MC/janc.gr");
-    CSR g(file);
+    CSR g("../data/MC/janc.gr");
 
     /* Test some basic graph properties */
     ASSERT_EQ(g.get_num_v(), 8);
@@ -45,10 +41,7 @@ TEST(InitGraphTest_1, Success)
 TEST(ComputeNumEdgeIntersectTest_1, Success)
 {
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/MC/janc.gr");
-    CSR g(file);
+    CSR g("../data/MC/janc.gr");
 
     /* Test some basic graph properties */
     vector<pair<int32_t, int32_t> > v_rg;
@@ -82,10 +75,7 @@ TEST(ComputeNumEdgeIntersectTest_1, Success)
 TEST(ReconstructTest_1, Success)
 {
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/MC/janc.gr");
-    CSR g(file);
+    CSR g("../data/MC/janc.gr");
 
     ASSERT_EQ(g.remove_e(0, 6), true);
     ASSERT_EQ(g.remove_e(3, 7), true);
@@ -93,6 +83,9 @@ TEST(ReconstructTest_1, Success)
     ASSERT_EQ(g.remove_e(2, 5), false);
 
     g.reconstruct();
+
+    ASSERT_EQ(g.get_num_e(), 20);
+
     g.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_reconstruct.dot", 
                 "./csr.dot"), TstUtil::OPTKIT_TEST_PASS); 
@@ -105,10 +98,7 @@ TEST(ReconstructTest_1, Success)
 TEST(OutputAllCCTest_1, Success)
 {
     /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/MC/janc.gr");
-    CSR g(file);
+    CSR g("../data/MC/janc.gr");
 
     ASSERT_EQ(g.remove_e(0, 3), true);
     ASSERT_EQ(g.remove_e(0, 6), true);

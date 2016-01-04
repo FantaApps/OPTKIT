@@ -17,6 +17,14 @@
 
 #include "csr.h"
 
+#include "gtest/gtest_prod.h"
+
+
+#include <iostream>
+
+using namespace std;
+
+
 /**
  * @class Truss 
  *
@@ -107,6 +115,25 @@ public:
         return num_c;
     }
 
+    /**
+     * @brief       Dump the content of support
+     *
+     * @return      N/A
+    **/
+    void print_sup()
+    {
+        FILE *writer = fopen("sup.txt", "w");
+        for(int32_t c=0; c<num_c; c++)
+        {
+            for(int32_t i=0; i<num_e; i++)
+            {
+                fprintf(writer, "%d ", e_sup[c][i]);
+            }
+            fprintf(writer, "\n");
+        }
+        fclose(writer);
+    }
+
 
 private:
     int32_t num_e;   ///< total number of edges
@@ -116,6 +143,9 @@ private:
 
     /**
      * @brief   Compute the support number of each edge
+     *
+     * @param[in]       g       graph of CSR format
+     * @param[in]       c       color
      *
      * @return  N/A
     **/
@@ -149,15 +179,17 @@ private:
 
             for(int32_t j=rg.first; j<rg.second; ++j)
             {
-                if(e_sup[c][j] > (k - 2))
+                if(e_sup[c][j] < (k - 2))
                 {
-                    reduce_one_edge(g, i);
-                    reduce_one_edge(g, g.get_to_v(j));
+                    int32_t to = g.get_to_v(j);
+                    if(i < to)
+                    {
+                        reduce_one_edge(g, i, to);
+                        g.remove_e(i, to);
+                        e_sup[c][j] = 0;
 
-                    g.set_rmvd(j);
-                    e_sup[c][j] = 0;
-
-                    ret = true;
+                        ret = true;
+                    }
                 }
             }
         }
@@ -169,19 +201,30 @@ private:
     /**
      * @brief   Reduce the support number of every edge connected to v by 1.
      *
-     * @param[in]       v       vertex id
+     * @param[in]       u       one vertex id
+     * @param[in]       v       another vertex id
      *
      * @return      N/A
-    **/
-    void reduce_one_edge(CSR & g, int32_t v, int32_t c=0)
+     **/
+    void reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c=0)
     {
-        pair<int32_t, int32_t> rg = g.get_e_range(v);
+        assert(u>=0 && u<g.get_num_v());
+        assert(v>=0 && v<g.get_num_v());
 
-        for(int32_t i=rg.first; i<rg.second; i++)
+        pair<int32_t, int32_t> rg1 = g.get_e_range(u);
+        pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+        vector<int32_t> W = g.get_intersect_edges(rg1, rg2); 
+
+        for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
         {
-            --e_sup[c][i];
+            --e_sup[c][*it];
         }
     }
+
+    // These are google test related
+    FRIEND_TEST(ReduceOneETest_1, Success);
+    FRIEND_TEST(ComputeSupTest_1, Success);
+    FRIEND_TEST(SupEOprTest_1, Success);
 
 };
 

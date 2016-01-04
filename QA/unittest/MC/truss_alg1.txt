@@ -1,0 +1,10 @@
+Comp [0] :0 1 6 2 5 
+Comp [1] :4 
+Comp [2] :7 
+Comp [0] :0 
+Comp [1] :1 
+Comp [2] :2 
+Comp [3] :4 
+Comp [4] :5 
+Comp [5] :6 
+Comp [6] :7 
