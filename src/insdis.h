@@ -1,5 +1,5 @@
 /**
- * Copy right YMSys, 2015, Zhaoming Yin
+ * Copy right YMSys, 2015,2016 Zhaoming Yin
  *
  * @brief    This is the header of DCJ distance methods. 
  *

@@ -1,9 +1,10 @@
 /**
- * Copy right YMSys, 2015, Zhaoming Yin
+ * Copy right YMSys, 2015,2016 Zhaoming Yin
  *
  * @brief    This is the header for truss decomposition. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/04/16 - Some bug fixing works. 
  *  stplaydog   12/14/15 - Add constructor/destructor 
  *  stplaydog   12/10/15 - Fix build bugs
  *  stplaydog   12/08/15 - Add the basic truss decomposition algorithm. 
