@@ -83,6 +83,9 @@ TEST(ReconstructTest_1, Success)
     ASSERT_EQ(g.remove_e(2, 5), false);
 
     g.reconstruct();
+
+    ASSERT_EQ(g.get_num_e(), 20);
+
     g.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_reconstruct.dot", 
                 "./csr.dot"), TstUtil::OPTKIT_TEST_PASS); 

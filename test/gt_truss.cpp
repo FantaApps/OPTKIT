@@ -4,6 +4,7 @@
  *  @brief    Unittest of truss decomposition utilities 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/04/16 - Fixed some bugs 
  *  stplaydog   12/15/15 - simplified the test procedure 
  *  stplaydog   12/14/15 - Add InitTrussTest_1, ComputeSupTest_1,
  *                         SupEOprTest_1, TrussDecompositionTest_1. 
@@ -61,8 +62,7 @@ TEST(ReduceOneETest_1, Success)
     Truss t(g.get_num_e(), g.get_num_c());
 
     t.compute_sup(g);
-    t.reduce_one_edge(g, 0);
-    t.reduce_one_edge(g, 1);
+    t.reduce_one_edge(g, 0, 1);
 
     t.print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_reduce_e.txt", "./sup.txt"), 

@@ -20,6 +20,11 @@
 #include "gtest/gtest_prod.h"
 
 
+#include <iostream>
+
+using namespace std;
+
+
 /**
  * @class Truss 
  *
@@ -174,15 +179,17 @@ private:
 
             for(int32_t j=rg.first; j<rg.second; ++j)
             {
-                if(e_sup[c][j] > (k - 2))
+                if(e_sup[c][j] < (k - 2))
                 {
                     int32_t to = g.get_to_v(j);
-                    reduce_one_edge(g, i);
-                    reduce_one_edge(g, to);
-                    g.remove_e(i, to);
-                    e_sup[c][j] = 0;
+                    if(i < to)
+                    {
+                        reduce_one_edge(g, i, to);
+                        g.remove_e(i, to);
+                        e_sup[c][j] = 0;
 
-                    ret = true;
+                        ret = true;
+                    }
                 }
             }
         }
@@ -194,19 +201,23 @@ private:
     /**
      * @brief   Reduce the support number of every edge connected to v by 1.
      *
-     * @param[in]       v       vertex id
+     * @param[in]       u       one vertex id
+     * @param[in]       v       another vertex id
      *
      * @return      N/A
-    **/
-    void reduce_one_edge(CSR & g, int32_t v, int32_t c=0)
+     **/
+    void reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c=0)
     {
+        assert(u>=0 && u<g.get_num_v());
         assert(v>=0 && v<g.get_num_v());
 
-        pair<int32_t, int32_t> rg = g.get_e_range(v);
+        pair<int32_t, int32_t> rg1 = g.get_e_range(u);
+        pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+        vector<int32_t> W = g.get_intersect_edges(rg1, rg2); 
 
-        for(int32_t i=rg.first; i<rg.second; i++)
+        for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
         {
-            --e_sup[c][i];
+            --e_sup[c][*it];
         }
     }
 

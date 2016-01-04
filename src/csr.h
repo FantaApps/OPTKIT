@@ -4,6 +4,8 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/04/16 - Fix one bug to remove one edge,
+ *                         add get_intersect_edges()
  *  stplaydog   12/13/15 - Fixed some bugs 
  *  stplaydog   12/10/15 - Add constructor
  *  stplaydog   12/10/15 - Fix build bugs
@@ -213,6 +215,44 @@ public:
         return ret;
     }
 
+    /**
+     * @brief   get a list of actual intersect edges between two vertices 
+     *
+     * @param[in]       rg1         range of the first vertex
+     * @param[in]       rg2         range of the second vertex
+     * @param[in]       c           which color
+     *
+     * @return      List of intersected edges.
+     *
+     * @note    edge list has to be sorted.
+    **/
+    vector<int32_t> get_intersect_edges(pair<int32_t, int32_t> rg1,
+                                        pair<int32_t, int32_t> rg2,
+                                        int32_t c = 0)
+    {
+        vector<int32_t> ret;
+        int32_t i(rg1.first), j(rg2.first);
+        while(i<rg1.second && j<rg2.second)
+        {
+            if(e_idx[c][i] == e_idx[c][j])
+            {
+                ret.push_back(i);
+                ret.push_back(j);
+                ++i;
+                ++j;
+            }
+            else if(e_idx[c][i] > e_idx[c][j])
+            {
+                ++j;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        return ret;
+    }
+
     
     /**
      * @brief   get number of vertices
@@ -311,6 +351,7 @@ public:
                 ++nxt;
             }
         }
+        num_e = cur;
     }
 
     /**
