@@ -108,6 +108,8 @@ TEST(OutputAllCCTest_1, Success)
     ASSERT_EQ(g.remove_e(2, 6), true);
 
     g.reconstruct();
+    ASSERT_EQ(g.get_num_e(), 14);
+
     FILE *writer = fopen("CC.txt", "w");
     g.output_all_CC(writer);
     fclose(writer);
