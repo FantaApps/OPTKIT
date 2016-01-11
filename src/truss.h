@@ -4,6 +4,7 @@
  * @brief    This is the header for truss decomposition. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/10/16 - Some bug fixing works. 
  *  stplaydog   01/04/16 - Some bug fixing works. 
  *  stplaydog   12/14/15 - Add constructor/destructor 
  *  stplaydog   12/10/15 - Fix build bugs
@@ -85,10 +86,11 @@ public:
         while(g.get_num_e() > 0)
         {
             while(sup_e_opr(g, k));
-
-            g.reconstruct();
-
-            g.output_all_CC(writer);
+            
+            if(g.get_num_e() > 0)
+            {
+                g.output_all_CC(writer, true);
+            }
 
             ++k;
         }
@@ -169,6 +171,9 @@ private:
      * @brief   Find an edge of specific support requirement, and 
      *          perform some operations on it.
      *
+     * @param[in]       g       graph of CSR format
+     * @param[in]       k       support value
+     *
      * @return  N/A
     **/
     bool sup_e_opr(CSR &g, int32_t k, int32_t c = 0)
@@ -187,13 +192,31 @@ private:
                     {
                         reduce_one_edge(g, i, to);
                         g.remove_e(i, to);
-                        e_sup[c][j] = 0;
 
                         ret = true;
                     }
                 }
             }
         }
+
+        g.reconstruct();
+
+        /* moving elements in e_sup */
+        int32_t cur=0, nxt=0;
+        while(nxt < num_e)
+        {
+            if(e_sup[c][nxt] == -1) 
+            {
+                ++nxt;
+            }
+            else
+            {
+                e_sup[c][cur] = e_sup[c][nxt];
+                ++cur;
+                ++nxt;
+            }
+        }
+        num_e = cur;
 
         return ret;
     }
@@ -212,15 +235,33 @@ private:
         assert(u>=0 && u<g.get_num_v());
         assert(v>=0 && v<g.get_num_v());
 
-        pair<int32_t, int32_t> rg1 = g.get_e_range(u);
-        pair<int32_t, int32_t> rg2 = g.get_e_range(v);
-        vector<int32_t> W = g.get_intersect_edges(rg1, rg2); 
+        vector<int32_t> W = g.get_intersect_edges(u, v); 
 
         for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
         {
             --e_sup[c][*it];
         }
+
+        pair<int32_t, int32_t> rg1 = g.get_e_range(u);
+        for(int i=rg1.first; i<rg1.second; i++)
+        {
+            if(g.get_to_v(i) == v)
+            {
+                e_sup[c][i] = -1;
+            }
+        }
+
+        pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+        for(int i=rg2.first; i<rg2.second; i++)
+        {
+            if(g.get_to_v(i) == u)
+            {
+                e_sup[c][i] = -1;
+            }
+        }
+
     }
+
 
     // These are google test related
     FRIEND_TEST(ReduceOneETest_1, Success);

@@ -4,6 +4,7 @@
  *  @brief    Unittest of truss decomposition utilities 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/10/16 - Validate all results in janc graph  
  *  stplaydog   01/04/16 - Fixed some bugs 
  *  stplaydog   12/15/15 - simplified the test procedure 
  *  stplaydog   12/14/15 - Add InitTrussTest_1, ComputeSupTest_1,
@@ -80,7 +81,14 @@ TEST(SupEOprTest_1, Success)
     Truss t(g.get_num_e(), g.get_num_c());
 
     t.compute_sup(g);
-    t.sup_e_opr(g, 3);
+    bool ret = t.sup_e_opr(g, 3);
+
+    ASSERT_EQ(ret, true);
+
+    g.visualize();
+    ASSERT_EQ(g.get_num_e(), 20);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_e_opr.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
     t.print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_e_opr.txt", "./sup.txt"), 

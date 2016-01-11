@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/10/16 - Validate all results in janc graph  
  *  stplaydog   12/15/15 - simplified the test procedure 
  *  stplaydog   12/13/15 - Finished OutputAllCCTest_1, ReconstructTest_1, 
  *                         ComputeNumEdgeIntersectTest_1, InitGraphTest_1 
@@ -108,6 +109,8 @@ TEST(OutputAllCCTest_1, Success)
     ASSERT_EQ(g.remove_e(2, 6), true);
 
     g.reconstruct();
+    ASSERT_EQ(g.get_num_e(), 14);
+
     FILE *writer = fopen("CC.txt", "w");
     g.output_all_CC(writer);
     fclose(writer);
