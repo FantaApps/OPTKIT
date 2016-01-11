@@ -4,6 +4,7 @@
  * @brief    This is the header for truss decomposition. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/10/16 - Some bug fixing works. 
  *  stplaydog   01/04/16 - Some bug fixing works. 
  *  stplaydog   12/14/15 - Add constructor/destructor 
  *  stplaydog   12/10/15 - Fix build bugs
@@ -85,10 +86,11 @@ public:
         while(g.get_num_e() > 0)
         {
             while(sup_e_opr(g, k));
-
-            g.reconstruct();
-
-            g.output_all_CC(writer);
+            
+            if(g.get_num_e() > 0)
+            {
+                g.output_all_CC(writer, true);
+            }
 
             ++k;
         }
@@ -196,6 +198,25 @@ private:
                 }
             }
         }
+
+        g.reconstruct();
+
+        /* moving elements in e_sup */
+        int32_t cur=0, nxt=0;
+        while(nxt < num_e)
+        {
+            if(e_sup[c][nxt] == -1) 
+            {
+                ++nxt;
+            }
+            else
+            {
+                e_sup[c][cur] = e_sup[c][nxt];
+                ++cur;
+                ++nxt;
+            }
+        }
+        num_e = cur;
 
         return ret;
     }

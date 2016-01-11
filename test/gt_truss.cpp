@@ -85,7 +85,6 @@ TEST(SupEOprTest_1, Success)
 
     ASSERT_EQ(ret, true);
 
-    g.reconstruct();
     g.visualize();
     ASSERT_EQ(g.get_num_e(), 20);
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_e_opr.dot", "./csr.dot"), 
@@ -100,13 +99,13 @@ TEST(SupEOprTest_1, Success)
  * @brief   test truss decomposition 
  *
 **/
-//TEST(TrussDecompositionTest_1, Success)
-//{
-//    /* Some basic setup */
-//    CSR g("../data/MC/janc.gr");
-//    Truss t(g.get_num_e(), g.get_num_c());
-//
-//    t.truss_decomosition(g, "truss.txt", 5);
-//    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/truss_alg1.txt", "./truss.txt"), 
-//            TstUtil::OPTKIT_TEST_PASS); 
-//}
+TEST(TrussDecompositionTest_1, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/janc.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.truss_decomosition(g, "truss.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/truss_alg1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+}

@@ -429,7 +429,7 @@ public:
      *
      * @return      N/A
      **/
-    void output_all_CC(FILE *writer, int32_t c = 0)
+    void output_all_CC(FILE *writer, bool with_edge = false, int32_t c = 0)
     {
         assert(c < num_c);
         assert(writer  != NULL);
@@ -439,7 +439,8 @@ public:
         int32_t count = 0;
         for(int32_t i=0; i<num_v; i++)
         {
-            if(!visited[i])
+            pair<int32_t, int32_t> rg = get_e_range(i, c);
+            if(!visited[i] && (!with_edge || rg.first < rg.second))
             {
                 fprintf(writer, "Comp [%d] :", count++);
                 output_one_CC(writer, i, visited, c);
