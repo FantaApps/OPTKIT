@@ -212,9 +212,7 @@ private:
         assert(u>=0 && u<g.get_num_v());
         assert(v>=0 && v<g.get_num_v());
 
-        pair<int32_t, int32_t> rg1 = g.get_e_range(u);
-        pair<int32_t, int32_t> rg2 = g.get_e_range(v);
-        vector<int32_t> W = g.get_intersect_edges(rg1, rg2); 
+        vector<int32_t> W = g.get_intersect_edges(u, v); 
 
         for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
         {

@@ -218,26 +218,36 @@ public:
     /**
      * @brief   get a list of actual intersect edges between two vertices 
      *
-     * @param[in]       rg1         range of the first vertex
-     * @param[in]       rg2         range of the second vertex
+     * @param[in]       u           one vertex id
+     * @param[in]       v           another vertex id
      * @param[in]       c           which color
      *
      * @return      List of intersected edges.
      *
      * @note    edge list has to be sorted.
     **/
-    vector<int32_t> get_intersect_edges(pair<int32_t, int32_t> rg1,
-                                        pair<int32_t, int32_t> rg2,
+    vector<int32_t> get_intersect_edges(int32_t u, int32_t v,
                                         int32_t c = 0)
     {
+        assert(u>=0 && u<get_num_v());
+        assert(v>=0 && v<get_num_v());
+
         vector<int32_t> ret;
+        vector<int32_t> vto;
+
+        /* process from edges */
+        pair<int32_t, int32_t> rg1 = get_e_range(u);
+        pair<int32_t, int32_t> rg2 = get_e_range(v);
+
         int32_t i(rg1.first), j(rg2.first);
+
         while(i<rg1.second && j<rg2.second)
         {
             if(e_idx[c][i] == e_idx[c][j])
             {
                 ret.push_back(i);
                 ret.push_back(j);
+                vto.push_back(e_idx[c][i]);
                 ++i;
                 ++j;
             }
@@ -250,6 +260,20 @@ public:
                 ++i;
             }
         }
+        
+        /* process to edges */
+        for(vector<int32_t>::iterator it = vto.begin(); it != vto.end(); ++it)
+        {
+            pair<int32_t, int32_t> rg = get_e_range(*it);
+            for(int i = rg.first; i<rg.second; i++)
+            {
+                if(e_idx[c][i] == u || e_idx[c][i] == v)
+                {
+                    ret.push_back(i);
+                }
+            }
+        }
+
         return ret;
     }
 
