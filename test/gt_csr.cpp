@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/10/16 - Validate all results in janc graph  
  *  stplaydog   12/15/15 - simplified the test procedure 
  *  stplaydog   12/13/15 - Finished OutputAllCCTest_1, ReconstructTest_1, 
  *                         ComputeNumEdgeIntersectTest_1, InitGraphTest_1 

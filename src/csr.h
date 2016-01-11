@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   01/10/16 - Fix one bug in get_intersect_edges 
  *  stplaydog   01/04/16 - Fix one bug to remove one edge,
  *                         add get_intersect_edges()
  *  stplaydog   12/13/15 - Fixed some bugs 
@@ -245,9 +246,12 @@ public:
         {
             if(e_idx[c][i] == e_idx[c][j])
             {
-                ret.push_back(i);
-                ret.push_back(j);
-                vto.push_back(e_idx[c][i]);
+                if(e_idx[c][i] != RMVD)
+                {
+                    ret.push_back(i);
+                    ret.push_back(j);
+                    vto.push_back(e_idx[c][i]);
+                }
                 ++i;
                 ++j;
             }

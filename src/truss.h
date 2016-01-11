@@ -169,6 +169,9 @@ private:
      * @brief   Find an edge of specific support requirement, and 
      *          perform some operations on it.
      *
+     * @param[in]       g       graph of CSR format
+     * @param[in]       k       support value
+     *
      * @return  N/A
     **/
     bool sup_e_opr(CSR &g, int32_t k, int32_t c = 0)
@@ -187,7 +190,6 @@ private:
                     {
                         reduce_one_edge(g, i, to);
                         g.remove_e(i, to);
-                        e_sup[c][j] = 0;
 
                         ret = true;
                     }
@@ -218,7 +220,27 @@ private:
         {
             --e_sup[c][*it];
         }
+
+        pair<int32_t, int32_t> rg1 = g.get_e_range(u);
+        for(int i=rg1.first; i<rg1.second; i++)
+        {
+            if(g.get_to_v(i) == v)
+            {
+                e_sup[c][i] = -1;
+            }
+        }
+
+        pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+        for(int i=rg2.first; i<rg2.second; i++)
+        {
+            if(g.get_to_v(i) == u)
+            {
+                e_sup[c][i] = -1;
+            }
+        }
+
     }
+
 
     // These are google test related
     FRIEND_TEST(ReduceOneETest_1, Success);
