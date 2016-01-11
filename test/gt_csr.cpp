@@ -33,6 +33,8 @@ TEST(InitGraphTest_1, Success)
     g.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./csr.dot");
 }
 
 /**
@@ -65,6 +67,8 @@ TEST(ComputeNumEdgeIntersectTest_1, Success)
 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/intersect.txt", 
                 "./intersect.txt"), TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./intersect.txt");
 }
 
 /**
@@ -90,6 +94,8 @@ TEST(ReconstructTest_1, Success)
     g.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_reconstruct.dot", 
                 "./csr.dot"), TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./csr.dot");
 }
 
 /**
@@ -117,4 +123,6 @@ TEST(OutputAllCCTest_1, Success)
 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/CC.txt", 
                 "./CC.txt"), TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./CC.txt");
 }
