@@ -15,6 +15,7 @@
 #include "csr.h"
 #include "test_util.h" 
 
+
 /**
  * @brief   Test a small graph one color
  *
@@ -31,7 +32,7 @@ TEST(InitGraphTest_1, Success)
 
     /* Test the content of the graph */
     g.visualize();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr.dot", "./csr.dot"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./csr.dot");
@@ -65,7 +66,7 @@ TEST(ComputeNumEdgeIntersectTest_1, Success)
     }
     fclose(writer);
 
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/intersect.txt", 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/intersect.txt", 
                 "./intersect.txt"), TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./intersect.txt");
@@ -92,7 +93,7 @@ TEST(ReconstructTest_1, Success)
     ASSERT_EQ(g.get_num_e(), 20);
 
     g.visualize();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_reconstruct.dot", 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr_reconstruct.dot", 
                 "./csr.dot"), TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./csr.dot");
@@ -121,7 +122,7 @@ TEST(OutputAllCCTest_1, Success)
     g.output_all_CC(writer);
     fclose(writer);
 
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/CC.txt", 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/CC.txt", 
                 "./CC.txt"), TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./CC.txt");

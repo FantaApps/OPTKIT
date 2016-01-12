@@ -22,6 +22,7 @@
 #include "utils.h"
 #include <algorithm>
 
+
 using namespace std; 
 
 /**
@@ -58,6 +59,8 @@ public:
         int32_t v_to  = OPTKIT_NULL;
         int32_t color = OPTKIT_NULL;
         int32_t sum   = 0;
+
+        LOG(INFO) << "Initiating list...";
 
         /* Read the head information, 
            and allocate according variables */

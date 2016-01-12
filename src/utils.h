@@ -28,6 +28,7 @@
 #include <cmath>
 #include <cassert>
 #include <vector>
+#include <glog/logging.h>
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"

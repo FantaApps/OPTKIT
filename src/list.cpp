@@ -17,6 +17,7 @@ extern int which_med;
 int g_count;
 bool control;
 
+
 #define FILTER 4
 
 /**
@@ -28,10 +29,11 @@ bool control;
  * @param[in]       num_t           number of threads
  * @param[in]       is_u            compute based on upper bound
  * @param[in]       is_enumerate_a  unumerate all possible solutions
- * @param[in]       log             place to keep the log file
  *
 **/
-List::List(int32_t b_size, int32_t list_size, int32_t b, int32_t num_t, bool is_u, bool *is_enumerate_a, const char* log)
+List::List(int32_t b_size, int32_t list_size, 
+           int32_t b,      int32_t num_t, 
+           bool is_u,      bool is_enumerate_a)
 {
     count            = new int*[num_threads];
 	eliminate        = new bool*[num_threads];
@@ -47,7 +49,7 @@ List::List(int32_t b_size, int32_t list_size, int32_t b, int32_t num_t, bool is_
     base             = b;
     buck_size        = b_size; 
     is_ub            = is_u;
-    is_enumerate_all = *is_enumerate_a;
+    is_enumerate_all = is_enumerate_a;
 	max_val          = 0;
 	min_val          = 100000000;
 	num_threads      = num_t;
@@ -56,6 +58,7 @@ List::List(int32_t b_size, int32_t list_size, int32_t b, int32_t num_t, bool is_
 	search_space     = 0;
 	write_num        = 0;
 	write_cnt        = 0;
+
 
     for(int i =0; i<num_threads; i++)
     {
