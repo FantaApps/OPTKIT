@@ -33,7 +33,7 @@ TEST(InitTrussTest_1, Success)
     ASSERT_EQ(t.get_num_e(), 26);
 
     t.print_sup();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_init.txt", "./sup.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_init.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");
@@ -52,7 +52,7 @@ TEST(ComputeSupTest_1, Success)
     t.compute_sup(g);
 
     t.print_sup();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_compt.txt", "./sup.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_compt.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");
@@ -72,7 +72,7 @@ TEST(ReduceOneETest_1, Success)
     t.reduce_one_edge(g, 0, 1);
 
     t.print_sup();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_reduce_e.txt", "./sup.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");
@@ -95,11 +95,11 @@ TEST(SupEOprTest_1, Success)
 
     g.visualize();
     ASSERT_EQ(g.get_num_e(), 20);
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/csr_e_opr.dot", "./csr.dot"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     t.print_sup();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/sup_e_opr.txt", "./sup.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");
@@ -117,7 +117,7 @@ TEST(TrussDecompositionTest_1, Success)
     Truss t(g.get_num_e(), g.get_num_c());
 
     t.truss_decomosition(g, "truss.txt", 5);
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/MC/truss_alg1.txt", "./truss.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/truss_alg1.txt", "./truss.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./truss.txt");
