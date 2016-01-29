@@ -4,6 +4,7 @@ compiler:
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libgtest-dev
+  - sudo apt-get install libgoogle-glog-dev 
   - sudo apt-get install cmake 
   - cd /usr/src/gtest
   - sudo cmake CMakeLists.txt
