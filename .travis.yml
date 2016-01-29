@@ -14,7 +14,8 @@ before_script:
   - sudo tar zxvf glog-0.3.3.tar.gz
   - cd glog-0.3.3
   - sudo ./configure
-  - sudo make && make install
+  - sudo make 
+  - sudo make install
   - cd ${TRAVIS_BUILD_DIR} 
   - chmod +x init.sh 
   - ./init.sh 
