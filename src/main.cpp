@@ -42,6 +42,8 @@ void print_help();
 **/
 int32_t main(int32_t argc , char *argv[])
 {
+    google::InitGoogleLogging("optkit");
+    LOG(INFO) << "Initiating OPTKIT...";
     Config *cfg = new Config();
     int32_t ret = process_options(argc, argv, cfg);
     return ret;

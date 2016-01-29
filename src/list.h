@@ -70,8 +70,6 @@ public:
     bool is_lk_max;        ///<
     bool is_lk;            ///<
 
-    FILE *logger;
-
     //this for debug purpose only
 #ifdef USE_DEBUG
     int32_t **g_count_list;
@@ -80,7 +78,10 @@ public:
 
 public:
     /* main functions */
-    List(int32_t buck_size, int32_t list_size, int32_t base, int32_t num_t, bool is_ub, bool *is_enumerate_all = NULL, const char* log = NULL);
+    List(int32_t buck_size, int32_t list_size, 
+         int32_t base,      int32_t num_t, 
+         bool is_ub,        bool is_enumerate_all = false);
+
     virtual ~List();
 
     bool compute_partition(int32_t buck_id, Instance** ins);
