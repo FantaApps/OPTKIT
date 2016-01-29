@@ -13,7 +13,7 @@ before_script:
   - sudo wget https://google-glog.googlecode.com/files/glog-0.3.3.tar.gz
   - sudo tar zxvf glog-0.3.3.tar.gz
   - cd glog-0.3.3
-  - ./configure
+  - sudo ./configure
   - sudo make && make install
   - cd ${TRAVIS_BUILD_DIR} 
   - chmod +x init.sh 
