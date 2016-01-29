@@ -4,4 +4,4 @@ aclocal
 autoconf
 automake -a
 ./configure
-ldconfig
+sudo ldconfig
