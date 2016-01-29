@@ -3,7 +3,7 @@ bin_PROGRAMS=optkit
 optkit_SOURCES=insdis.cpp insmed.cpp plist.cpp timer.cpp insdis.h list.cpp insknap.cpp instance.cpp main.cpp utils.cpp insmc.cpp listint.cpp graph_util.cpp 
 optkit_LDADD=$(OPENMP_LIBi) 
 if DEBUG
-AM_CXXFLAGS = -g  -fopenmp -I$(top_srcdir)/lib -D__USE_XOPEN2K8 -lglog -lpthread -ldl 
+AM_CXXFLAGS = -g  -fopenmp -I$(top_srcdir)/lib -D__USE_XOPEN2K8 -lglog
 else
-AM_CXXFLAGS = -g -fopenmp -I$(top_srcdir)/lib -DUSE_DEBUG -D__USE_XOPEN2K8 -lglog -lpthread -ldl
+AM_CXXFLAGS = -g -fopenmp -I$(top_srcdir)/lib -DUSE_DEBUG -D__USE_XOPEN2K8 -lglog
 endif

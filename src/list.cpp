@@ -17,7 +17,6 @@ extern int which_med;
 int g_count;
 bool control;
 
-
 #define FILTER 4
 
 /**

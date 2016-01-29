@@ -22,8 +22,8 @@
 **/
 TEST(InitTrussTest_1, Success)
 {
-    FLAGS_log_dir();
-    google::InitGoogleLogging("gtest");
+    google::InitGoogleLogging("OPTKIT_TEST");
+
     /* Some basic setup */
     CSR g("../data/MC/janc.gr");
     Truss t(g.get_num_e(), g.get_num_c());
