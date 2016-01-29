@@ -10,7 +10,7 @@ before_script:
   - sudo make
   - sudo cp *.a /usr/lib
   - sudo apt-get install libboost-graph-dev
-  - wget https://google-glog.googlecode.com/files/glog-0.3.3.tar.gz
+  - sudo wget https://google-glog.googlecode.com/files/glog-0.3.3.tar.gz
   - sudo tar zxvf glog-0.3.3.tar.gz
   - cd glog-0.3.3
   - ./configure
