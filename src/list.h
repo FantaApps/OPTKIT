@@ -29,24 +29,25 @@
 
 using namespace std;
 
-class List{
+template <class T>
+class List
+{
 public:
     time_list t;           ///<
 
+    T   **content;         ///< The real content that stores the encode info.
+    int **c_idx;           ///< Iontent index indicate start and end position.
+    int *c_pos;            ///< Indicate how many position have been filled.
+
     int32_t **count;       ///< number of element in thread i of bucket j
-    int32_t **end;         ///<
-    int32_t **idx_sum;     ///<
-    int32_t **l_lb;        ///<
-    int32_t **l_ub;        ///<
     int32_t **nei_score;   ///<
     int32_t **start;       ///<
-
+    int32_t **end;         ///<
+    int32_t **idx_sum;     ///<
     bool    **eliminate;   ///<
-
-    int64_t *content_size; ///<
-    int64_t *num;          ///<
-
     int32_t *elim_idx;     ///<
+
+    int64_t *num;          ///<
 
     int64_t read_num;      ///<
     int64_t write_num;     ///<
@@ -82,7 +83,7 @@ public:
          int32_t base,      int32_t num_t, 
          bool is_ub,        bool is_enumerate_all = false);
 
-    virtual ~List();
+    virtual ~List() {};
 
     bool compute_partition(int32_t buck_id, Instance** ins);
     void reorder_list(int32_t buck_id, Instance** ins);
@@ -99,28 +100,78 @@ public:
     void reset_list();
     void add_g_count_list(int32_t pos, int32_t g_count);
 
-    //virtual functions
-    virtual void    add(int64_t pos,      int32_t buck_id, 
-                        int32_t num_code, int32_t *encode, 
-                        int32_t ins_id) = 0;
+    /**
+     * Add one element into the list.
+     *
+     * @param[in]       pos         which position to insert
+     * @param[in]       buck_id     which bucket to insert
+     * @param[in]       num_code    size of the encode
+     * @param[in]       encode      the encode to be stored
+     * @param[in]       ins_id      which instance
+     *
+     * @return      N/A
+    **/
+    void add(int64_t pos,      int32_t buck_id, 
+             int32_t num_code, T       *encode, 
+             int32_t ins_id) 
+    {
+        int stt = pos == 0 ? 0 : c_idx[buck_id][pos-1];
+        for(int i=0; i<num_code; i++)
+        {
+            content[buck_id][stt++] = encode[i];
+        }
 
-    virtual void    get(int64_t pos,     int32_t buck_id, 
-                        int32_t *encode, int32_t *num, 
-                        int32_t ins_id) = 0;
+        c_idx[buck_id][pos] =stt;
+    }
 
-    virtual void    prepare_parallel_list(int32_t buck_id) = 0;
+    /**
+     * Add one element into the list.
+     *
+     * @param[in]       pos         which position to insert
+     * @param[in]       buck_id     which bucket to insert
+     * @param[in]       encode      the encode to be stored
+     * @param[in]       size        size of the encode
+     * @param[in]       ins_id      which instance
+     *
+     * @return      N/A
+    **/
+    void get(int64_t pos,     int32_t buck_id, 
+             T       *encode, int32_t *num, 
+             int32_t ins_id)
+    {
+        int start = pos == 0 ? 0 : c_idx[buck_id][pos-1];
+        int end   = c_idx[buck_id][pos];
+        for(int i=0, j=start; j<end; i++,j++)
+        {
+            encode[i] = content[buck_id][j];
+        }
 
-    virtual int32_t copy_zero(int32_t buck_id) = 0;
+        *number = (end-start);
+    }
 
-    virtual void    reset_num() = 0;
+    /**
+     * Reset the number in the list, which means cleaning.
+     *
+     * @return      N/A
+    **/
+    void reset_num()
+    {
+        for(int i=lower_bound; i<upper_bound; i++)
+        {
+            if(start[0][i-base] < end[num_threads-1][i-base])
+            {
+                num[i-base] = end[num_threads-1][i-base];
+            }
+        }
+    }
 
-    virtual void    copy(List *other, int32_t buck_id, int32_t size) = 0;
+    void    prepare_parallel_list(int32_t buck_id) = 0;
 
-    virtual void    print_bucket(int32_t buck_id) = 0;
+    int32_t copy_zero(int32_t buck_id) = 0;
 
-    //virtual void    free_buck(int32_t buck_id) = 0;
+    void    copy(List *other, int32_t buck_id, int32_t size) = 0;
 
-    //virtual void    reallocate_buck(int32_t buck_id) = 0;
+    void    print_bucket(int32_t buck_id) = 0;
 };
 
 #endif

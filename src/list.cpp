@@ -36,12 +36,10 @@ List::List(int32_t b_size, int32_t list_size,
 {
     count            = new int*[num_threads];
 	eliminate        = new bool*[num_threads];
-	end              = new int*[num_threads];
     idx_sum          = new int*[num_threads];
 	nei_score        = new int*[num_t];
 	start            = new int*[num_threads];
 
-    content_size     = new int64_t[b_size];
 	elim_idx         = new int[num_t*CACHE_FILL];
     num              = new int64_t[b_size];
 
@@ -71,7 +69,6 @@ List::List(int32_t b_size, int32_t list_size,
 	/* init values */
 	for(int i=0; i<b_size; i++)
     {
-		content_size[i] = list_size;
 		num[i]          = 0;
 		for(int j=0; j<num_t; j++)
         {
@@ -88,9 +85,6 @@ List::List(int32_t b_size, int32_t list_size,
 		t.list.push_back(e);
 		t.init_timer(i);
 	}
-}
-
-List::~List(){
 }
 
 bool
@@ -530,10 +524,6 @@ List::bnb(Instance** ins, int ins_id){
 			int buck_id = upper_bound - base;
 			while(num[buck_id]<=0 && upper_bound > lower_bound)
             {
-                if(content_size[buck_id]>0)
-                {
-                    free_buck(buck_id);
-                }
 				buck_id--;
 				upper_bound--;
 				//printf("decrease to %d upper_bound %d lower_bound %d\n", buck_id+base, upper_bound, lower_bound);

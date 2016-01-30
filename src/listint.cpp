@@ -79,7 +79,6 @@ IntList::~IntList()
     free(start);
     free(eliminate);
     free(nei_score);
-    free(content_size);
     free(num);
     free(elim_idx);
 }
