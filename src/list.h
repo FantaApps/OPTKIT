@@ -33,7 +33,7 @@ class List{
 public:
     time_list t;           ///<
 
-    int32_t **count;       ///<
+    int32_t **count;       ///< number of element in thread i of bucket j
     int32_t **end;         ///<
     int32_t **idx_sum;     ///<
     int32_t **l_lb;        ///<
@@ -100,15 +100,27 @@ public:
     void add_g_count_list(int32_t pos, int32_t g_count);
 
     //virtual functions
-    virtual void add(int64_t pos, int32_t buck_id, int32_t num_code, int32_t *encode, int32_t ins_id);
-    virtual void get(int64_t pos, int32_t buck_id, int32_t *encode, int32_t *num, int32_t ins_id);
-    virtual void prepare_parallel_list(int32_t buck_id);
-    virtual int32_t copy_zero(int32_t buck_id);
-    virtual void reset_num();
-    virtual void copy(List *other, int32_t buck_id, int32_t size);
-    virtual void print_bucket(int32_t buck_id);
-    virtual void free_buck(int32_t buck_id);
-    virtual void reallocate_buck(int32_t buck_id);
+    virtual void    add(int64_t pos,      int32_t buck_id, 
+                        int32_t num_code, int32_t *encode, 
+                        int32_t ins_id) = 0;
+
+    virtual void    get(int64_t pos,     int32_t buck_id, 
+                        int32_t *encode, int32_t *num, 
+                        int32_t ins_id) = 0;
+
+    virtual void    prepare_parallel_list(int32_t buck_id) = 0;
+
+    virtual int32_t copy_zero(int32_t buck_id) = 0;
+
+    virtual void    reset_num() = 0;
+
+    virtual void    copy(List *other, int32_t buck_id, int32_t size) = 0;
+
+    virtual void    print_bucket(int32_t buck_id) = 0;
+
+    //virtual void    free_buck(int32_t buck_id) = 0;
+
+    //virtual void    reallocate_buck(int32_t buck_id) = 0;
 };
 
 #endif

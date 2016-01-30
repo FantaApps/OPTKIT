@@ -917,43 +917,6 @@ List::reset_list(){
 }
 
 
-//fclose(dbg);
-//printf("the best score is %d\n", best_score);
-void
-free_list(){
-}
-
-void 
-List::add(int64_t pos, int32_t buck_id, 
-        int num_code, int *encode, int ins_id){
-}
-
-void 
-List::get(int64_t pos, int32_t buck_id, 
-        int *encode, int *number, int ins_id){
-}
-
-void
-List::prepare_parallel_list(int buck_id){
-}
-
-int 
-List::copy_zero(int buck_id){
-    return -1;
-}
-
-void
-List::reset_num(){
-}
-
-void 
-List::copy(List *other, int buck_id, int size){
-}
-
-void
-List::print_bucket(int buck_id){
-}
-
 void
 List::print_buck(){
     for(int i=lower_bound; i<=upper_bound; i++)
@@ -966,12 +929,4 @@ List::add_g_count_list(int buck_id, int g_count){
 #ifdef USE_DEBUG
     g_count_list[buck_id][g_count_idx[buck_id]++] = g_count;
 #endif
-}
-
-void List::free_buck(int buck_id)
-{
-}
-
-void List::reallocate_buck(int buck_id)
-{
 }
