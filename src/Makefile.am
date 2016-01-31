@@ -1,6 +1,6 @@
-noinst_HEADERS=insknap.h insmed.h list.h timer.h insdis.h instance.h plist.h utils.h insmc.h listint.h factory.h config.h graph_util.h csr.h truss.h 
+noinst_HEADERS=list.h node.h 
 bin_PROGRAMS=optkit
-optkit_SOURCES=insdis.cpp insmed.cpp plist.cpp timer.cpp insdis.h list.cpp insknap.cpp instance.cpp main.cpp utils.cpp insmc.cpp listint.cpp graph_util.cpp 
+optkit_SOURCES=main.cpp 
 optkit_LDADD=$(OPENMP_LIBi) 
 if DEBUG
 AM_CXXFLAGS = -g  -fopenmp -I$(top_srcdir)/lib -D__USE_XOPEN2K8 -lglog
