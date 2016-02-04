@@ -12,11 +12,12 @@
 
 //#include "utils.h"
 //#include "graph_util.h"
-//#include "config.h"
 //#include "factory.h"
 
 #include "list.h"
 #include "node.h"
+#include "RTree.h"
+//#include "config.h"
 //#include "listint.h"
 //#include "plist.h"
 //

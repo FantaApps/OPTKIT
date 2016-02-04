@@ -19,7 +19,6 @@
 #include <map>
 #include <vector>
 #include <assert.h>
-#include <omp.h>
 
 #include "node.h"
 
@@ -103,7 +102,6 @@ public:
     bool check(Node<T> *node, int32_t node_id = -1)
     {
         int32_t required = node->get_encode_size();
-        int32_t remain;  
     }
 
     /**
