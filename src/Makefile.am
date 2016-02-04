@@ -1,4 +1,4 @@
-noinst_HEADERS=list.h node.h 
+noinst_HEADERS=list.h node.h RTree.h 
 bin_PROGRAMS=optkit
 optkit_SOURCES=main.cpp 
 optkit_LDADD=$(OPENMP_LIBi) 
