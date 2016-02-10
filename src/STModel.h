@@ -28,8 +28,8 @@ using namespace std;
  *
  *        1) given the range of the cube, return all node ids
  *           in that range.
- *        2) given the central point, and the diameter, return all
- *           node ids in that range.
+ *        2) given the range of the cube, return count of nodes 
+ *           in that range.
  *
  *        This class should be able to convert time_t to a integer
  *        so that a common framework could be utilized to index points
@@ -37,14 +37,16 @@ using namespace std;
 **/
 class STModel 
 {
-    virtual STModel() = 0;
+public:
+    STModel() {};
 
-    virtual ~STModel() = 0;
+    ~STModel() {};
 
-    virtual vector<int32_t> query(int32_t max[2], int32_t min[2], time_t ts[2]) = 0;
+    vector<int32_t> query_list(int32_t max[3], int32_t min[3]);
 
-    virtual vector<int32_t> query(int32_t x, int32_t y, time_t ts, 
-                                  int32_t cord_range, time_t time_range) = 0;
+    int32_t         query_cont(int32_t max[3], int32_t min[3]);
+
+    void            serialize();
 };
 
 #endif // __H_ST_MODEL__ 

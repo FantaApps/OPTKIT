@@ -8,38 +8,29 @@
  *
 **/
 
+#include <string>
+#include "CSVparser.h" 
+#include "CrimeSTModel.h" 
+
 /**
  * @brief       build graph from ny crime data
  **/
 void CrimeSTModel::read_data()
 {
-    ifstream reader(input_file);
+    csv::Parser file = csv::Parser(in_file.c_str());
     struct tm tm;
-    string line;
 
-    while(getline(reader, line))
+    for(int i=0; i<file.rowCount(); i++)
     {
         Node n;
+
         n.id = serial_num++;
-
-        isstringstream iss(line);
-
-        string token;
-
-        getline(iss, token, ',');
-        strptime(token.c_str(),"%Y/%M/%D", &tm); 
-        n.ts = mktime(tm);
-
-        getline(iss, token, ',');
-        n.xx[0] = n.xx[1] = stoi(token);
-
-        getline(iss, token, ',');
-        n.yy[0] = n.yy[1] = stoi(token);
-
-        getline(iss, token, ',');
-        n.freq = stoi(token);
-
-        getline(iss, n.type, ',');
+        strptime(file[i][0].c_str(),"%Y/%m/%d", &tm); 
+        n.min[2] = n.max[2] = tm.tm_mon;
+        n.min[0] = n.max[0] = stoi(file[i][1]);
+        n.min[1] = n.max[1] = stoi(file[i][2]);
+        n.freq = stoi(file[i][3]);
+        n.type = file[i][4];
 
         nodes.push_back(n);
     }
@@ -58,11 +49,21 @@ void CrimeSTModel::build_model()
     } 
 }
 
-vector<int32_t> query(int32_t max[2], int32_t min[2], time_t ts[2])
+void CrimeSTModel::serialize()
+{
+    FILE *writer = fopen("./crime_data.txt", "w");
+    fprintf(writer, "%s %d\n", in_file.c_str(), serial_num);
+    for(int i=0; i<nodes.size(); i++)
+    {
+        fprintf(writer, "%d %d|%d|%d %d|%d|%d %d %s\n", nodes[i].id, 
+                nodes[i].min[0], nodes[i].min[1], nodes[i].min[2],
+                nodes[i].max[0], nodes[i].max[1], nodes[i].max[2],
+                nodes[i].freq, nodes[i].type.c_str());
+    }
+    fclose(writer);
+}
+
+vector<int32_t> query(int32_t max[3], int32_t min[3])
 {
 }
 
-vector<int32_t> query(int32_t x, int32_t y, time_t ts, 
-        int32_t cord_range, time_t time_range)
-{
-}

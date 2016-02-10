@@ -60,7 +60,7 @@ public:
         int32_t color = OPTKIT_NULL;
         int32_t sum   = 0;
 
-        LOG(INFO) << "Initiating CSR...";
+        DLOG(INFO) << "Initiating CSR...";
 
         /* Read the head information, 
            and allocate according variables */

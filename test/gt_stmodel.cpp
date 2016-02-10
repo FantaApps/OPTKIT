@@ -8,9 +8,11 @@
 **/
 
 #include <gtest/gtest.h>
-#include "csr.h"
+#include "STModel.h"
+#include "CrimeSTModel.h" 
 #include "test_util.h" 
 
+using namespace std;
 
 /**
  * @brief   Test a small graph one color
@@ -18,22 +20,13 @@
 **/
 TEST(NYCrimeDataTest_1, Success)
 {
-    struct Rect
-    {
-        Rect()  {}
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
+    stm.serialize();
 
-        Rect(int a_minX, int a_minY, int a_maxX, int a_maxY)
-        {
-            min[0] = a_minX;
-            min[1] = a_minY;
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/crime_data.txt", "./crime_data.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
-            max[0] = a_maxX;
-            max[1] = a_maxY;
-        }
-
-
-        int min[2];
-        int max[2];
-    };
+    std::remove("./crime_data.txt");
 }
 
