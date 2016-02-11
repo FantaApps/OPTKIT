@@ -45,8 +45,6 @@ public:
     vector<int32_t> query_list(int32_t max[3], int32_t min[3]);
 
     int32_t         query_cont(int32_t max[3], int32_t min[3]);
-
-    void            serialize();
 };
 
 #endif // __H_ST_MODEL__ 

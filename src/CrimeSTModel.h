@@ -16,6 +16,8 @@
 #include "STModel.h"
 #include <glog/logging.h>
 
+#include "gtest/gtest_prod.h"
+
 /**
  * @class SpatialTemporalGraphBuilder
  *
@@ -57,18 +59,23 @@ public:
 
     ~CrimeSTModel(){}
 
-    vector<int32_t> query_list(int32_t max[3], int32_t min[3]);
-    int32_t         query_cont(int32_t max[3], int32_t min[3]);
-    void            serialize();
+    vector<int32_t> query_list(int32_t min[3], int32_t max[3]);
+    int32_t         query_cont(int32_t min[3], int32_t max[3]);
 
 protected:
-    vector<Node>     nodes;
-    string           in_file;
-    int32_t          serial_num;
+    vector<Node>                    nodes;
+    RTree<void*, int32_t, 3, float> rt;
+    string                          in_file;
+    int32_t                         serial_num;
 
 private:
-    void read_data();
-    void build_model();
+    void   read_data();
+    void   build_model();
+    static bool search_callback(void* in, void* arg) { return true; }
+    void   serialize();
+
+    FRIEND_TEST(SmallCrimeDataTest_1, Success);
+    FRIEND_TEST(NYCrimeDataTest_1, Success);
 };
 
 #endif // SPATIAL_TEMPROAL_GRAPH_BUILDER__
