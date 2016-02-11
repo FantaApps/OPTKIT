@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/10/16 - test model creation and RTree creation 
  *  stplaydog   02/01/16 - Creation
 **/
 
@@ -13,6 +14,36 @@
 #include "test_util.h" 
 
 using namespace std;
+
+/**
+ * @brief   Test a small graph one color
+ *
+**/
+TEST(SmallCrimeDataTest_1, Success)
+{
+    google::InitGoogleLogging("OPTKIT_TEST");
+    string input_file = "../data/truss/crime_small_st.csv"; 
+    CrimeSTModel stm(input_file);
+
+    int min[3] = {0,0,1};
+    int max[3] = {1,1,1};
+    int max1[3] = {2,2,1};
+    int max2[3] = {2,2,2};
+    int max3[3] = {2,2,3};
+    
+    ASSERT_EQ(stm.query_cont(min, max), 4);
+    ASSERT_EQ(stm.query_cont(min, max1), 9);
+    ASSERT_EQ(stm.query_cont(min, max2), 18);
+    ASSERT_EQ(stm.query_cont(min, max3), 27);
+    
+    stm.serialize();
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/small_crime_st.txt", "./crime_data.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+
+    std::remove("./crime_data.txt");
+}
 
 /**
  * @brief   Test a small graph one color
