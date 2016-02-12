@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/12/16 - change min[3] max[3] to coord to save space.
  *  stplaydog   02/09/16 - Some refactor work 
  *  stplaydog   02/01/16 - Creation
  *
@@ -33,10 +34,10 @@ public:
     **/
     struct Node 
     {
-        int32_t id;
-        int32_t coord[3];
-        int32_t freq;
-        string  type;
+        int32_t id;         ///< id of the node
+        int32_t coord[3];   ///< coordinate of the node in spatial time space
+        int32_t freq;       ///< frequency of this crime
+        string  type;       ///< crime type
     };
 
     /**
@@ -80,9 +81,25 @@ protected:
 private:
     void        read_data();
     void        build_model();
-
+    
+    /**
+     * @brief       callback for count query
+     *
+     * @param[in]       in          one value hit
+     * @param[in]       arg         nothing
+     *
+     * @return      true if continue
+    **/
     static bool search_callback(void* in, void* arg) { return true; }
 
+    /**
+     * @brief       callback for list query, every hit will be added to a vector
+     *
+     * @param[in]       in          one value hit
+     * @param[out]       arg         the output vector list
+     *
+     * @return      true if continue
+    **/
     static bool value_callback(void* in, void* arg) 
     { 
         vector<int32_t> *v = (vector<int32_t> *) arg;
@@ -90,7 +107,15 @@ private:
         v->push_back(n->id);
         return true; 
     }
-
+    
+    /**
+     * @brief       used for sorting pairs
+     *
+     * @param[in]       e1          the first edge      
+     * @param[in]       e2          the second edge      
+     *
+     * @return  true if e1 is smaller than e2
+    **/
     static bool smaller(pair<int32_t, int32_t> e1, pair<int32_t, int32_t> e2)
     {
         if(e1.first < e2.first)

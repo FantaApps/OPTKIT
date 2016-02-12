@@ -96,7 +96,7 @@ int32_t CrimeSTModel::query_cont(int32_t min[3], int32_t max[3])
 **/
 vector<pair<int32_t, int32_t>> CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
 {
-    ASSERT(x_gap && y_gap && z_gap);
+    ASSERT(x_gap>=0 && y_gap>=0 && z_gap>=0);
 
     int32_t min[3];
     int32_t max[3];
