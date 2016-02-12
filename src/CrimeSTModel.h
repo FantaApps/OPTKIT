@@ -40,6 +40,14 @@ public:
         string  type;
     };
 
+    /**
+     * @brief       build the spatial temporal model following two steps
+     *              1) read the data
+     *              2) build RTree
+     *
+     * @param[in]       input_file      the file input of the CSV format
+     *
+    **/
     CrimeSTModel(const string &input_file) :
        serial_num(0),
        in_file(input_file)
@@ -63,15 +71,23 @@ public:
     int32_t         query_cont(int32_t min[3], int32_t max[3]);
 
 protected:
-    vector<Node>                    nodes;
-    RTree<void*, int32_t, 3, float> rt;
-    string                          in_file;
-    int32_t                         serial_num;
+    vector<Node>                    nodes;      ///< nodes read from CSV file
+    RTree<void*, int32_t, 3, float> rt;         ///< rtree built
+    string                          in_file;    ///< file to read the spatial temporal data
+    int32_t                         serial_num; ///< keep the id
 
 private:
-    void   read_data();
-    void   build_model();
+    void        read_data();
+    void        build_model();
+
     static bool search_callback(void* in, void* arg) { return true; }
+    static bool value_callback(void* in, void* arg) 
+    { 
+        vector<int32_t> *v = (vector<int32_t> *) arg;
+        Node *n = (Node*) in;
+        v->push_back(n->id);
+        return true; 
+    }
     void   serialize();
 
     FRIEND_TEST(SmallCrimeDataTest_1, Success);

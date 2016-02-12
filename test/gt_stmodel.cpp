@@ -35,6 +35,13 @@ TEST(SmallCrimeDataTest_1, Success)
     ASSERT_EQ(stm.query_cont(min, max1), 9);
     ASSERT_EQ(stm.query_cont(min, max2), 18);
     ASSERT_EQ(stm.query_cont(min, max3), 27);
+
+    vector<int32_t> v = stm.query_list(min, max);
+    sort(v.begin(), v.end());
+    ASSERT_EQ(v[0], 0);
+    ASSERT_EQ(v[1], 1);
+    ASSERT_EQ(v[2], 3);
+    ASSERT_EQ(v[3], 4);
     
     stm.serialize();
 
