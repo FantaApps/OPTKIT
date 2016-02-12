@@ -4,7 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
- *  stplaydog   02/12/16 - change min[3] max[3] to coord to save space.
+ *  stplaydog   02/12/16 - change min[3] max[3] to coord[3] to save space.
  *  stplaydog   02/09/16 - Some refactor work 
  *  stplaydog   02/01/16 - Creation
  *
@@ -90,7 +90,7 @@ private:
      *
      * @return      true if continue
     **/
-    static bool search_callback(void* in, void* arg) { return true; }
+    static bool cont_callback(void* in, void* arg) { return true; }
 
     /**
      * @brief       callback for list query, every hit will be added to a vector
@@ -100,7 +100,7 @@ private:
      *
      * @return      true if continue
     **/
-    static bool value_callback(void* in, void* arg) 
+    static bool list_callback(void* in, void* arg) 
     { 
         vector<int32_t> *v = (vector<int32_t> *) arg;
         Node *n = (Node*) in;

@@ -63,7 +63,7 @@ vector<int32_t> CrimeSTModel::query_list(int32_t min[3], int32_t max[3])
     ASSERT(min && max);
 
     vector<int32_t> ret;
-    rt.Search(min, max, value_callback, &ret);
+    rt.Search(min, max, list_callback, &ret);
     return ret;
 }
 
@@ -79,7 +79,7 @@ int32_t CrimeSTModel::query_cont(int32_t min[3], int32_t max[3])
 {
     ASSERT(min && max);
 
-    int32_t nhits = rt.Search(min, max, search_callback, NULL);
+    int32_t nhits = rt.Search(min, max, cont_callback, NULL);
     return nhits;
 }
 
