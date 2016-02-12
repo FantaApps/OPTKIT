@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/11/16 - add query_list     
  *  stplaydog   02/10/16 - CSV read and RTree creation/query 
  *  stplaydog   02/09/16 - Creation
  *
@@ -15,7 +16,7 @@
 
 /**
  * @brief       build graph from ny crime data
- **/
+**/
 void CrimeSTModel::read_data()
 {
     csv::Parser file = csv::Parser(in_file.c_str());
@@ -39,7 +40,7 @@ void CrimeSTModel::read_data()
 
 /**
  * @brief       build graph from ny crime data
- **/
+**/
 void CrimeSTModel::build_model()
 {
     for(int32_t i=0; i<nodes.size(); i++)
@@ -48,17 +49,38 @@ void CrimeSTModel::build_model()
     } 
 }
 
-
+/**
+ * @brief       given a range, return node ids in that range
+ *
+ * @param[in]       min         the min range
+ * @param[in]       max         the max range
+ *
+ * @reurn       list of ids
+**/
 vector<int32_t> CrimeSTModel::query_list(int32_t min[3], int32_t max[3])
 {
+    vector<int32_t> ret;
+    rt.Search(min, max, value_callback, &ret);
+    return ret;
 }
 
+/**
+ * @brief       given a range, return # nodes 
+ *
+ * @param[in]       min         the min range
+ * @param[in]       max         the max range
+ *
+ * @reurn      # of nodes 
+**/
 int32_t CrimeSTModel::query_cont(int32_t min[3], int32_t max[3])
 {
     int32_t nhits = rt.Search(min, max, search_callback, NULL);
     return nhits;
 }
 
+/**
+ * @brief       serialize model into file, for test purpose
+**/
 void CrimeSTModel::serialize()
 {
     FILE *writer = fopen("./crime_data.txt", "w");
