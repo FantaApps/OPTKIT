@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/10/16 - test build_edges 
  *  stplaydog   02/10/16 - test model creation and RTree creation 
  *  stplaydog   02/01/16 - Creation
 **/
@@ -42,13 +43,16 @@ TEST(SmallCrimeDataTest_1, Success)
     ASSERT_EQ(v[1], 1);
     ASSERT_EQ(v[2], 3);
     ASSERT_EQ(v[3], 4);
+
+    vector<pair<int32_t, int32_t>> edges = stm.build_edges(1, 1, 1);
+    stm.serialize_edges(edges);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/small_crime_edges.txt", "./crime_edges.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./crime_edges.txt");
     
     stm.serialize();
-
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/small_crime_st.txt", "./crime_data.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
-
-
     std::remove("./crime_data.txt");
 }
 

@@ -7,6 +7,7 @@
  *  MODIFIED   (MM/DD/YY)
  *  stplaydog   02/08/16 - Creation
  *
+ *  TODO    change this to template
 **/
 
 #pragma once
@@ -42,9 +43,11 @@ public:
 
     ~STModel() {};
 
-    vector<int32_t> query_list(int32_t max[3], int32_t min[3]);
+    virtual vector<int32_t> query_list(int32_t max[3], int32_t min[3]) = 0;
 
-    int32_t         query_cont(int32_t max[3], int32_t min[3]);
+    virtual int32_t         query_cont(int32_t max[3], int32_t min[3]) = 0;
+
+    virtual vector<pair<int32_t, int32_t>> build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap) = 0;
 };
 
 #endif // __H_ST_MODEL__ 

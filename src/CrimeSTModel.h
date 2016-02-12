@@ -34,8 +34,7 @@ public:
     struct Node 
     {
         int32_t id;
-        int32_t min[3];
-        int32_t max[3];
+        int32_t coord[3];
         int32_t freq;
         string  type;
     };
@@ -67,8 +66,10 @@ public:
 
     ~CrimeSTModel(){}
 
-    vector<int32_t> query_list(int32_t min[3], int32_t max[3]);
-    int32_t         query_cont(int32_t min[3], int32_t max[3]);
+    virtual vector<int32_t>                query_list(int32_t min[3], int32_t max[3]);
+    virtual int32_t                        query_cont(int32_t min[3], int32_t max[3]);
+    virtual vector<pair<int32_t, int32_t>> build_edges(int32_t x_gap, int32_t y_gap, 
+                                               int32_t z_gap);
 
 protected:
     vector<Node>                    nodes;      ///< nodes read from CSV file
@@ -81,6 +82,7 @@ private:
     void        build_model();
 
     static bool search_callback(void* in, void* arg) { return true; }
+
     static bool value_callback(void* in, void* arg) 
     { 
         vector<int32_t> *v = (vector<int32_t> *) arg;
@@ -88,7 +90,25 @@ private:
         v->push_back(n->id);
         return true; 
     }
-    void   serialize();
+
+    static bool smaller(pair<int32_t, int32_t> e1, pair<int32_t, int32_t> e2)
+    {
+        if(e1.first < e2.first)
+        {
+            return true;
+        }
+        else if(e1.first == e2.first && e1.second <= e2.second)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void serialize();
+    void serialize_edges(vector<pair<int32_t, int32_t>> &edges);
 
     FRIEND_TEST(SmallCrimeDataTest_1, Success);
     FRIEND_TEST(NYCrimeDataTest_1, Success);
