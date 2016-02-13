@@ -18,5 +18,5 @@ AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
 #for libraries
 LT_INIT
 
-AC_CONFIG_FILES(Makefile test/Makefile src/Makefile)
+AC_CONFIG_FILES(Makefile libs/Makefile test/Makefile src/Makefile)
 AC_OUTPUT

@@ -16,5 +16,5 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 ## MA 02110-1301, USA.
 
-SUBDIRS 		= src test
+SUBDIRS 		= libs src test
 MAINTAINERCLEANFILES 	= Makefile.in configure 
