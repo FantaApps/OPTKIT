@@ -1,5 +1,8 @@
 noinst_PROGRAMS = graphutiltest 
-graphutiltest_SOURCES= gt_csr.cpp ../src/csr.h ../src/csr.cpp gt_truss.cpp ../src/truss.h gt_stmodel.cpp ../src/STModel.h ../src/CrimeSTModel.h ../src/CrimeSTModel.cpp ../libs/CSVparser.cpp ../libs/CSVparser.h test_util.h 
+graphutiltest_SOURCES= gt_csr.cpp            ../src/csr.h        ../src/csr.cpp \
+					   gt_truss.cpp          ../src/truss.h      ../src/truss.cpp \
+					   gt_stmodel.cpp        ../src/STModel.h    ../src/CrimeSTModel.h ../src/CrimeSTModel.cpp \ 
+                       ../libs/CSVparser.cpp ../libs/CSVparser.h test_util.h 
 TESTS=graphutiltest
 
 if DEBUG
