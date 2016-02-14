@@ -57,7 +57,7 @@ TEST(SmallCrimeDataTest_1, Success)
 }
 
 /**
- * @brief   Test a small graph one color
+ * @brief   Test building graph from edge list, and test vertex mapping 
  *
 **/
 TEST(NYCrimeDataTest_1, Success)

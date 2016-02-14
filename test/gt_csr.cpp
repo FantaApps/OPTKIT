@@ -4,6 +4,8 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/13/16 - validate making graph from edge list
+ *                         also have vertex mappings 
  *  stplaydog   01/10/16 - Validate all results in janc graph  
  *  stplaydog   12/15/15 - simplified the test procedure 
  *  stplaydog   12/13/15 - Finished OutputAllCCTest_1, ReconstructTest_1, 
@@ -37,6 +39,44 @@ TEST(InitGraphTest_1, Success)
 
     std::remove("./csr.dot");
 }
+
+/**
+ * @brief   Test a small graph one color
+ *
+**/
+TEST(InitGraphTest_2, Success)
+{
+    // test one graph
+    vector<pair<int32_t, int32_t>> edges1 = TstUtil::read_edge_list("../data/MC/janc.gr");
+    CSR g1(edges1);
+
+    ASSERT_EQ(g1.get_num_v(), 8);
+    ASSERT_EQ(g1.get_num_e(), 26);
+    ASSERT_EQ(g1.get_num_c(), 1);
+
+    g1.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./csr.dot");
+
+    // test another graph
+    vector<pair<int32_t, int32_t>> edges2 = TstUtil::read_edge_list("../data/MC/janc_origin.gr");
+    CSR g2(edges2);
+
+    /* Test some basic graph properties */
+    ASSERT_EQ(g2.get_num_v(), 8);
+    ASSERT_EQ(g2.get_num_e(), 26);
+    ASSERT_EQ(g2.get_num_c(), 1);
+
+    /* Test the content of the graph */
+    g2.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    //std::remove("./csr.dot");
+}
+
 
 /**
  * @brief   test compute_num_edge_intersect

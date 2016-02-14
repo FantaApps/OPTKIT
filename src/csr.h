@@ -22,6 +22,8 @@
 
 #include "utils.h"
 #include <algorithm>
+#include <map>
+#include "gtest/gtest_prod.h"
 
 
 using namespace std; 
@@ -45,11 +47,13 @@ public:
 
     CSR(const char *in_file);
 
+    CSR(vector<pair<int32_t, int32_t>> &edges);
+
     ~CSR();
 
     void allocate_data_structure(const int32_t v_num, 
                                  const int32_t e_num, 
-                                 const int32_t c_num);
+                                 const int32_t c_num = 1);
 
     int32_t compute_num_edge_intersect(pair<int32_t, int32_t> rg1,
                                        pair<int32_t, int32_t> rg2,
@@ -85,8 +89,12 @@ private:
     int32_t **v_idx; ///< vertex index for CSR
     int32_t **e_idx; ///< edge index for CSR
 
+    map<int32_t, int32_t> dic; ///< to store the mapping of vertices
+
     void output_one_CC(FILE *writer, int32_t v, 
                        bool *visited, int32_t c = 0);
+
+    FRIEND_TEST(InitGraphTest_2, Success);
 
 };
 

@@ -9,12 +9,13 @@
 **/
 
 #include "csr.h"
+#include "utils.h"
+
 
 /**
  * @brief   This is the constructor
  *
  * @param[in]   in_file         graph file to read 
- *
  *
  * @return      N/A
 **/
@@ -107,6 +108,47 @@ CSR::CSR(const char *in_file)
 }
 
 /**
+ * @brief   This is the constructor
+ *
+ * @param[in]   edges         edge list 
+ *
+ * @return      N/A
+**/
+CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
+{
+    DLOG(INFO) << "Initiating CSR...";
+
+    sort(edges.begin(), edges.end(), Utils::smaller);
+
+    map<int32_t, int32_t> count;
+    num_e = edges.size();
+    num_v = 0;
+    for(int32_t i=0; i<edges.size(); i++)
+    {
+        int32_t v_origin = edges[i].first;
+        if(dic.find(v_origin) == dic.end())
+        {
+            dic[v_origin] = num_v++;
+        }
+        count[dic[v_origin]]++;
+    }
+
+    allocate_data_structure(num_v, num_e);
+
+    int sum = 0;
+    for(int32_t i=0; i<num_v; i++)
+    {
+        sum += count[i]; 
+        v_idx[0][i] = sum;
+    }
+    
+    for(int32_t i=0; i<edges.size(); ++i)    
+    {
+        e_idx[0][i] = dic[edges[i].second];
+    }
+}
+
+/**
  * @brief   Destrutor
 **/
 CSR::~CSR()
@@ -160,10 +202,10 @@ void CSR::allocate_data_structure(const int32_t v_num,
  * @return      number of intersections
  *
  * @note    edge list has to be sorted.
-**/
+ **/
 int32_t CSR::compute_num_edge_intersect(pair<int32_t, int32_t> rg1,
-                                        pair<int32_t, int32_t> rg2,
-                                        int32_t c)
+        pair<int32_t, int32_t> rg2,
+        int32_t c)
 {
     int32_t ret = 0;
     int32_t i(rg1.first), j(rg2.first);
