@@ -133,6 +133,13 @@ public:
         return !*p;  
     }
 
+    /**
+     * @brief       read graph file into edge list
+     *
+     * @param[in]       file        graph file
+     *
+     * @return      edge list
+    **/
     static vector<pair<int32_t, int32_t>> read_edge_list(const char *file)
     {
         vector<pair<int32_t, int32_t>> edges;

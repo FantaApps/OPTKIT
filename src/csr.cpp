@@ -10,14 +10,12 @@
 
 #include "csr.h"
 #include "utils.h"
-#include <iostream>
 
 
 /**
  * @brief   This is the constructor
  *
  * @param[in]   in_file         graph file to read 
- *
  *
  * @return      N/A
 **/
@@ -112,8 +110,7 @@ CSR::CSR(const char *in_file)
 /**
  * @brief   This is the constructor
  *
- * @param[in]   in_file         graph file to read 
- *
+ * @param[in]   edges         edge list 
  *
  * @return      N/A
 **/
@@ -153,7 +150,7 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
 
 /**
  * @brief   Destrutor
- **/
+**/
 CSR::~CSR()
 {
     for(int c=0; c<num_c; c++)
@@ -174,10 +171,10 @@ CSR::~CSR()
  * @param[in]       _num        number of colors 
  *
  * @return      N/A
- **/
+**/
 void CSR::allocate_data_structure(const int32_t v_num, 
-        const int32_t e_num, 
-        const int32_t c_num)
+                                  const int32_t e_num, 
+                                  const int32_t c_num)
 {
     num_v = v_num;
     num_e = e_num;
