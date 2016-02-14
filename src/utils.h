@@ -91,6 +91,32 @@ public:
         }
         printf("\n");
     }
+
+    /**
+     * @brief       used for sorting pairs
+     *
+     * @param[in]       e1          the first edge      
+     * @param[in]       e2          the second edge      
+     *
+     * TODO     move this to util as a static function.
+     *
+     * @return  true if e1 is smaller than e2
+    **/
+    static bool smaller(pair<int32_t, int32_t> e1, pair<int32_t, int32_t> e2)
+    {
+        if(e1.first < e2.first)
+        {
+            return true;
+        }
+        else if(e1.first == e2.first && e1.second <= e2.second)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 };
 
 #endif

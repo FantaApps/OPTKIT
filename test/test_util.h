@@ -133,6 +133,21 @@ public:
         return !*p;  
     }
 
+    static vector<pair<int32_t, int32_t>> read_edge_list(const char *file)
+    {
+        vector<pair<int32_t, int32_t>> edges;
+        FILE *reader = fopen(file, "r");
+        int32_t num_v, num_e, num_c, v_from, v_to, c;
+        fscanf(reader, "%d %d %d\n", &num_v, &num_c, &num_e);
+        for(int i=0; i<num_e; i++)
+        {
+            fscanf(reader, "%d %d %d\n", &v_from, &v_to, &c);
+            edges.push_back(pair<int32_t, int32_t>(v_from, v_to));
+        }
+        fclose(reader);
+        return edges;
+    }
+
 };
 
 #endif

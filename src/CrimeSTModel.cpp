@@ -14,6 +14,7 @@
 #include <string>
 #include "../libs/CSVparser.h" 
 #include "CrimeSTModel.h" 
+#include "utils.h" 
 
 /**
  * @brief       build graph from ny crime data
@@ -119,7 +120,6 @@ vector<pair<int32_t, int32_t>> CrimeSTModel::build_edges(int32_t x_gap, int32_t 
         }
     }
 
-    sort(ret.begin(), ret.end(), smaller);
     return ret;
 }
 
@@ -144,6 +144,8 @@ void CrimeSTModel::serialize()
 **/
 void CrimeSTModel::serialize_edges(vector<pair<int32_t, int32_t>> &edges)
 {
+    sort(edges.begin(), edges.end(), Utils::smaller);
+
     FILE *writer = fopen("crime_edges.txt", "w");
     for(auto e : edges)
     {
