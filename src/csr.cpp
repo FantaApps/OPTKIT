@@ -4,6 +4,7 @@
  * @brief    This is the implementation for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/14/16 - Fixed a bug in allocate_data_structure 
  *  stplaydog   02/13/16 - Creation
  *
 **/
