@@ -4,6 +4,7 @@
  * @brief    This is the implementation for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/14/16 - Fixed a bug in allocate_data_structure 
  *  stplaydog   02/13/16 - Creation
  *
 **/
@@ -187,8 +188,8 @@ void CSR::allocate_data_structure(const int32_t v_num,
     {
         v_idx[c] = new int32_t[num_v];
         e_idx[c] = new int32_t[num_e];
-        memset(v_idx[c], 0, sizeof v_idx[c] * sizeof(int));
-        memset(e_idx[c], 0, sizeof e_idx[c] * sizeof(int));
+        memset(v_idx[c], 0, num_v * sizeof(int32_t));
+        memset(e_idx[c], 0, num_e * sizeof(int32_t));
     }
 }
 

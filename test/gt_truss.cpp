@@ -4,6 +4,7 @@
  *  @brief    Unittest of truss decomposition utilities 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/14/16 - add TrussDecompositionTest_2 to test case in J Wang's paper.
  *  stplaydog   01/10/16 - Validate all results in janc graph  
  *  stplaydog   01/04/16 - Fixed some bugs 
  *  stplaydog   12/15/15 - simplified the test procedure 
@@ -106,7 +107,6 @@ TEST(SupEOprTest_1, Success)
 
 /**
  * @brief   test truss decomposition 
- *
 **/
 TEST(TrussDecompositionTest_1, Success)
 {
@@ -119,4 +119,20 @@ TEST(TrussDecompositionTest_1, Success)
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./truss.txt");
+}
+
+/**
+ * @brief   test truss decomposition in J. Wang's paper example 
+**/
+TEST(TrussDecompositionTest_2, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.truss_decomosition(g, "truss.txt", 5);
+    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
+    //        TstUtil::OPTKIT_TEST_PASS); 
+
+    //std::remove("./truss.txt");
 }

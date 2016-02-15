@@ -4,6 +4,7 @@
  * @brief    This is the header for truss decomposition. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/14/16 - Fixed a bug to output truss number when dumping. 
  *  stplaydog   01/10/16 - Some bug fixing works. 
  *  stplaydog   01/04/16 - Some bug fixing works. 
  *  stplaydog   12/14/15 - Add constructor/destructor 
@@ -68,6 +69,7 @@ void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32
 
         if(g.get_num_e() > 0)
         {
+            fprintf(writer, "%d Truss: \n", k);
             g.output_all_CC(writer, true);
         }
 

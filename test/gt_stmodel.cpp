@@ -13,6 +13,8 @@
 #include "STModel.h"
 #include "CrimeSTModel.h" 
 #include "test_util.h" 
+#include "csr.h"
+#include "truss.h"
 
 using namespace std;
 
@@ -54,6 +56,18 @@ TEST(SmallCrimeDataTest_1, Success)
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/small_crime_st.txt", "./crime_data.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./crime_data.txt");
+
+    // now test graph generation and truss decomposition
+    //CSR g(edges);
+
+    //Truss t(g.get_num_e(), g.get_num_c());
+
+    //t.truss_decomosition(g, "truss.txt", 5);
+    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/st_truss_alg1.txt", "./truss.txt"), 
+    //        TstUtil::OPTKIT_TEST_PASS); 
+
+    ////std::remove("./truss.txt");
+    //exit(1);
 }
 
 /**
