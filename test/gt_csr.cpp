@@ -74,7 +74,7 @@ TEST(InitGraphTest_2, Success)
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
-    //std::remove("./csr.dot");
+    std::remove("./csr.dot");
 }
 
 

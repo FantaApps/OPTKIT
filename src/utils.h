@@ -98,8 +98,6 @@ public:
      * @param[in]       e1          the first edge      
      * @param[in]       e2          the second edge      
      *
-     * TODO     move this to util as a static function.
-     *
      * @return  true if e1 is smaller than e2
     **/
     static bool smaller(pair<int32_t, int32_t> e1, pair<int32_t, int32_t> e2)
