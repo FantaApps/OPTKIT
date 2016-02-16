@@ -40,6 +40,7 @@ TEST(InitGraphTest_1, Success)
     std::remove("./csr.dot");
 }
 
+
 /**
  * @brief   Test a small graph one color
  *
@@ -72,6 +73,28 @@ TEST(InitGraphTest_2, Success)
     /* Test the content of the graph */
     g2.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./csr.dot");
+}
+
+/**
+ * @brief   Test a small graph one color
+ *
+**/
+TEST(InitGraphTest_3, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+
+    /* Test some basic graph properties */
+    ASSERT_EQ(g.get_num_v(), 21);
+    ASSERT_EQ(g.get_num_e(), 90);
+    ASSERT_EQ(g.get_num_c(), 1);
+
+    /* Test the content of the graph */
+    g.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr1.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./csr.dot");
