@@ -16,6 +16,7 @@
 using namespace std; 
 
 #include "utils.h"
+#include "csr.h"
 
 /**
  * @class TstUtil 
@@ -153,6 +154,28 @@ public:
         }
         fclose(reader);
         return edges;
+    }
+
+    static void compute_num_edge_intersect(CSR &g)
+    {
+        /* Test some basic graph properties */
+        vector<pair<int32_t, int32_t> > v_rg;
+        for(int i=0; i<g.get_num_v(); i++)
+        {
+            v_rg.push_back(g.get_e_range(i));
+        }
+
+        /* Compare the correctness of intersection */
+        FILE *writer = fopen("./intersect.txt", "w"); 
+        for(int i=0; i<g.get_num_v(); i++)
+        {
+            for(int j=i+1; j<g.get_num_v(); j++)
+            {
+                fprintf(writer, "%d %d %d\n", 
+                        i, j, g.compute_num_edge_intersect(v_rg[i], v_rg[j]));
+            }
+        }
+        fclose(writer);
     }
 
 };

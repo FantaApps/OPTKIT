@@ -42,7 +42,7 @@ TEST(InitGraphTest_1, Success)
 
 
 /**
- * @brief   Test a small graph one color
+ * @brief   Test a small graph using edge list and with vertex mapping 
  *
 **/
 TEST(InitGraphTest_2, Success)
@@ -79,7 +79,7 @@ TEST(InitGraphTest_2, Success)
 }
 
 /**
- * @brief   Test a small graph one color
+ * @brief   Test a little bigger graph J. Wang 
  *
 **/
 TEST(InitGraphTest_3, Success)
@@ -102,7 +102,7 @@ TEST(InitGraphTest_3, Success)
 
 
 /**
- * @brief   test compute_num_edge_intersect
+ * @brief   test compute_num_edge_intersect for janc graph
  *
 **/
 TEST(ComputeNumEdgeIntersectTest_1, Success)
@@ -110,24 +110,7 @@ TEST(ComputeNumEdgeIntersectTest_1, Success)
     /* Some basic setup */
     CSR g("../data/MC/janc.gr");
 
-    /* Test some basic graph properties */
-    vector<pair<int32_t, int32_t> > v_rg;
-    for(int i=0; i<g.get_num_v(); i++)
-    {
-        v_rg.push_back(g.get_e_range(i));
-    }
-
-    /* Compare the correctness of intersection */
-    FILE *writer = fopen("./intersect.txt", "w"); 
-    for(int i=0; i<g.get_num_v(); i++)
-    {
-        for(int j=i+1; j<g.get_num_v(); j++)
-        {
-            fprintf(writer, "%d %d %d\n", 
-                    i, j, g.compute_num_edge_intersect(v_rg[i], v_rg[j]));
-        }
-    }
-    fclose(writer);
+    TstUtil::compute_num_edge_intersect(g);
 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/intersect.txt", 
                 "./intersect.txt"), TstUtil::OPTKIT_TEST_PASS); 
@@ -136,7 +119,24 @@ TEST(ComputeNumEdgeIntersectTest_1, Success)
 }
 
 /**
- * @brief   test reconstruct,
+ * @brief   test compute_num_edge_intersect for jwang graph
+ *
+**/
+TEST(ComputeNumEdgeIntersectTest_2, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+
+    TstUtil::compute_num_edge_intersect(g);
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/intersect1.txt", 
+                "./intersect.txt"), TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./intersect.txt");
+}
+
+/**
+ * @brief   test reconstruct, using janc graph
  *          we removed three edges in the graph and
  *          see if the reconstruction goes well or not.  
  *
