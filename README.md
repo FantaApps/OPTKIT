@@ -15,6 +15,15 @@ Algorithm implemented are:
   
 ==============  
 INSTALL  
+
+Before install you need to make sure that you have installed:  
+
+autoconf  
+automake 
+libtool (in MAC system, it's glibtool)  
+glog  
+gtest  
+
 ./init.sh  
   
 ==============  
