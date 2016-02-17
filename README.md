@@ -22,7 +22,8 @@ autoconf
 automake 
 libtool (in MAC system, it's glibtool)  
 glog  
-gtest  
+gnu g++-4.8
+gtest -- when build with MAC os, you need to be very careful to build gtest the same compiler with this project.  
 
 ./init.sh  
   

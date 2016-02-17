@@ -163,6 +163,40 @@ TEST(ReconstructTest_1, Success)
 }
 
 /**
+ * @brief   test reconstruct, using jwang graph
+ *          we removed three edges in the graph and
+ *          see if the reconstruction goes well or not.  
+ *
+**/
+TEST(ReconstructTest_2, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+
+    ASSERT_EQ(g.remove_e(3, 7),   true);
+    ASSERT_EQ(g.remove_e(3, 9),  true);
+    ASSERT_EQ(g.remove_e(3, 17),  true);
+    ASSERT_EQ(g.remove_e(0, 3),   true);
+
+    ASSERT_EQ(g.remove_e(2, 20),  true);
+    ASSERT_EQ(g.remove_e(7, 20),  true);
+    ASSERT_EQ(g.remove_e(19, 20), true);
+    ASSERT_EQ(g.remove_e(17, 20), true);
+
+    ASSERT_EQ(g.remove_e(13, 17), true);
+
+    g.reconstruct();
+
+    ASSERT_EQ(g.get_num_e(), 72);
+
+    g.visualize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr_reconstruct1.dot", 
+                "./csr.dot"), TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./csr.dot");
+}
+
+/**
  * @brief   test output_all_CC 
  *
 **/
