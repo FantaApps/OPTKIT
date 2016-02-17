@@ -156,6 +156,9 @@ public:
         return edges;
     }
 
+    /**
+     * @brief       This is a common entry for testing edge intersects
+    **/
     static void compute_num_edge_intersect(CSR &g)
     {
         /* Test some basic graph properties */
