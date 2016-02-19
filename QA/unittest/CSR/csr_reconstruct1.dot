@@ -16,7 +16,6 @@ graph{
 6 -- 10 [color=red];
 6 -- 13 [color=red];
 6 -- 16 [color=red];
-6 -- 17 [color=red];
 6 -- 20 [color=red];
 7 -- 9 [color=red];
 7 -- 17 [color=red];
@@ -49,7 +48,6 @@ graph{
 17 -- 0 [color=red];
 17 -- 2 [color=red];
 17 -- 4 [color=red];
-17 -- 6 [color=red];
 17 -- 7 [color=red];
 17 -- 8 [color=red];
 17 -- 9 [color=red];
