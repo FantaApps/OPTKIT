@@ -4,6 +4,7 @@
  *  @brief    Unittest of truss decomposition utilities 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/17/16 - add test cases for jwang graph 
  *  stplaydog   02/14/16 - add TrussDecompositionTest_2 to test case in J Wang's paper.
  *  stplaydog   01/10/16 - Validate all results in janc graph  
  *  stplaydog   01/04/16 - Fixed some bugs 
@@ -18,12 +19,11 @@
 #include "test_util.h" 
 
 /**
- * @brief   Test a small graph one color
- *
+ * @brief   Test a small graph one color for janc graph
 **/
 TEST(InitTrussTest_1, Success)
 {
-    /* Some basic setup */
+    /* Some basic setup for janc graph*/
     CSR g("../data/MC/janc.gr");
     Truss t(g.get_num_e(), g.get_num_c());
 
@@ -39,8 +39,27 @@ TEST(InitTrussTest_1, Success)
 }
 
 /**
- * @brief   test compute_sup  
- *
+ * @brief   Test a small graph one color for jwang graph
+**/
+TEST(InitTrussTest_2, Success)
+{
+    /* Some basic setup for jwang graph*/
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    /* Test some basic graph properties */
+    ASSERT_EQ(t.get_num_c(), 1);
+    ASSERT_EQ(t.get_num_e(), 90);
+
+    t.print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_init1.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./sup.txt");
+}
+
+/**
+ * @brief   test compute_sup for janc graph 
 **/
 TEST(ComputeSupTest_1, Success)
 {
@@ -58,8 +77,25 @@ TEST(ComputeSupTest_1, Success)
 }
 
 /**
+ * @brief   test compute_sup for jwang graph 
+**/
+TEST(ComputeSupTest_2, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.compute_sup(g);
+
+    t.print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_compt1.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./sup.txt");
+}
+
+/**
  * @brief   test sup_e_opr 
- *
 **/
 TEST(ReduceOneETest_1, Success)
 {
@@ -79,7 +115,26 @@ TEST(ReduceOneETest_1, Success)
 
 /**
  * @brief   test sup_e_opr 
- *
+**/
+TEST(ReduceOneETest_2, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.compute_sup(g);
+    t.reduce_one_edge(g, 0, 1);
+
+    t.print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e1.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+
+    std::remove("./sup.txt");
+}
+
+/**
+ * @brief   test sup_e_opr 
 **/
 TEST(SupEOprTest_1, Success)
 {
@@ -99,6 +154,38 @@ TEST(SupEOprTest_1, Success)
 
     t.print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+
+    std::remove("./sup.txt");
+    std::remove("./csr.dot");
+
+
+}
+
+/**
+ * @brief   test sup_e_opr 
+**/
+TEST(SupEOprTest_2, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.compute_sup(g);
+    bool ret = t.sup_e_opr(g, 3);
+
+    ASSERT_EQ(ret, true);
+
+    g.visualize();
+    ASSERT_EQ(g.get_num_e(), 84);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr1.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+
+
+    t.print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr1.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");

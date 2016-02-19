@@ -61,10 +61,14 @@ private:
     void reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c = 0);
 
     // These are google test related
-    FRIEND_TEST(InitTrussTest_1, Success);
+    FRIEND_TEST(InitTrussTest_1,  Success);
     FRIEND_TEST(ReduceOneETest_1, Success);
     FRIEND_TEST(ComputeSupTest_1, Success);
-    FRIEND_TEST(SupEOprTest_1, Success);
+    FRIEND_TEST(SupEOprTest_1,    Success);
+    FRIEND_TEST(InitTrussTest_2,  Success);
+    FRIEND_TEST(ReduceOneETest_2, Success);
+    FRIEND_TEST(ComputeSupTest_2, Success);
+    FRIEND_TEST(SupEOprTest_2,    Success);
 
 };
 
