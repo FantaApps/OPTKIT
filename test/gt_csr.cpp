@@ -214,10 +214,11 @@ TEST(ReconstructTest_2, Success)
     ASSERT_EQ(g.remove_e(17, 20), true);
 
     ASSERT_EQ(g.remove_e(13, 17), true);
+    ASSERT_EQ(g.remove_e(6, 17), true);
 
     g.reconstruct();
 
-    ASSERT_EQ(g.get_num_e(), 72);
+    ASSERT_EQ(g.get_num_e(), 70);
 
     g.visualize();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/csr_reconstruct1.dot", 
