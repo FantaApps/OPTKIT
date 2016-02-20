@@ -4,6 +4,7 @@
  * @brief    This is the implementation for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/19/16 - Fixed a bug of uninitialized array (visited) 
  *  stplaydog   02/14/16 - Fixed a bug in allocate_data_structure 
  *  stplaydog   02/13/16 - Creation
  *
@@ -448,6 +449,7 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
     assert(writer  != NULL);
 
     bool *visited = new bool[num_v];
+    memset(visited, false, num_v * sizeof(bool));
 
     int32_t count = 0;
     for(int32_t i=0; i<num_v; i++)
