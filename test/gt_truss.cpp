@@ -218,8 +218,7 @@ TEST(TrussDecompositionTest_2, Success)
     Truss t(g.get_num_e(), g.get_num_c());
 
     t.truss_decomosition(g, "truss.txt", 5);
-    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
-    //        TstUtil::OPTKIT_TEST_PASS); 
-
-    //std::remove("./truss.txt");
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./truss.txt");
 }
