@@ -123,7 +123,7 @@ TEST(ReduceOneETest_2, Success)
     Truss t(g.get_num_e(), g.get_num_c());
 
     t.compute_sup(g);
-    t.reduce_one_edge(g, 0, 1);
+    t.reduce_one_edge(g, 0, 3);
 
     t.print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e1.txt", "./sup.txt"), 
