@@ -4,6 +4,7 @@
  *  @brief    Unittest of truss decomposition utilities 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   02/19/16 - passes all test cases 
  *  stplaydog   02/17/16 - add test cases for jwang graph 
  *  stplaydog   02/14/16 - add TrussDecompositionTest_2 to test case in J Wang's paper.
  *  stplaydog   01/10/16 - Validate all results in janc graph  
