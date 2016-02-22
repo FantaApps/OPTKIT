@@ -83,7 +83,7 @@ public:
          *
          * @param[in]       factor      the resize multiplier 
         **/
-        bool resize(int32_t factor = 2)
+        void resize(int32_t factor = 2)
         {
             data.resize(data.size()*factor);
             idx.resize(data.size()*factor);
@@ -102,6 +102,7 @@ public:
     bool check(Node<T> *node, int32_t node_id = -1)
     {
         int32_t required = node->get_encode_size();
+        return true;
     }
 
     /**

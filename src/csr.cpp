@@ -125,7 +125,7 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
     map<int32_t, int32_t> count;
     num_e = edges.size();
     num_v = 0;
-    for(int32_t i=0; i<edges.size(); i++)
+    for(uint32_t i=0; i<edges.size(); i++)
     {
         int32_t v_origin = edges[i].first;
         if(dic.find(v_origin) == dic.end())
@@ -144,7 +144,7 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
         v_idx[0][i] = sum;
     }
     
-    for(int32_t i=0; i<edges.size(); ++i)    
+    for(uint32_t i=0; i<edges.size(); ++i)    
     {
         e_idx[0][i] = dic[edges[i].second];
     }
