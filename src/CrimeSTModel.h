@@ -49,8 +49,8 @@ public:
      *
     **/
     CrimeSTModel(const string &input_file) :
-       serial_num(0),
-       in_file(input_file)
+       in_file(input_file),
+       serial_num(0)
     {
         LOG(INFO) << "Reading data...";
 
