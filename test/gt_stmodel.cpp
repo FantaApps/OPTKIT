@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/03/16 - move test case to new directories 
  *  stplaydog   02/10/16 - test build_edges 
  *  stplaydog   02/10/16 - test model creation and RTree creation 
  *  stplaydog   02/01/16 - Creation
