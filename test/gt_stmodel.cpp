@@ -48,26 +48,25 @@ TEST(SmallCrimeDataTest_1, Success)
 
     vector<pair<int32_t, int32_t>> edges = stm.build_edges(1, 1, 1);
     stm.serialize_edges(edges);
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/small_crime_edges.txt", "./crime_edges.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/small_crime_edges.txt", "./crime_edges.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./crime_edges.txt");
     
     stm.serialize();
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/small_crime_st.txt", "./crime_data.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/small_crime_st.txt", "./crime_data.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./crime_data.txt");
 
     // now test graph generation and truss decomposition
-    //CSR g(edges);
+    CSR g(edges);
 
-    //Truss t(g.get_num_e(), g.get_num_c());
+    Truss t(g.get_num_e(), g.get_num_c());
 
-    //t.truss_decomosition(g, "truss.txt", 5);
-    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/st_truss_alg1.txt", "./truss.txt"), 
-    //        TstUtil::OPTKIT_TEST_PASS); 
+    t.truss_decomosition(g, "truss.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/small_crime_truss_alg1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
-    ////std::remove("./truss.txt");
-    //exit(1);
+    std::remove("./truss.txt");
 }
 
 /**
@@ -80,7 +79,7 @@ TEST(NYCrimeDataTest_1, Success)
     CrimeSTModel stm(input_file);
     stm.serialize();
 
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/crime_data.txt", "./crime_data.txt"), 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/crime_data.txt", "./crime_data.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./crime_data.txt");
