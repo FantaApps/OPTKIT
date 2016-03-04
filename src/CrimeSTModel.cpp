@@ -24,7 +24,7 @@ void CrimeSTModel::read_data()
     csv::Parser file = csv::Parser(in_file.c_str());
     struct tm tm;
 
-    for(int32_t i=0; i<file.rowCount(); i++)
+    for(uint32_t i=0; i<file.rowCount(); i++)
     {
         Node n;
 
@@ -45,7 +45,7 @@ void CrimeSTModel::read_data()
 **/
 void CrimeSTModel::build_model()
 {
-    for(int32_t i=0; i<nodes.size(); i++)
+    for(uint32_t i=0; i<nodes.size(); i++)
     {
         rt.Insert(nodes[i].coord, nodes[i].coord, &(nodes[i]));
     } 
@@ -130,7 +130,7 @@ void CrimeSTModel::serialize()
 {
     FILE *writer = fopen("./crime_data.txt", "w");
     fprintf(writer, "%s %d\n", in_file.c_str(), serial_num);
-    for(int i=0; i<nodes.size(); i++)
+    for(uint32_t i=0; i<nodes.size(); i++)
     {
         fprintf(writer, "%d %d|%d|%d %d %s\n", nodes[i].id, 
                 nodes[i].coord[0], nodes[i].coord[1], nodes[i].coord[2],

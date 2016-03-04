@@ -85,7 +85,7 @@ public:
 
     static void gtest_log_vector(const std::vector<int> &vec)
     {
-        for(int i=0; i<vec.size(); ++i)
+        for(uint32_t i=0; i<vec.size(); ++i)
         {
             printf("%d ", vec[i]);
         }
