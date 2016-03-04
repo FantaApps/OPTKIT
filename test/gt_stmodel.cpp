@@ -5,6 +5,7 @@
  *
  *  MODIFIED   (MM/DD/YY)
  *  stplaydog   03/03/16 - move test case to new directories 
+ *                         add the truss test for ny crime data.
  *  stplaydog   02/10/16 - test build_edges 
  *  stplaydog   02/10/16 - test model creation and RTree creation 
  *  stplaydog   02/01/16 - Creation
@@ -26,6 +27,7 @@ using namespace std;
 TEST(SmallCrimeDataTest_1, Success)
 {
     google::InitGoogleLogging("OPTKIT_TEST");
+
     string input_file = "../data/truss/crime_small_st.csv"; 
     CrimeSTModel stm(input_file);
 
@@ -78,11 +80,26 @@ TEST(NYCrimeDataTest_1, Success)
 {
     string input_file = "../data/truss/ny_crime.csv"; 
     CrimeSTModel stm(input_file);
-    stm.serialize();
 
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/crime_data.txt", "./crime_data.txt"), 
+    vector<pair<int32_t, int32_t>> edges = stm.build_edges(1, 1, 1);
+    stm.serialize_edges(edges);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_edges.txt", "./crime_edges.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
-
+    std::remove("./crime_edges.txt");
+    
+    stm.serialize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_st.txt", "./crime_data.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./crime_data.txt");
+
+    // now test graph generation and truss decomposition
+    CSR g(edges);
+
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.truss_decomosition(g, "truss.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_truss_alg1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./truss.txt");
 }
 
