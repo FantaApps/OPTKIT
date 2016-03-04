@@ -181,7 +181,6 @@ public:
         fclose(writer);
     }
 
-
 };
 
 #endif
