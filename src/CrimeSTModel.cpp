@@ -178,7 +178,7 @@ void CrimeSTModel::interpret_CC(const char *fIn, const char *fOut)
         bool is_comp = false;
         while(getline(ss, token, ' '))
         {
-            if(token.find("Comp"))
+            if(token == "Comp")
             {
                 is_comp = true;
             }
