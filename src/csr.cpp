@@ -4,6 +4,8 @@
  * @brief    This is the implementation for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/04/16 - Fixed a bug that graph does not have a reverse
+ *                         mapping. 
  *  stplaydog   02/19/16 - Fixed a bug of uninitialized array (visited) 
  *  stplaydog   02/14/16 - Fixed a bug in allocate_data_structure 
  *  stplaydog   02/13/16 - Creation
@@ -130,7 +132,9 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
         int32_t v_origin = edges[i].first;
         if(dic.find(v_origin) == dic.end())
         {
-            dic[v_origin] = num_v++;
+            dic[v_origin]  = num_v;
+            rev_dic[num_v] = v_origin;
+            num_v++;
         }
         count[dic[v_origin]]++;
     }
@@ -536,7 +540,14 @@ void CSR::output_one_CC(FILE *writer, int32_t v, bool *visited, int32_t c)
 
     if(!visited[v])
     {
-        fprintf(writer, "%d ", v);
+        if(!rev_dic.size())
+        {
+            fprintf(writer, "%d ", v);
+        }
+        else
+        {
+            fprintf(writer, "%d ", rev_dic[v]);
+        }
         visited[v] = true;
     }
     else

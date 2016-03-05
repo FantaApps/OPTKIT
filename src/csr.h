@@ -89,7 +89,8 @@ private:
     int32_t **v_idx; ///< vertex index for CSR
     int32_t **e_idx; ///< edge index for CSR
 
-    map<int32_t, int32_t> dic; ///< to store the mapping of vertices
+    map<int32_t, int32_t> dic;     ///< to store the mapping of vertices
+    map<int32_t, int32_t> rev_dic; ///< to store the reverse mapping of vertices
 
     void output_one_CC(FILE *writer, int32_t v, 
                        bool *visited, int32_t c = 0);

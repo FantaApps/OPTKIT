@@ -102,7 +102,11 @@ TEST(NYCrimeDataTest_1, Success)
             TstUtil::OPTKIT_TEST_PASS); 
 
     // also do some real data validation
+    stm.interpret_CC("./truss.txt", "./truss_stmodel.txt");
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_truss_stmodel.txt", "./truss_stmodel.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./truss.txt");
+    std::remove("./truss_stmodel.txt");
 }
 
