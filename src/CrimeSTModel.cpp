@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/03/16 - add function to intepret CC files
  *  stplaydog   02/12/16 - add build_edges 
  *  stplaydog   02/11/16 - add query_list     
  *  stplaydog   02/10/16 - CSV read and RTree creation/query 
@@ -12,6 +13,8 @@
 **/
 
 #include <string>
+#include <fstream>
+#include <sstream>
 #include "../libs/CSVparser.h" 
 #include "CrimeSTModel.h" 
 #include "utils.h" 
@@ -152,4 +155,49 @@ void CrimeSTModel::serialize_edges(vector<pair<int32_t, int32_t>> &edges)
         fprintf(writer, "%d %d\n", e.first, e.second);
     }
     fclose(writer);
+}
+
+/**
+ * @brief       Interpret CC files
+ *
+ * @param[in]       fIn         input file
+ * @param[in]       fOut        output file
+ *
+ * @return      N/A
+**/
+void CrimeSTModel::interpret_CC(const char *fIn, const char *fOut)
+{
+    ifstream reader(fIn);
+    ofstream writer(fOut);
+
+    string line;
+    while(getline(reader, line))
+    {
+        istringstream ss(line);
+        string token;
+        bool is_comp = false;
+        while(getline(ss, token, ' '))
+        {
+            if(token == "Comp")
+            {
+                is_comp = true;
+            }
+            if(is_comp && isdigit(token[0]))
+            {
+                int id = stoi(token);
+                writer<<"["
+                      <<nodes[id].coord[0]<<", "
+                      <<nodes[id].coord[1]<<", "
+                      <<nodes[id].coord[2]<<"]";
+            }
+            else
+            {
+                writer<<token<<" ";
+            }
+        }
+        writer<<endl;
+    }
+
+    reader.close();
+    writer.close();
 }

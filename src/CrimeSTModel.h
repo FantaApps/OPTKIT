@@ -111,6 +111,7 @@ private:
 
     void serialize();
     void serialize_edges(vector<pair<int32_t, int32_t>> &edges);
+    void interpret_CC(const char *fIn, const char *fOut);
 
     FRIEND_TEST(SmallCrimeDataTest_1, Success);
     FRIEND_TEST(NYCrimeDataTest_1, Success);

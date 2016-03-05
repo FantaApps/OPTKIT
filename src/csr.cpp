@@ -461,7 +461,7 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
         pair<int32_t, int32_t> rg = get_e_range(i, c);
         if(!visited[i] && (!with_edge || rg.first < rg.second))
         {
-            fprintf(writer, "Comp [%d] :", count++);
+            fprintf(writer, "Comp [%d] : ", count++);
             output_one_CC(writer, i, visited, c);
             fprintf(writer, "\n");
         }
