@@ -48,9 +48,9 @@ public:
     virtual void serialize() = 0;
     virtual void write_content(int32_t option, string &content) = 0;
 
-    string m_outFile;       ///<
-    string m_time;          ///<
-    string m_application;   ///<
+    string m_outFile;       ///< output json to this file
+    string m_time;          ///< the creation time
+    string m_application;   ///< the application name
 };
 
 class TrussStats : public Stats
@@ -86,7 +86,7 @@ public:
         int32_t                          m_numCC;           ///< native code
         int32_t                          m_diameter;        ///< boost 
         int32_t                          m_girth;           ///< boost
-        double                           m_cluterCoeff;     ///< boost
+        double                           m_clusterCoeff;    ///< boost
         double                           m_betweenCentrl;   ///< boost
         vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
     };
@@ -108,12 +108,12 @@ public:
               <<"        ],"<<endl;
         writer<<"        \"graph property\""<<" : "<<"[\n"
               <<"             \"numV\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"numE\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"numCC\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"diameter\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"girth\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"clusterCoeff\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"betweenCentrl\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"numE\" : "<<m_gProperty.m_numE<<",\n"
+              <<"             \"numCC\" : "<<m_gProperty.m_numCC<<",\n"
+              <<"             \"diameter\" : "<<m_gProperty.m_diameter<<",\n"
+              <<"             \"girth\" : "<<m_gProperty.m_girth<<",\n"
+              <<"             \"clusterCoeff\" : "<<m_gProperty.m_clusterCoeff<<",\n"
+              <<"             \"betweenCentrl\" : "<<m_gProperty.m_betweenCentrl<<",\n"
               <<"             \"truss\" : "<<"[\n";
         for(size_t i=0; i<m_gProperty.m_numTruss.size(); i++)
         {
@@ -182,7 +182,7 @@ public:
             }
             case CLUSTERCOEFF:
             {
-                m_gProperty.m_cluterCoeff = stod(content);
+                m_gProperty.m_clusterCoeff = stod(content);
                 break;
             }
             case BETWEENCENTRL:
@@ -199,9 +199,9 @@ public:
         }
     }
 
-    string                           m_dataName;  ///<
-    vector<int32_t>                  m_range;     ///<
-    GraphProperty                    m_gProperty; ///<
+    string                           m_dataName;  ///< data source name
+    vector<int32_t>                  m_range;     ///< x,y and time
+    GraphProperty                    m_gProperty; ///< graph properties
 
     FRIEND_TEST(StatsTest_1,  Success);
 };
