@@ -13,7 +13,6 @@
 #ifndef __H_STATS__
 #define __H_STATS__
 
-#include "../libs/picojson.h"
 
 using namespace std;
 
@@ -36,12 +35,17 @@ using namespace std;
 class Stats 
 {
 public:
-    Stats(string outFile) { m_outFile = outFile; };
+    Stats(string outFile) 
+    { 
+        m_outFile     = outFile; 
+        m_time        = to_string(rand() % 1000);
+        m_application = "OPTKIT";
+    };
 
     ~Stats() {};
 
-    virtual void serialize();
-    virtual void write_content(int32_t option, string &content);
+    virtual void serialize() = 0;
+    virtual void write_content(int32_t option, string &content) = 0;
 
     string m_outFile;       ///<
     string m_time;          ///<
@@ -50,7 +54,7 @@ public:
 
 class TrussStats : public Stats
 {
-}
+};
 
 class STModelStats : public Stats
 {
@@ -70,6 +74,10 @@ class STModelStats : public Stats
 
 public:
 
+    STModelStats(string outFile) : Stats(outFile) { };
+
+    ~STModelStats() {};
+
     struct GraphProperty
     {
         int32_t                          m_numV;            ///< native code
@@ -84,41 +92,108 @@ public:
 
     void serialize()
     {
-    }
+        ofstream writer (m_outFile);
 
+        writer<<"{"<<endl;
+
+        writer<<"   \"time\""<<" : "<<m_time<<","<<endl;
+        writer<<"   \"application\""<<" : "<<"\""<<m_application<<"\","<<endl;
+        writer<<"   \"content\""<<" : {"<<endl;
+        writer<<"        \"data name\""<<" : "<<"\""<<m_dataName<<"\","<<endl;
+        writer<<"        \"range\""<<" : "<<"[\n"
+              <<"             "<<m_range[0]<<",\n"
+              <<"             "<<m_range[1]<<",\n"
+              <<"             "<<m_range[2]<<"\n"
+              <<"        ],"<<endl;
+        writer<<"        \"graph property\""<<" : "<<"[\n"
+              <<"             \"numV\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"numE\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"numCC\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"diameter\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"girth\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"clusterCoeff\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"betweenCentrl\" : "<<m_gProperty.m_numV<<",\n"
+              <<"             \"truss\" : "<<"[\n";
+        for(size_t i=0; i<m_gProperty.m_numTruss.size(); i++)
+        {
+            writer<<"                  "<<m_gProperty.m_numTruss[i].first<<" : "<<m_gProperty.m_numTruss[i].second;
+            if(i!=m_gProperty.m_numTruss.size()-1)
+                writer<<",";
+            writer<<endl;
+        }
+        writer<<"             ]\n        ]\n";
+
+        writer<<"    }"<<endl;
+        writer<<"}"<<endl;
+
+        writer.close();
+    }
+    
+    /**
+     * @brief       To fill the content of a specific experiemnt
+     *
+     * @param[in]       option      which field to fill with
+     * @param[in]       content     value of the field
+     *
+     * @return      N/A
+    **/
     void write_content(int32_t option, string &content)
     {
         switch (option)
         {
             case RANGE :
             {
+                vector<string> val = Utils::split(content, ',');
+                m_range.push_back(stoi(val[0]));
+                m_range.push_back(stoi(val[1]));
+                m_range.push_back(stoi(val[2]));
+                break;
             } 
             case DATANAME :
             {
+                m_dataName = content;
+                break;
             }
             case NUMV:
             {
+                m_gProperty.m_numV = stoi(content);
+                break;
             }
             case NUME:
             {
+                m_gProperty.m_numE = stoi(content);
+                break;
             }
             case NUMCC:
             {
+                m_gProperty.m_numCC = stoi(content);
+                break;
             }
             case DIAMETER:
             {
+                m_gProperty.m_diameter = stoi(content);
+                break;
             }
             case GIRTH:
             {
+                m_gProperty.m_girth = stoi(content);
+                break;
             }
             case CLUSTERCOEFF:
             {
+                m_gProperty.m_cluterCoeff = stod(content);
+                break;
             }
             case BETWEENCENTRL:
             {
+                m_gProperty.m_betweenCentrl = stod(content);
+                break;
             }
             case TRUSS:
             {
+                vector<string> val = Utils::split(content, ',');
+                m_gProperty.m_numTruss.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
             }
         }
     }
@@ -126,6 +201,8 @@ public:
     string                           m_dataName;  ///<
     vector<int32_t>                  m_range;     ///<
     GraphProperty                    m_gProperty; ///<
-}
+
+    FRIEND_TEST(StatsTest_1,  Success);
+};
 
 #endif // __H_STATS__ 
