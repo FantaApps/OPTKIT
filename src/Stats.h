@@ -5,6 +5,7 @@
  *           The result could be serialized to a json file.  
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/08/16 - Add serialization 
  *  stplaydog   03/06/16 - Creation
  *
 **/

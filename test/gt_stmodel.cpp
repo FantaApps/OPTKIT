@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/08/16 - add code to test STModelStats 
  *  stplaydog   03/03/16 - move test case to new directories 
  *                         add the truss test for ny crime data.
  *  stplaydog   02/10/16 - test build_edges 

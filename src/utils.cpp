@@ -4,6 +4,7 @@
  *  @brief    Some utility implementations.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/08/16 - add split code, and remove warnings 
  *  stplaydog   08/02/15 - Creation
 **/
 
