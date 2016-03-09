@@ -4,6 +4,7 @@
  *  @brief    Unittest of CSR graph structure. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/08/16 - add code to test STModelStats 
  *  stplaydog   03/03/16 - move test case to new directories 
  *                         add the truss test for ny crime data.
  *  stplaydog   02/10/16 - test build_edges 
@@ -17,6 +18,7 @@
 #include "test_util.h" 
 #include "csr.h"
 #include "truss.h"
+#include "Stats.h"
 
 using namespace std;
 
@@ -108,5 +110,32 @@ TEST(NYCrimeDataTest_1, Success)
 
     std::remove("./truss.txt");
     std::remove("./truss_stmodel.txt");
+}
+
+/**
+ * @brief   Test stats to serilize to json file 
+ *
+**/
+TEST(StatsTest_1, Success)
+{
+    Stats *st = new STModelStats(string("./stats.txt"));
+    
+    string tmp = "1,1,1"; st->write_content((int32_t)STModelStats::RANGE,         tmp);
+    tmp = "gtest";        st->write_content((int32_t)STModelStats::DATANAME,      tmp); 
+    tmp = "10";           st->write_content((int32_t)STModelStats::NUMV,          tmp);
+    tmp = "1000";         st->write_content((int32_t)STModelStats::NUME,          tmp);
+    tmp = "5";            st->write_content((int32_t)STModelStats::NUMCC,         tmp);
+    tmp = "3";            st->write_content((int32_t)STModelStats::DIAMETER,      tmp);
+    tmp = "25";           st->write_content((int32_t)STModelStats::GIRTH,         tmp);
+    tmp = "0.58";         st->write_content((int32_t)STModelStats::CLUSTERCOEFF,  tmp);
+    tmp = "0.33";         st->write_content((int32_t)STModelStats::BETWEENCENTRL, tmp);
+    tmp = "3,25";         st->write_content((int32_t)STModelStats::TRUSS,         tmp);
+
+    st->serialize();
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/simple_stats.txt", "./stats.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./stats.txt");
 }
 

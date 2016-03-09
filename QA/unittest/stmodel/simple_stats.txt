@@ -1,0 +1,24 @@
+{
+   "time" : 1000,
+   "application" : "OPTKIT",
+   "content" : {
+        "data name" : "gtest",
+        "range" : [
+             1,
+             1,
+             1
+        ],
+        "graph property" : [
+             "numV" : 10,
+             "numE" : 1000,
+             "numCC" : 5,
+             "diameter" : 3,
+             "girth" : 25,
+             "clusterCoeff" : 0.58,
+             "betweenCentrl" : 0.33,
+             "truss" : [
+                  3 : 25
+             ]
+        ]
+    }
+}

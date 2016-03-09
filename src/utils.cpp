@@ -4,6 +4,7 @@
  *  @brief    Some utility implementations.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/08/16 - add split code, and remove warnings 
  *  stplaydog   08/02/15 - Creation
 **/
 
@@ -217,7 +218,6 @@ void Utils::get_file_name(const char *full_path_name, int16_t size1, char *file_
     char cLF = 0x0a;
     char cFF = 0x0c;
 
-    char    ret[OPTKIT_FILE_SIZE];
     int16_t last_slash_pos = OPTKIT_ZERO;
     size_t  full_path_size = strlen(full_path_name);
 
@@ -250,7 +250,7 @@ void Utils::concate_path(const char *path, const char *full_path_name, int16_t s
     char file_name[OPTKIT_FILE_SIZE];
     Utils::get_file_name(full_path_name, size2, file_name, OPTKIT_FILE_SIZE);
 
-    assert(strlen(file_name)+strlen(path) < size3);
+    assert(strlen(file_name)+strlen(path) < (uint32_t)size3);
 
     snprintf(concated, size3, "%s%s", path, file_name);
 }
@@ -281,4 +281,17 @@ int Utils::ede1(int invdist, int ngene)
     newvalue = ( int ) ceil ( dval );
     /*if (newvalue-dval > 0) return newvalue-1; */
     return newvalue;
+}
+
+
+vector<string> Utils::split(string &s, char delim)
+{
+   vector<string> ret; 
+   istringstream ss(s);
+   string token;
+   while(getline(ss, token, delim))
+   {
+       ret.push_back(token);
+   }
+   return ret;
 }

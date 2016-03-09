@@ -18,6 +18,7 @@
 #include "csr.h"
 #include "truss.h"
 #include "CrimeSTModel.h"
+#include "Stats.h"
 #include <getopt.h>
 
 void define_arguments(Parser &parser);
