@@ -39,7 +39,7 @@ public:
     Stats(string outFile) 
     { 
         m_outFile     = outFile; 
-        m_time        = to_string(rand() % 1000);
+        m_time        = to_string(1000);
         m_application = "OPTKIT";
     };
 

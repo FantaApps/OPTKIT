@@ -133,7 +133,7 @@ TEST(StatsTest_1, Success)
 
     st->serialize();
 
-    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/simple_stats.txt", "./stats.txt"), 
+    ASSERT_EQ(TstUtil::isMatch("../QA/unittest/stmodel/simple_stats.txt", "./stats.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     //std::remove("./stats.txt");
