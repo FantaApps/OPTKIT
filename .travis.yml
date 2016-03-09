@@ -28,3 +28,4 @@ before_script:
 script: 
   - make
   - make check
+  - cat ./QA/unittest/stmodel/simple_stats.txt
