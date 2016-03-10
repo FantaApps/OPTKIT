@@ -71,6 +71,7 @@ void process(Parser &parser)
 
     if(truss.isSet())
     {
+        Config::instance()->set("application", "truss");
         CSR g(infile.c_str());
         Truss t(g.get_num_e(), g.get_num_c());
         t.truss_decomosition(g, oufile.c_str(), 5);
@@ -82,7 +83,7 @@ void process(Parser &parser)
             list<string> values = coord.getValue();
             int     _coord[3];
             uint8_t i = 0;
-
+            
             for(auto entry = values.begin(); entry != values.end(); ++entry) 
             {
                 _coord[i++] = stoi(*entry);

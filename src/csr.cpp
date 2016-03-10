@@ -462,7 +462,10 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
         if(!visited[i] && (!with_edge || rg.first < rg.second))
         {
             fprintf(writer, "Comp [%d] : ", count++);
-            output_one_CC(writer, i, visited, c);
+            int32_t cnt = 0;
+            output_one_CC(writer, i, visited, cnt, c);
+            Config::instance()->set(Config::instance()->get("ktruss")+count, 
+                                    to_string(cnt));
             fprintf(writer, "\n");
         }
     }
@@ -528,10 +531,13 @@ void CSR::visualize()
  * @param[in]       writer      the file which is going to be written
  * @param[in]       v           the seed vertex 
  * @param[in]       visited     indicate which vertex has been visited
+ * @param[out]      cnt         num of vertices in this CC
+ * @param[in]       c           which color 
  *
  * @return      N/A
 **/
-void CSR::output_one_CC(FILE *writer, int32_t v, bool *visited, int32_t c)
+void CSR::output_one_CC(FILE *writer, int32_t v, bool *visited, 
+                        int32_t &cnt, int32_t c)
 {
     assert(c < num_c);
     assert(writer  != NULL);
@@ -548,6 +554,7 @@ void CSR::output_one_CC(FILE *writer, int32_t v, bool *visited, int32_t c)
         {
             fprintf(writer, "%d ", rev_dic[v]);
         }
+        cnt++;
         visited[v] = true;
     }
     else
@@ -558,6 +565,6 @@ void CSR::output_one_CC(FILE *writer, int32_t v, bool *visited, int32_t c)
     pair<int32_t, int32_t> rg = get_e_range(v);
     for(int32_t i=rg.first; i<rg.second; ++i)
     {
-        output_one_CC(writer, e_idx[c][i], visited);
+        output_one_CC(writer, e_idx[c][i], visited, cnt);
     }
 }

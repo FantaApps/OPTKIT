@@ -39,8 +39,21 @@ public:
     Stats(string outFile) 
     { 
         m_outFile     = outFile; 
-        m_time        = to_string(1000);
-        m_application = "OPTKIT";
+        if(truss.isSet())
+        {
+            m_application = "truss";
+            m_time        = currentDateTime();
+        }
+        else if(stmodel.isSet())
+        {
+            m_application = "stmodel";
+            m_time        = currentDateTime();
+        }
+        else
+        {
+            m_application = "OPTKIT";
+            m_time        = "1000";
+        }
     };
 
     ~Stats() {};

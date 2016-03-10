@@ -83,6 +83,21 @@ public:
     static void concate_path(const char *path, const char *full_path_name, int16_t size2, char* concated, int size3);
     static int  ede1(int invdist, int ngene);
     static vector<string> split(string &s, char delim);
+    
+    
+    // Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+    const string currentDateTime() 
+    {
+        time_t     now = time(0);
+        struct tm  tstruct;
+        char       buf[80];
+        tstruct = *localtime(&now);
+        // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+        // for more information about date/time format
+        strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+        return buf;
+    }
 
     static void gtest_log_vector(const std::vector<int> &vec)
     {
