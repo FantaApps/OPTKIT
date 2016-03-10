@@ -70,7 +70,8 @@ class STModelStats : public Stats
         GIRTH,
         CLUSTERCOEFF,
         BETWEENCENTRL,
-        TRUSS
+        TRUSS,
+        CLIQUE
     };
 
 public:
@@ -89,6 +90,7 @@ public:
         double                           m_clusterCoeff;    ///< boost
         double                           m_betweenCentrl;   ///< boost
         vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
+        vector<pair<int32_t, int32_t>>   m_numClique;       ///< boost
     };
 
     void serialize()
@@ -194,6 +196,12 @@ public:
             {
                 vector<string> val = Utils::split(content, ',');
                 m_gProperty.m_numTruss.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
+            }
+            case CLIQUE:
+            {
+                vector<string> val = Utils::split(content, ',');
+                m_gProperty.m_numClique.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
         }
