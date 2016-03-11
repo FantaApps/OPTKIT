@@ -12,9 +12,10 @@
 #ifndef __H_CONFIG__
 #define __H_CONFIG__
 
-#include "../libs/Parser.h"
+#include "utils.h"
 
 using namespace std;
+
 
 /**
  * @class Config
@@ -34,8 +35,15 @@ public:
         return m_instance;
     }
 
-    void set(const string &key, const string &val);
-    string get(const string &key);
+    void set(const string &key, const string &val)
+    {
+    }
+
+    string get(const string &key)
+    {
+        string ret;
+        return ret;
+    }
 
 
 private:
@@ -44,5 +52,7 @@ private:
     static Config * m_instance;
 
 };
+
+
 
 #endif

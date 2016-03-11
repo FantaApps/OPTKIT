@@ -14,8 +14,12 @@
 #ifndef __H_STATS__
 #define __H_STATS__
 
+#include <fstream>
+#include "utils.h"
+#include "gtest/gtest_prod.h"
 
 using namespace std;
+
 
 /**
  * @class Stats
@@ -65,12 +69,12 @@ protected:
         //if(truss.isSet())
         //{
         //    m_application = "truss";
-        //    m_time        = currentDateTime();
+        //    m_time        = Utils::currentDateTime();
         //}
         //else if(stmodel.isSet())
         //{
         //    m_application = "stmodel";
-        //    m_time        = currentDateTime();
+        //    m_time        = Utils::currentDateTime();
         //}
         //else
         //{
@@ -79,6 +83,7 @@ protected:
         //}
     };
 
+    Stats() {};
 
     static Stats *m_instance;
 
@@ -94,6 +99,8 @@ class TrussStats : public Stats
 
 class STModelStats : public Stats
 {
+
+public:
     enum options
     {
         RANGE = 0,
@@ -108,8 +115,6 @@ class STModelStats : public Stats
         TRUSS,
         CLIQUE
     };
-
-public:
 
     STModelStats(string outFile) : Stats(outFile) { };
 
@@ -248,5 +253,6 @@ public:
 
     FRIEND_TEST(StatsTest_1,  Success);
 };
+
 
 #endif // __H_STATS__ 

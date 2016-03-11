@@ -15,6 +15,7 @@
 **/
 
 #include "truss.h"
+#include "Config.h"
 
 
 /**

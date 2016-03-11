@@ -15,6 +15,7 @@
 #include "csr.h"
 #include "utils.h"
 #include "Config.h"
+#include "Stats.h"
 
 
 /**
@@ -465,9 +466,10 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
             fprintf(writer, "Comp [%d] : ", count++);
             int32_t cnt = 0;
             output_one_CC(writer, i, visited, cnt, c);
-            string ktruss = Config::instance()->get("ktruss")+","+to_string(cnt);
-            Stats::instance()->set(STModelStats::TRUSS); 
             fprintf(writer, "\n");
+
+            string ktruss = Config::instance()->get("ktruss")+","+to_string(cnt);
+            Stats::instance()->write_content(STModelStats::TRUSS, ktruss); 
         }
     }
 

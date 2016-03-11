@@ -20,15 +20,17 @@
 #include "Stats.h"
 #include "Config.h"
 #include <getopt.h>
+#include "../libs/Parser.h"
 
 void define_arguments(Parser &parser);
 void process(Parser &parser);
 
-BoolOption        truss         ('t', "truss",      false, "perform the truss decomposition");
-BoolOption        stmodel       ('s', "stmodel",    false, "perform stmodel computation");
+BoolOption        truss         ('t', "truss",      true , "truss apllication");
+BoolOption        stmodel       ('s', "stmodel",    true , "stmodel application");
 StringOption      input         ('i', "input",      true , "input file name");
 StringOption      output        ('o', "output",     true , "output file name");
 StringListOption  coord         ('c', "coord",      false, "spatial temporal coordinates");
+
 
 
 /**
