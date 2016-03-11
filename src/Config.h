@@ -12,6 +12,7 @@
 #ifndef __H_CONFIG__
 #define __H_CONFIG__
 
+#include "../libs/Parser.h"
 
 using namespace std;
 
@@ -23,26 +24,25 @@ using namespace std;
 **/
 class Config 
 {
-    map<string, string> m_dic;
-    static Config *s_instance;
-    Config() {}
-    
 public:
-    string get(const string &key)
-    {
-        return m_dic[key];
-    }
-    void set(const string &key, const string &val)
-    {
-        m_dic[key] = val;
-    }
-
     static Config *instance()
     {
-        if (!s_instance)
-            s_instance = new Config;
-        return s_instance;
+        if(!m_instance)
+        {
+            m_instance = new Config;
+        }
+        return m_instance;
     }
+
+    void set(const string &key, const string &val);
+    string get(const string &key);
+
+
+private:
+    Config() {}
+    
+    static Config * m_instance;
+
 };
 
 #endif

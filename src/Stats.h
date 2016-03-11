@@ -36,30 +36,52 @@ using namespace std;
 class Stats 
 {
 public:
-    Stats(string outFile) 
-    { 
-        m_outFile     = outFile; 
-        if(truss.isSet())
+
+    static Stats *instance()
+    {
+        if (!m_instance)
         {
-            m_application = "truss";
-            m_time        = currentDateTime();
+            //if(truss.isSet())
+            //{
+            //    m_instance = new TrussStats;
+            //}
+            //else if(truss.isSet())
+            //{
+            //    m_instance = new STModelStats;
+            //}
         }
-        else if(stmodel.isSet())
-        {
-            m_application = "stmodel";
-            m_time        = currentDateTime();
-        }
-        else
-        {
-            m_application = "OPTKIT";
-            m_time        = "1000";
-        }
-    };
+        return m_instance;
+    }
 
     ~Stats() {};
 
     virtual void serialize() = 0;
     virtual void write_content(int32_t option, string &content) = 0;
+
+protected:
+    Stats(string outFile) 
+    { 
+        m_outFile     = outFile; 
+        //if(truss.isSet())
+        //{
+        //    m_application = "truss";
+        //    m_time        = currentDateTime();
+        //}
+        //else if(stmodel.isSet())
+        //{
+        //    m_application = "stmodel";
+        //    m_time        = currentDateTime();
+        //}
+        //else
+        //{
+        //    m_application = "OPTKIT";
+        //    m_time        = "1000";
+        //}
+    };
+
+
+    static Stats *m_instance;
+
 
     string m_outFile;       ///< output json to this file
     string m_time;          ///< the creation time

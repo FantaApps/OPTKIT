@@ -14,11 +14,11 @@
 #include "list.h"
 #include "node.h"
 #include "../libs/RTree.h"
-#include "../libs/Parser.h"
 #include "csr.h"
 #include "truss.h"
 #include "CrimeSTModel.h"
 #include "Stats.h"
+#include "Config.h"
 #include <getopt.h>
 
 void define_arguments(Parser &parser);
@@ -30,6 +30,7 @@ StringOption      input         ('i', "input",      true , "input file name");
 StringOption      output        ('o', "output",     true , "output file name");
 StringListOption  coord         ('c', "coord",      false, "spatial temporal coordinates");
 
+
 /**
  * Main function of OPTKIT
 **/
@@ -39,7 +40,6 @@ int32_t main(int32_t argc , const char *argv[])
     LOG(INFO) << "Initiating OPTKIT...";
 
     Parser parser;
-    define_arguments(parser);
     process(parser);
 
     return 1;
@@ -49,14 +49,14 @@ int32_t main(int32_t argc , const char *argv[])
  * @brief       This function is used to load parameters
  *
  * @param[in/out]       parser      This is the parameter parser
-**/
+ **/
 void define_arguments(Parser &parser)
 {
     parser.addOption(truss)
-          .addOption(stmodel)
-          .addOption(input)
-          .addOption(output)
-          .addOption(coord);
+        .addOption(stmodel)
+        .addOption(input)
+        .addOption(output)
+        .addOption(coord);
 }
 
 /**
@@ -69,9 +69,13 @@ void process(Parser &parser)
     string infile = input.getValue();
     string oufile = output.getValue();
 
+    string key, val;
+
     if(truss.isSet())
     {
-        Config::instance()->set("application", "truss");
+        key = "application";
+        val = "truss";
+        Config::instance()->set(key, val);
         CSR g(infile.c_str());
         Truss t(g.get_num_e(), g.get_num_c());
         t.truss_decomosition(g, oufile.c_str(), 5);
