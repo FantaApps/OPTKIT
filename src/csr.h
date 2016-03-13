@@ -93,7 +93,8 @@ private:
     map<int32_t, int32_t> rev_dic; ///< to store the reverse mapping of vertices
 
     void output_one_CC(FILE *writer, int32_t v, 
-                       bool *visited, int32_t c = 0);
+                       bool *visited, int &cnt, 
+                       int32_t c = 0);
 
     FRIEND_TEST(InitGraphTest_2, Success);
 

@@ -14,8 +14,12 @@
 #ifndef __H_STATS__
 #define __H_STATS__
 
+#include <fstream>
+#include "utils.h"
+#include "gtest/gtest_prod.h"
 
 using namespace std;
+
 
 /**
  * @class Stats
@@ -36,17 +40,53 @@ using namespace std;
 class Stats 
 {
 public:
-    Stats(string outFile) 
-    { 
-        m_outFile     = outFile; 
-        m_time        = to_string(1000);
-        m_application = "OPTKIT";
-    };
+
+    static Stats *instance()
+    {
+        if (!m_instance)
+        {
+            //if(truss.isSet())
+            //{
+            //    m_instance = new TrussStats;
+            //}
+            //else if(truss.isSet())
+            //{
+            //    m_instance = new STModelStats;
+            //}
+        }
+        return m_instance;
+    }
 
     ~Stats() {};
 
     virtual void serialize() = 0;
     virtual void write_content(int32_t option, string &content) = 0;
+
+protected:
+    Stats(string outFile) 
+    { 
+        m_outFile     = outFile; 
+        //if(truss.isSet())
+        //{
+        //    m_application = "truss";
+        //    m_time        = Utils::currentDateTime();
+        //}
+        //else if(stmodel.isSet())
+        //{
+        //    m_application = "stmodel";
+        //    m_time        = Utils::currentDateTime();
+        //}
+        //else
+        //{
+        //    m_application = "OPTKIT";
+        //    m_time        = "1000";
+        //}
+    };
+
+    Stats() {};
+
+    static Stats *m_instance;
+
 
     string m_outFile;       ///< output json to this file
     string m_time;          ///< the creation time
@@ -59,6 +99,8 @@ class TrussStats : public Stats
 
 class STModelStats : public Stats
 {
+
+public:
     enum options
     {
         RANGE = 0,
@@ -73,8 +115,6 @@ class STModelStats : public Stats
         TRUSS,
         CLIQUE
     };
-
-public:
 
     STModelStats(string outFile) : Stats(outFile) { };
 
@@ -213,5 +253,6 @@ public:
 
     FRIEND_TEST(StatsTest_1,  Success);
 };
+
 
 #endif // __H_STATS__ 
