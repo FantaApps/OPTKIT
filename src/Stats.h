@@ -76,6 +76,7 @@ public:
                           m_girth(0),
                           m_clusterCoeff(0.0),
                           m_betweenCentrl(0.0)
+        {}
     };
 
     static Stats *instance()
