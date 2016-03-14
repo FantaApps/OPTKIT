@@ -68,6 +68,14 @@ public:
         double                           m_betweenCentrl;   ///< boost
         vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
         vector<pair<int32_t, int32_t>>   m_numClique;       ///< boost
+
+        GraphProperty() : m_numV(0), 
+                          m_numE(0),
+                          m_numCC(0),
+                          m_diameter(0),
+                          m_girth(0),
+                          m_clusterCoeff(0.0),
+                          m_betweenCentrl(0.0)
     };
 
     static Stats *instance()
