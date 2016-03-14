@@ -118,18 +118,18 @@ TEST(NYCrimeDataTest_1, Success)
 **/
 TEST(StatsTest_1, Success)
 {
-    Stats *st = new STModelStats(string("./stats.txt"));
+    Stats *st = new Stats(string("./stats.txt"));
     
-    string tmp = "1,1,1"; st->write_content((int32_t)STModelStats::RANGE,         tmp);
-    tmp = "gtest";        st->write_content((int32_t)STModelStats::DATANAME,      tmp); 
-    tmp = "10";           st->write_content((int32_t)STModelStats::NUMV,          tmp);
-    tmp = "1000";         st->write_content((int32_t)STModelStats::NUME,          tmp);
-    tmp = "5";            st->write_content((int32_t)STModelStats::NUMCC,         tmp);
-    tmp = "3";            st->write_content((int32_t)STModelStats::DIAMETER,      tmp);
-    tmp = "25";           st->write_content((int32_t)STModelStats::GIRTH,         tmp);
-    tmp = "0.58";         st->write_content((int32_t)STModelStats::CLUSTERCOEFF,  tmp);
-    tmp = "0.33";         st->write_content((int32_t)STModelStats::BETWEENCENTRL, tmp);
-    tmp = "3,25";         st->write_content((int32_t)STModelStats::TRUSS,         tmp);
+    string tmp = "1,1,1"; st->write_content((int32_t)Stats::RANGE,         tmp);
+    tmp = "gtest";        st->write_content((int32_t)Stats::DATANAME,      tmp); 
+    tmp = "10";           st->write_content((int32_t)Stats::NUMV,          tmp);
+    tmp = "1000";         st->write_content((int32_t)Stats::NUME,          tmp);
+    tmp = "5";            st->write_content((int32_t)Stats::NUMCC,         tmp);
+    tmp = "3";            st->write_content((int32_t)Stats::DIAMETER,      tmp);
+    tmp = "25";           st->write_content((int32_t)Stats::GIRTH,         tmp);
+    tmp = "0.58";         st->write_content((int32_t)Stats::CLUSTERCOEFF,  tmp);
+    tmp = "0.33";         st->write_content((int32_t)Stats::BETWEENCENTRL, tmp);
+    tmp = "3,25";         st->write_content((int32_t)Stats::TRUSS,         tmp);
 
     st->serialize();
 

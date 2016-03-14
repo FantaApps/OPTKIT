@@ -23,6 +23,7 @@
 #include "../libs/Parser.h"
 
 void define_arguments(Parser &parser);
+void parse_arguments(Parser &parser, int argc, const char* argv[]);
 void process(Parser &parser);
 
 BoolOption        truss         ('t', "truss",      true , "truss apllication");
@@ -42,6 +43,8 @@ int32_t main(int32_t argc , const char *argv[])
     LOG(INFO) << "Initiating OPTKIT...";
 
     Parser parser;
+    define_arguments(parser);
+    parse_arguments(parser, argc, argv);
     process(parser);
 
     return 1;
@@ -61,6 +64,47 @@ void define_arguments(Parser &parser)
         .addOption(coord);
 }
 
+void parse_arguments(Parser &parser, int argc, const char* argv[])
+{
+    vector<string> otherArguments = parser.parse(argc, (char**)argv);
+
+    string key, val;
+
+    if(truss.isSet())
+    {
+        key = "application";
+        val = "truss";
+        Config::instance()->set(key, val);
+    }
+    else if(stmodel.isSet())
+    {
+        key = "application";
+        val = "stmodel";
+        Config::instance()->set(key, val);
+    }
+
+    key = "infile";
+    val = input.getValue();
+    Config::instance()->set(key, val);
+
+    key = "outfile";
+    val = output.getValue();
+    Config::instance()->set(key, val);
+
+    key = "coord";
+    list<string> values = coord.getValue();
+    int i=0;
+    for(auto entry = values.begin(); i<3; i++, ++entry)
+    {
+        if(i>0)
+        {
+            val += ",";
+        }
+        val += *entry;
+    }
+    Config::instance()->set(key, val);
+}
+
 /**
  * @brief       process input parameters and perform according functions
  *
@@ -71,13 +115,9 @@ void process(Parser &parser)
     string infile = input.getValue();
     string oufile = output.getValue();
 
-    string key, val;
 
     if(truss.isSet())
     {
-        key = "application";
-        val = "truss";
-        Config::instance()->set(key, val);
         CSR g(infile.c_str());
         Truss t(g.get_num_e(), g.get_num_c());
         t.truss_decomosition(g, oufile.c_str(), 5);
@@ -86,17 +126,12 @@ void process(Parser &parser)
     {
         if(coord.isSet())
         {
-            list<string> values = coord.getValue();
-            int     _coord[3];
-            uint8_t i = 0;
-            
-            for(auto entry = values.begin(); entry != values.end(); ++entry) 
-            {
-                _coord[i++] = stoi(*entry);
-            }
-
             CrimeSTModel stm(infile.c_str());
-            vector<pair<int32_t, int32_t>> edges = stm.build_edges(_coord[0], _coord[1], _coord[2]);
+            string coord_val = Config::instance()->get("coord");
+            vector<string> _coord = Utils::split(coord_val, ',');
+            vector<pair<int32_t, int32_t>> edges = stm.build_edges(stoi(_coord[0]), 
+                                                                   stoi(_coord[1]), 
+                                                                   stoi(_coord[2]));
             CSR g(edges);
             Truss t(g.get_num_e(), g.get_num_c());
             t.truss_decomosition(g, oufile.c_str(), 5);

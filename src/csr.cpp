@@ -13,9 +13,9 @@
 **/
 
 #include "csr.h"
-#include "utils.h"
 #include "Config.h"
 #include "Stats.h"
+#include "utils.h"
 
 
 /**
@@ -469,7 +469,7 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
             fprintf(writer, "\n");
 
             string ktruss = Config::instance()->get("ktruss")+","+to_string(cnt);
-            Stats::instance()->write_content(STModelStats::TRUSS, ktruss); 
+            Stats::instance()->write_content(Stats::TRUSS, ktruss); 
         }
     }
 

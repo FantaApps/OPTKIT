@@ -13,6 +13,7 @@
 #define __H_CONFIG__
 
 #include "utils.h"
+#include <map>
 
 using namespace std;
 
@@ -37,11 +38,13 @@ public:
 
     void set(const string &key, const string &val)
     {
+        m_params[key] = val;
     }
 
     string get(const string &key)
     {
         string ret;
+        ret = m_params[key];
         return ret;
     }
 
@@ -49,8 +52,9 @@ public:
 private:
     Config() {}
     
-    static Config * m_instance;
-
+    static Config *     m_instance;
+    
+    map<string, string> m_params;
 };
 
 
