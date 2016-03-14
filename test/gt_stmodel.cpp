@@ -120,6 +120,8 @@ TEST(StatsTest_1, Success)
 {
     Stats *st = new Stats(string("./stats.txt"));
     
+    st->m_application = "stmodel";    
+
     string tmp = "1,1,1"; st->write_content((int32_t)Stats::RANGE,         tmp);
     tmp = "gtest";        st->write_content((int32_t)Stats::DATANAME,      tmp); 
     tmp = "10";           st->write_content((int32_t)Stats::NUMV,          tmp);

@@ -1,6 +1,6 @@
 {
    "time" : 1000,
-   "application" : "OPTKIT",
+   "application" : "stmodel",
    "content" : {
         "data name" : "gtest",
         "range" : [
