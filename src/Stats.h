@@ -16,6 +16,7 @@
 
 #include <fstream>
 #include "utils.h"
+#include "Config.h"
 #include "gtest/gtest_prod.h"
 
 using namespace std;
@@ -41,66 +42,6 @@ class Stats
 {
 public:
 
-    static Stats *instance()
-    {
-        if (!m_instance)
-        {
-            //if(truss.isSet())
-            //{
-            //    m_instance = new TrussStats;
-            //}
-            //else if(truss.isSet())
-            //{
-            //    m_instance = new STModelStats;
-            //}
-        }
-        return m_instance;
-    }
-
-    ~Stats() {};
-
-    virtual void serialize() = 0;
-    virtual void write_content(int32_t option, string &content) = 0;
-
-protected:
-    Stats(string outFile) 
-    { 
-        m_outFile     = outFile; 
-        //if(truss.isSet())
-        //{
-        //    m_application = "truss";
-        //    m_time        = Utils::currentDateTime();
-        //}
-        //else if(stmodel.isSet())
-        //{
-        //    m_application = "stmodel";
-        //    m_time        = Utils::currentDateTime();
-        //}
-        //else
-        //{
-        //    m_application = "OPTKIT";
-        //    m_time        = "1000";
-        //}
-    };
-
-    Stats() {};
-
-    static Stats *m_instance;
-
-
-    string m_outFile;       ///< output json to this file
-    string m_time;          ///< the creation time
-    string m_application;   ///< the application name
-};
-
-class TrussStats : public Stats
-{
-};
-
-class STModelStats : public Stats
-{
-
-public:
     enum options
     {
         RANGE = 0,
@@ -116,10 +57,6 @@ public:
         CLIQUE
     };
 
-    STModelStats(string outFile) : Stats(outFile) { };
-
-    ~STModelStats() {};
-
     struct GraphProperty
     {
         int32_t                          m_numV;            ///< native code
@@ -131,128 +68,62 @@ public:
         double                           m_betweenCentrl;   ///< boost
         vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
         vector<pair<int32_t, int32_t>>   m_numClique;       ///< boost
+
+        GraphProperty() : m_numV(0), 
+                          m_numE(0),
+                          m_numCC(0),
+                          m_diameter(0),
+                          m_girth(0),
+                          m_clusterCoeff(0.0),
+                          m_betweenCentrl(0.0)
+        {}
     };
+
+    static Stats *instance()
+    {
+        if (!m_instance)
+        {
+            m_instance = new Stats(Config::instance()->get("outfile"));
+        }
+        return m_instance;
+    }
+
+    ~Stats() {};
 
     void serialize()
     {
-        ofstream writer (m_outFile);
-
-        writer<<"{"<<endl;
-
-        writer<<"   \"time\""<<" : "<<m_time<<","<<endl;
-        writer<<"   \"application\""<<" : "<<"\""<<m_application<<"\","<<endl;
-        writer<<"   \"content\""<<" : {"<<endl;
-        writer<<"        \"data name\""<<" : "<<"\""<<m_dataName<<"\","<<endl;
-        writer<<"        \"range\""<<" : "<<"[\n"
-              <<"             "<<m_range[0]<<",\n"
-              <<"             "<<m_range[1]<<",\n"
-              <<"             "<<m_range[2]<<"\n"
-              <<"        ],"<<endl;
-        writer<<"        \"graph property\""<<" : "<<"[\n"
-              <<"             \"numV\" : "<<m_gProperty.m_numV<<",\n"
-              <<"             \"numE\" : "<<m_gProperty.m_numE<<",\n"
-              <<"             \"numCC\" : "<<m_gProperty.m_numCC<<",\n"
-              <<"             \"diameter\" : "<<m_gProperty.m_diameter<<",\n"
-              <<"             \"girth\" : "<<m_gProperty.m_girth<<",\n"
-              <<"             \"clusterCoeff\" : "<<m_gProperty.m_clusterCoeff<<",\n"
-              <<"             \"betweenCentrl\" : "<<m_gProperty.m_betweenCentrl<<",\n"
-              <<"             \"truss\" : "<<"[\n";
-        for(size_t i=0; i<m_gProperty.m_numTruss.size(); i++)
+        if(m_application == "stmodel")
         {
-            writer<<"                  "<<m_gProperty.m_numTruss[i].first<<" : "<<m_gProperty.m_numTruss[i].second;
-            if(i!=m_gProperty.m_numTruss.size()-1)
-                writer<<",";
-            writer<<endl;
+            serialize_stmodel();
         }
-        writer<<"             ]\n        ]\n";
-
-        writer<<"    }"<<endl;
-        writer<<"}"<<endl;
-
-        writer.close();
     }
-    
-    /**
-     * @brief       To fill the content of a specific experiemnt
-     *
-     * @param[in]       option      which field to fill with
-     * @param[in]       content     value of the field
-     *
-     * @return      N/A
-    **/
+
     void write_content(int32_t option, string &content)
     {
-        switch (option)
+        if(m_application == "stmodel")
         {
-            case RANGE :
-            {
-                vector<string> val = Utils::split(content, ',');
-                m_range.push_back(stoi(val[0]));
-                m_range.push_back(stoi(val[1]));
-                m_range.push_back(stoi(val[2]));
-                break;
-            } 
-            case DATANAME :
-            {
-                m_dataName = content;
-                break;
-            }
-            case NUMV:
-            {
-                m_gProperty.m_numV = stoi(content);
-                break;
-            }
-            case NUME:
-            {
-                m_gProperty.m_numE = stoi(content);
-                break;
-            }
-            case NUMCC:
-            {
-                m_gProperty.m_numCC = stoi(content);
-                break;
-            }
-            case DIAMETER:
-            {
-                m_gProperty.m_diameter = stoi(content);
-                break;
-            }
-            case GIRTH:
-            {
-                m_gProperty.m_girth = stoi(content);
-                break;
-            }
-            case CLUSTERCOEFF:
-            {
-                m_gProperty.m_clusterCoeff = stod(content);
-                break;
-            }
-            case BETWEENCENTRL:
-            {
-                m_gProperty.m_betweenCentrl = stod(content);
-                break;
-            }
-            case TRUSS:
-            {
-                vector<string> val = Utils::split(content, ',');
-                m_gProperty.m_numTruss.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
-                break;
-            }
-            case CLIQUE:
-            {
-                vector<string> val = Utils::split(content, ',');
-                m_gProperty.m_numClique.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
-                break;
-            }
+            write_content_stmodel(option, content);
         }
     }
 
-    string                           m_dataName;  ///< data source name
-    vector<int32_t>                  m_range;     ///< x,y and time
-    GraphProperty                    m_gProperty; ///< graph properties
+private:
+
+    Stats(string outFile); 
+    Stats(); 
+    void serialize_stmodel();
+    void write_content_stmodel(int32_t option, string &content);
+
+    static Stats*   m_instance;
+
+    string          m_outFile;      ///< output json to this file
+    string          m_time;         ///< the creation time
+    string          m_application;  ///< the application name
+
+    string          m_dataName;     ///< data source name
+    vector<int32_t> m_range;        ///< x,y and time
+    GraphProperty   m_gProperty;    ///< graph properties
 
     FRIEND_TEST(StatsTest_1,  Success);
 };
-
 
 #endif // __H_STATS__ 
