@@ -63,7 +63,7 @@ public:
         int32_t                          m_numE;            ///< native code
         int32_t                          m_numCC;           ///< native code
         int32_t                          m_diameter;        ///< boost 
-        int32_t                          m_girth;           ///< boost
+        int32_t                          m_girth;           ///< native 
         double                           m_clusterCoeff;    ///< boost
         double                           m_betweenCentrl;   ///< boost
         vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
