@@ -1,4 +1,4 @@
-noinst_HEADERS=list.h node.h CrimeSTModel.h STModel.h csr.h truss.h Stats.h Config.h utils.h
+noinst_HEADERS=list.h node.h CrimeSTModel.h STModel.h csr.h truss.h Stats.h Config.h utils.h bgl.h 
 bin_PROGRAMS=optkit
 optkit_SOURCES=main.cpp CrimeSTModel.cpp csr.cpp truss.cpp Stats.cpp Config.cpp utils.cpp 
 optkit_LDADD=$(OPENMP_LIBi) ../libs/liboptkit.la 

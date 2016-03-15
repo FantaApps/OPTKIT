@@ -19,6 +19,7 @@
 #include "CrimeSTModel.h"
 #include "Stats.h"
 #include "Config.h"
+#include "bgl.h"
 #include <getopt.h>
 #include "../libs/Parser.h"
 
@@ -46,6 +47,8 @@ int32_t main(int32_t argc , const char *argv[])
     define_arguments(parser);
     parse_arguments(parser, argc, argv);
     process(parser);
+
+    BGL bgl;
 
     return 1;
 }
