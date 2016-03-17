@@ -4,6 +4,7 @@
  * @brief    This is the class for BGL using boost graph library. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/16/16 - Add code to initialize graph from file. 
  *  stplaydog   03/15/16 - Add clustering coefficient, betweeness centrality,
  *                         and all cliques algorithms. 
  *  stplaydog   03/14/16 - Add all pairs shortest path 
@@ -106,122 +107,157 @@ class BGL
         OutputStream& os;
     };
 
-    public:
+public:
 
-        BGL(const char *in_file)
+
+    BGL(const char *in_file)
+    {
+        int32_t v_num = OPTKIT_NULL;
+        int32_t e_num = OPTKIT_NULL;
+        int32_t c_num = OPTKIT_NULL;
+        int32_t v_id  = OPTKIT_NULL;
+        int32_t v_to  = OPTKIT_NULL;
+        int32_t color = OPTKIT_NULL;
+
+        DLOG(INFO) << "Initiating BGL...";
+
+        /* Read the head information, 
+           and allocate according variables */
+        FILE *reader;
+        if((reader = fopen(in_file, "r")) == NULL)
         {
+            printf("the file %s you input does not exist!\n", in_file);
+            ERROR_PRINT();
+        }
+        else if(fscanf(reader, "%d %d %d\n", &v_num, &c_num, &e_num)==EOF)
+        {
+            ERROR_PRINT();
         }
 
-        BGL(vector<pair<int32_t, int32_t>> &edges)
+        NameMap                   nm(get(&Actor::name, m_udir));
+        map<std::string, UVertex> verts;
+        /* Scan the real content */
+        for(int32_t i=0;i<e_num;i++)
         {
-            NameMap nm(get(&Actor::name, m_udir));
-            std::map<std::string, UVertex> verts;
-
-            for(auto it = edges.begin(); it != edges.end(); ++it)
-            {
-                add_edge(it->first, it->second, 1.0, m_adj);
-
-                string name1 = to_string(it->first);
-                string name2 = to_string(it->second);
-                if(verts.find(name1) == verts.end())
-                {
-                    add_named_vertex(m_udir, nm, name1, verts);
-                }
-                if(verts.find(name2) == verts.end())
-                {
-                    add_named_vertex(m_udir, nm, name2, verts);
-                }
-
-                add_edge(verts[name1], verts[name2], m_udir);
-
-                add_edge(it->first, it->second, m_adj1);
-
-            }
-        }
-
-        /**
-         * @brief       Constructor and Destructor
-         *
-        **/
-        BGL() {};
-        ~BGL() {};
-
-    private:
-
-        /**
-         *
-         *
-        **/
-        void floyd_warshall()
-        {
-            WeightMap weight_pmap = boost::get(boost::edge_weight, m_adj);
-
-            DistanceMatrix    distances(num_vertices(m_adj));
-            DistanceMatrixMap dm(distances, m_adj);
-
-            bool valid = floyd_warshall_all_pairs_shortest_paths(m_adj,     dm, 
-                                                                 weight_map(weight_pmap));
-            if (!valid) 
+            if(fscanf(reader, "%d %d %d\n",&v_id , &v_to, &color)==EOF)
             {
                 ERROR_PRINT();
             }
+            add_one_edge(v_id, v_to, nm, verts);
         }
+    }
 
-        /**
-         *
-         *
-        **/
-        void clustering_coeff()
-        {
-            ClusteringContainer coefs(num_vertices(m_udir));
-            ClusteringMap cm(coefs, m_udir);
-            float cc = all_clustering_coefficients(m_udir, cm);
-           
-            string val = to_string(cc); 
-            Stats::instance()->write_content(Stats::CLUSTERCOEFF, val);
-        }
+    BGL(vector<pair<int32_t, int32_t>> &edges)
+    {
+            NameMap                   nm(get(&Actor::name, m_udir));
+            map<std::string, UVertex> verts;
 
-        /**
-         *
-         *
-        **/
-        void betweeness_centrality()
-        {
-            StdEdgeIndexMap              my_e_index;
-            EdgeIndexMap                 e_index(my_e_index);
-
-            int i = 0;
-            BGL_FORALL_EDGES(edge, m_adj1, Adj1)
+            for(auto it = edges.begin(); it != edges.end(); ++it)
             {
-                my_e_index.insert(pair< Edge1, int >( edge, i));
-                ++i;
+                add_one_edge(it->first, it->second, nm, verts);
             }
+    }
 
-            vector< double > e_centrality_vec(num_edges(m_adj1), 0.0);
-            iterator_property_map <vector<double>::iterator, EdgeIndexMap>
-                                  e_centrality_map(e_centrality_vec.begin(), e_index);
+    /**
+     * @brief       Constructor and Destructor
+     *
+     **/
+    BGL() {};
+    ~BGL() {};
 
-            VertexIndexMap        v_index = get(vertex_index, m_adj1);
-            vector<double>        v_centrality_vec(num_vertices(m_adj1), 0.0);
-            iterator_property_map <vector< double >::iterator, VertexIndexMap >
-                                  v_centrality_map(v_centrality_vec.begin(), v_index);
+private:
 
-            brandes_betweenness_centrality( m_adj1, v_centrality_map, e_centrality_map );
-        }
+    void add_one_edge(int32_t v_from, int32_t v_to, NameMap &nm, map<std::string, UVertex> &verts)
+    {
+        add_edge(v_from, v_to, 1.0, m_adj);
 
-        /**
-         *
-         *
-        **/
-        void all_cliques()
+        string name1 = to_string(v_from);
+        string name2 = to_string(v_to);
+        if(verts.find(name1) == verts.end())
         {
-            clique_printer<ostream> vis(cout);
-            bron_kerbosch_all_cliques(m_udir, vis);
+            add_named_vertex(m_udir, nm, name1, verts);
+        }
+        if(verts.find(name2) == verts.end())
+        {
+            add_named_vertex(m_udir, nm, name2, verts);
         }
 
-        Adj  m_adj;     ///<
-        Adj1 m_adj1;    ///<
-        Udir m_udir;    ///<
+        add_edge(verts[name1], verts[name2], m_udir);
+
+        add_edge(v_from, v_to, m_adj1);
+    }
+
+    /**
+     * @brief       This function is used to calculate all pairs shortest path
+     *              Which is used for calculating diameter of a graph.
+    **/
+    void floyd_warshall()
+    {
+        WeightMap weight_pmap = boost::get(boost::edge_weight, m_adj);
+
+        DistanceMatrix    distances(num_vertices(m_adj));
+        DistanceMatrixMap dm(distances, m_adj);
+
+        bool valid = floyd_warshall_all_pairs_shortest_paths(m_adj,     dm, 
+                weight_map(weight_pmap));
+        if (!valid) 
+        {
+            ERROR_PRINT();
+        }
+    }
+
+    /**
+     * @brief       This function is used to calculate clustering coefficient.
+    **/
+    void clustering_coeff()
+    {
+        ClusteringContainer coefs(num_vertices(m_udir));
+        ClusteringMap cm(coefs, m_udir);
+        float cc = all_clustering_coefficients(m_udir, cm);
+
+        string val = to_string(cc); 
+        Stats::instance()->write_content(Stats::CLUSTERCOEFF, val);
+    }
+
+    /**
+     * @brief       This function is used to calculate betweeness centrality.
+    **/
+    void betweeness_centrality()
+    {
+        StdEdgeIndexMap              my_e_index;
+        EdgeIndexMap                 e_index(my_e_index);
+
+        int i = 0;
+        BGL_FORALL_EDGES(edge, m_adj1, Adj1)
+        {
+            my_e_index.insert(pair< Edge1, int >( edge, i));
+            ++i;
+        }
+
+        vector< double > e_centrality_vec(num_edges(m_adj1), 0.0);
+        iterator_property_map <vector<double>::iterator, EdgeIndexMap>
+            e_centrality_map(e_centrality_vec.begin(), e_index);
+
+        VertexIndexMap        v_index = get(vertex_index, m_adj1);
+        vector<double>        v_centrality_vec(num_vertices(m_adj1), 0.0);
+        iterator_property_map <vector< double >::iterator, VertexIndexMap >
+            v_centrality_map(v_centrality_vec.begin(), v_index);
+
+        brandes_betweenness_centrality( m_adj1, v_centrality_map, e_centrality_map );
+    }
+
+    /**
+     * @brief       This function is used to list all cliques.
+    **/
+    void all_cliques()
+    {
+        clique_printer<ostream> vis(cout);
+        bron_kerbosch_all_cliques(m_udir, vis);
+    }
+
+        Adj  m_adj;     ///< Adjacency graph
+        Adj1 m_adj1;    ///< Another adj graph
+        Udir m_udir;    ///< undirected graph
 
         FRIEND_TEST(InitGraphTest_2, Success);
 };
