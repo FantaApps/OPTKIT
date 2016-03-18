@@ -5,13 +5,9 @@ before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
 install:
-  - sudo apt-get install -qq g++-4.8 libboost-all-dev libgtest-dev cmake
+  - sudo apt-get install -qq g++-4.8 libboost-graph-dev libgtest-dev cmake
   - export CXX="g++-4.8"
 before_script:
-  - cd /usr/src/gtest
-  - sudo cmake CMakeLists.txt
-  - sudo make
-  - sudo cp *.a /usr/lib
   - sudo wget https://google-glog.googlecode.com/files/glog-0.3.3.tar.gz
   - sudo tar zxvf glog-0.3.3.tar.gz
   - cd glog-0.3.3
