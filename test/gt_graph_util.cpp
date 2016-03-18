@@ -15,7 +15,7 @@
 
 using namespace boost;
 #include <boost/graph/graphml.hpp>
-
+#undef shared_ptr
 
 /**
  * @brief   Test a small graph one color for janc graph
