@@ -9,7 +9,7 @@
 **/
 
 #include <gtest/gtest.h>
-//#include <boost/graph/graphviz.hpp>
+#include <boost/graph/graphviz.hpp>
 #include "bgl.h"
 #include "test_util.h" 
 
@@ -27,10 +27,10 @@ TEST(BGLInitGraph_1, Success)
 //    write_graphviz(writer, g.m_adj1);
 //    write_graphviz(writer, g.m_udir);
     writer.close();
-//
+
 //    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/bgl/bgl_janc.dot", "./bgl_janc.dot"),
 //              TstUtil::OPTKIT_TEST_PASS);
-//
-//    std::remove("./bgl_janc.dot");
+
+    std::remove("./bgl_janc.dot");
 }
 
