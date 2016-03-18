@@ -1,5 +1,6 @@
 noinst_PROGRAMS = graphutiltest 
-graphutiltest_SOURCES= gt_csr.cpp            ../src/csr.h        ../src/csr.cpp \
+graphutiltest_SOURCES= gt_csr.cpp            ../src/csr.h        ../src/csr.cpp  \	   
+					   gt_graph_util.cpp     ../src/bgl.h \
 					   gt_truss.cpp          ../src/truss.h      ../src/truss.cpp \
 					   ../src/utils.h        ../src/utils.cpp    ../src/Stats.h \
 					   ../src/Stats.cpp      ../src/Config.h     ../src/Config.cpp \

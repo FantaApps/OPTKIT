@@ -9,50 +9,27 @@
 **/
 
 #include <gtest/gtest.h>
-#include "graph_util.h"
-#include "utils.h"
+#include "bgl.h"
+#include "test_util.h" 
+#include <boost/graph/graphviz.hpp>
 
 using namespace boost;
 
-TEST(InitGraphTest, Success)
+
+/**
+ * @brief   Test a small graph one color for janc graph
+**/
+TEST(BGLInitGraph_1, Success)
 {
-    /* Some basic setup */
-    char file[OPTKIT_FILE_SIZE];
-    snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-            "../data/CC/graphs/crimepair_0");
-    Adj g;
-    GraphUtils::init_adj(file, g);
+    BGL g("../data/MC/janc.gr");
+    ofstream writer ("bgl_janc.dot");
+    write_graphviz(writer, g.m_adj);
+    write_graphviz(writer, g.m_adj1);
+    write_graphviz(writer, g.m_udir);
+    writer.close();
 
-    /* Test some basic graph properties */
-    ASSERT_EQ(num_edges(g), 903);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/bgl/bgl_janc.dot", "./bgl_janc.dot"),
+              TstUtil::OPTKIT_TEST_PASS);
+
+    std::remove("./bgl_janc.dot");
 }
-
-TEST(ConnectedCompTest, Success)
-{
-    // This can be an ofstream as well or any other ostream
-    std::stringstream buffer;
-
-    // Save cout's buffer here
-    std::streambuf *sbuf = std::cout.rdbuf();
-
-    // Redirect cout to our stringstream buffer or any other ostream
-    std::cout.rdbuf(buffer.rdbuf());
-
-
-    // When done redirect cout to its old self
-    std::cout.rdbuf(sbuf);
-
-
-    /* Some basic setup */
-    // char file[OPTKIT_FILE_SIZE];
-    // snprintf(file, OPTKIT_FILE_SIZE, "%s", 
-    //        "../data/CC/graphs/crimepair_0");
-    // GraphUtils::connected_comps(file, "aaa");
-
-    // snprintf(file, OPTKIT_FILE_SIZE, "%s",
-    //        "../QA/testcase/rfc_logs/crimepair_0.log");
-    //std::ifstream t(file);
-    //std::stringstream buffer1;
-    //buffer1 << t.rdbuf();
-}
-
