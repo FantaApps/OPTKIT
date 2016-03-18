@@ -9,11 +9,11 @@
 **/
 
 #include <gtest/gtest.h>
-#include <boost/graph/graphviz.hpp>
-#include "bgl.h"
+//#include <boost/graph/graphviz.hpp>
+//#include "bgl.h"
 #include "test_util.h" 
 
-using namespace boost;
+//using namespace boost;
 
 
 /**
