@@ -38,8 +38,6 @@
 
 #include <boost/graph/bron_kerbosch_all_cliques.hpp>
 
-//#include <boost/graph/graphviz.hpp>
-
 using namespace boost;
 using namespace std; 
 
@@ -168,7 +166,6 @@ public:
     ~BGL() {};
 
 private:
-
 
     void add_one_edge(int32_t v_from, int32_t v_to, NameMap &nm, map<std::string, UVertex> &verts)
     {
