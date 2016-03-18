@@ -165,6 +165,10 @@ public:
     BGL() {};
     ~BGL() {};
 
+        Adj  get_adj() {return m_adj;}     ///< Adjacency graph
+        Adj1 get_adj1() {return m_adj1;}    ///< Another adj graph
+        Udir get_udir() {return m_udir;}    ///< undirected graph
+
 private:
 
     void add_one_edge(int32_t v_from, int32_t v_to, NameMap &nm, map<std::string, UVertex> &verts)
@@ -259,7 +263,7 @@ private:
         Adj1 m_adj1;    ///< Another adj graph
         Udir m_udir;    ///< undirected graph
 
-        FRIEND_TEST(InitGraphTest_2, Success);
+        FRIEND_TEST(BGLInitGraph_1, Success);
 };
 
 #endif
