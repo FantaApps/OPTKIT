@@ -259,11 +259,38 @@ private:
         bron_kerbosch_all_cliques(m_udir, vis);
     }
 
-        Adj  m_adj;     ///< Adjacency graph
-        Adj1 m_adj1;    ///< Another adj graph
-        Udir m_udir;    ///< undirected graph
+    template < typename Graph> 
+    void print_dependencies(ostream & out, const Graph & g)
+    {
+        out<<"graph{"<<endl;
+        typename graph_traits < Graph >::edge_iterator ei, ei_end;
+        for (tie(ei, ei_end) = edges(g); ei != ei_end; ++ei)
+        {
+            out << source(*ei, g) << " -> "
+                << target(*ei, g) << ";"<< endl;
+        }
+        out << "}" <<endl;
+    }
 
-        FRIEND_TEST(BGLInitGraph_1, Success);
+    template < typename Graph> void
+    print_udependencies(std::ostream & out, const Graph & g)
+    {
+        out<<"graph{"<<endl;
+        NameMap  nm(get(&Actor::name, m_udir));
+        typename graph_traits < Graph >::edge_iterator ei, ei_end;
+        for (boost::tie(ei, ei_end) = edges(g); ei != ei_end; ++ei)
+        {
+            out << get(nm, source(*ei, g)) << " -> "
+                << get(nm, target(*ei, g)) <<";" <<endl;
+        }
+        out << "}" <<endl;
+    }
+
+    Adj  m_adj;     ///< Adjacency graph
+    Adj1 m_adj1;    ///< Another adj graph
+    Udir m_udir;    ///< undirected graph
+
+    FRIEND_TEST(BGLInitGraph_1, Success);
 };
 
 #endif
