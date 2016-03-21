@@ -5,6 +5,7 @@
  *           The result could be serialized to a json file.  
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/20/16 - write function get_content_stmodel. 
  *  stplaydog   03/10/16 - Creation
  *
 **/
@@ -109,6 +110,88 @@ void Stats::write_content_stmodel(int32_t option, string &content)
                 break;
             }
     }
+}
+
+/**
+ * @brief       To get the content of a specific experiemnt
+ *
+ * @param[in]       option      which field to fill with
+ *
+ * @return      N/A
+ **/
+string Stats::get_content_stmodel(int32_t option)
+{
+    string ret;
+    switch (option)
+    {
+        case RANGE :
+            {
+                for (auto it = m_range.begin(); it != m_range.end(); ++it)
+                {
+                    ret += to_string(*it) + ",";
+                }
+                break;
+            } 
+        case DATANAME :
+            {
+                ret = m_dataName;
+                break;
+            }
+        case NUMV:
+            {
+                ret = to_string(m_gProperty.m_numV);
+                break;
+            }
+        case NUME:
+            {
+                ret = to_string(m_gProperty.m_numE);
+                break;
+            }
+        case NUMCC:
+            {
+                ret = to_string(m_gProperty.m_numCC); 
+                break;
+            }
+        case DIAMETER:
+            {
+                ret = to_string(m_gProperty.m_diameter);
+                break;
+            }
+        case GIRTH:
+            {
+                ret = to_string(m_gProperty.m_girth);
+                break;
+            }
+        case CLUSTERCOEFF:
+            {
+                ret = to_string(m_gProperty.m_clusterCoeff);
+                break;
+            }
+        case BETWEENCENTRL:
+            {
+                ret = to_string(m_gProperty.m_betweenCentrl);
+                break;
+            }
+        case TRUSS:
+            {
+                for (auto it = m_gProperty.m_numTruss.begin(); 
+                        it != m_gProperty.m_numTruss.end(); ++it)
+                {
+                    ret += to_string(it->first) + "," + to_string(it->second) + "\n";
+                }
+                break;
+            }
+        case CLIQUE:
+            {
+                for (auto it = m_gProperty.m_numClique.begin(); 
+                        it != m_gProperty.m_numClique.end(); ++it)
+                {
+                    ret += to_string(it->first) + "," + to_string(it->second) + "\n";
+                }
+                break;
+            }
+    }
+    return ret;
 }
 
 void Stats::serialize_stmodel()

@@ -106,12 +106,23 @@ public:
         }
     }
 
+    string get_content(int32_t option)
+    {
+        string ret;
+        if(m_application == "stmodel")
+        {
+            ret = get_content_stmodel(option);
+        }
+        return ret;
+    }
+
 private:
 
     Stats(string outFile); 
     Stats(); 
     void serialize_stmodel();
     void write_content_stmodel(int32_t option, string &content);
+    string get_content_stmodel(int32_t option);
 
     static Stats*   m_instance;
 
@@ -124,6 +135,7 @@ private:
     GraphProperty   m_gProperty;    ///< graph properties
 
     FRIEND_TEST(StatsTest_1,  Success);
+    FRIEND_TEST(BGLGraphProperty_1, Success);
 };
 
 #endif // __H_STATS__ 

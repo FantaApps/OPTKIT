@@ -37,3 +37,21 @@ TEST(BGLInitGraph_1, Success)
     std::remove("./bgl_janc.dot");
 }
 
+/**
+ * @brief   Test a small graph one color for janc graph
+**/
+TEST(BGLGraphProperty_1, Success)
+{
+    BGL g("../data/MC/janc.gr");
+
+    Stats::instance()->m_application = "stmodel";    
+
+    g.floyd_warshall();
+    g.clustering_coeff();
+
+    ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.311508");
+
+    std::remove("./bgl_janc.dot");
+}
+

@@ -208,6 +208,17 @@ private:
         {
             ERROR_PRINT();
         }
+
+        int32_t diameter = 0;
+        for (size_t i = 0; i < num_vertices(m_adj); ++i) 
+        {
+            for (size_t j = i; j < num_vertices(m_adj); ++j) 
+            {
+                diameter = max(diameter, (int32_t)distances[i][j]);
+            }
+        }
+        string val = to_string(diameter);
+        Stats::instance()->write_content(Stats::DIAMETER, val);
     }
 
     /**
@@ -290,7 +301,8 @@ private:
     Adj1 m_adj1;    ///< Another adj graph
     Udir m_udir;    ///< undirected graph
 
-    FRIEND_TEST(BGLInitGraph_1, Success);
+    FRIEND_TEST(BGLInitGraph_1,     Success);
+    FRIEND_TEST(BGLGraphProperty_1, Success);
 };
 
 #endif
