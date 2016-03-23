@@ -131,15 +131,18 @@ public:
     template <typename T>
     static void vec_to_string(const vector<T> &v, string &ret)
     {
-        ostringstream oss;
-
-        if (!v.empty())
+        for(auto it = v.begin(); it != v.end(); )
         {
-            std::copy(v.begin(), v.end()-1,
-                    std::ostream_iterator<T>(oss, ","));
-            oss << v.back();
+            auto cur = it++;
+            if(it != v.end())
+            {
+                ret += to_string(*cur) + ","; 
+            }
+            else
+            {
+                ret += to_string(*cur); 
+            }
         }
-        ret = oss.str();
     }
 
     template <typename T>
