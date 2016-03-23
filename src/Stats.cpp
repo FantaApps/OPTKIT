@@ -94,7 +94,7 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             }
         case BETWEENCENTRL:
             {
-                m_gProperty.m_betweenCentrl = stod(content);
+                Utils::string_to_vec<double>(content, m_gProperty.m_betweenCentrl);
                 break;
             }
         case TRUSS:
@@ -126,10 +126,7 @@ string Stats::get_content_stmodel(int32_t option)
     {
         case RANGE :
             {
-                for (auto it = m_range.begin(); it != m_range.end(); ++it)
-                {
-                    ret += to_string(*it) + ",";
-                }
+                Utils::vec_to_string<int>(m_range, ret);
                 break;
             } 
         case DATANAME :
@@ -169,25 +166,17 @@ string Stats::get_content_stmodel(int32_t option)
             }
         case BETWEENCENTRL:
             {
-                ret = to_string(m_gProperty.m_betweenCentrl);
+                Utils::vec_to_string<double>(m_gProperty.m_betweenCentrl, ret);
                 break;
             }
         case TRUSS:
             {
-                for (auto it = m_gProperty.m_numTruss.begin(); 
-                        it != m_gProperty.m_numTruss.end(); ++it)
-                {
-                    ret += to_string(it->first) + "," + to_string(it->second) + "\n";
-                }
+                Utils::vec_pair_to_string<int, int>(m_gProperty.m_numTruss, ret);
                 break;
             }
         case CLIQUE:
             {
-                for (auto it = m_gProperty.m_numClique.begin(); 
-                        it != m_gProperty.m_numClique.end(); ++it)
-                {
-                    ret += to_string(it->first) + "," + to_string(it->second) + "\n";
-                }
+                Utils::vec_pair_to_string<int, int>(m_gProperty.m_numClique, ret);
                 break;
             }
     }
@@ -216,7 +205,7 @@ void Stats::serialize_stmodel()
         <<"             \"diameter\" : "<<m_gProperty.m_diameter<<",\n"
         <<"             \"girth\" : "<<m_gProperty.m_girth<<",\n"
         <<"             \"clusterCoeff\" : "<<m_gProperty.m_clusterCoeff<<",\n"
-        <<"             \"betweenCentrl\" : "<<m_gProperty.m_betweenCentrl<<",\n"
+        <<"             \"betweenCentrl\" : "<<get_content_stmodel(BETWEENCENTRL)<<",\n"
         <<"             \"truss\" : "<<"[\n";
     for(size_t i=0; i<m_gProperty.m_numTruss.size(); i++)
     {

@@ -29,6 +29,7 @@
 #include <cassert>
 #include <vector>
 #include <glog/logging.h>
+#include <boost/lexical_cast.hpp>
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -106,6 +107,54 @@ public:
             printf("%d ", vec[i]);
         }
         printf("\n");
+    }
+
+    template <typename T, typename L>
+    static void vec_pair_to_string(const vector<pair<T, L>> &v, string &ret)
+    {
+        for(auto it = v.begin(); it != v.end(); )
+        {
+            auto cur = it++;
+            if(it != v.end())
+            {
+                ret += to_string(cur->first) + "," + 
+                       to_string(cur->second) + "\n";
+            }
+            else
+            {
+                ret += to_string(cur->first) + "," + 
+                       to_string(cur->second);
+            }
+        }
+    }
+
+    template <typename T>
+    static void vec_to_string(const vector<T> &v, string &ret)
+    {
+        for(auto it = v.begin(); it != v.end(); )
+        {
+            auto cur = it++;
+            if(it != v.end())
+            {
+                ret += to_string(*cur) + ","; 
+            }
+            else
+            {
+                ret += to_string(*cur); 
+            }
+        }
+    }
+
+    template <typename T>
+    static void string_to_vec(string &s, vector<T> &ret)
+    {
+        vector<string> val = split(s, ',');
+        for(auto it = val.begin(); it != val.end(); ++it)
+        {
+            T  val = boost::lexical_cast<T>(*it); 
+            ret.push_back(val);
+        }
+        
     }
 
     /**

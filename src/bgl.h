@@ -256,9 +256,13 @@ private:
         VertexIndexMap        v_index = get(vertex_index, m_adj1);
         vector<double>        v_centrality_vec(num_vertices(m_adj1), 0.0);
         iterator_property_map <vector< double >::iterator, VertexIndexMap >
-            v_centrality_map(v_centrality_vec.begin(), v_index);
+                              v_centrality_map(v_centrality_vec.begin(), v_index);
 
         brandes_betweenness_centrality( m_adj1, v_centrality_map, e_centrality_map );
+        
+        string val;
+        Utils::vec_to_string<double>(v_centrality_vec, val);
+        Stats::instance()->write_content(Stats::BETWEENCENTRL, val);
     }
 
     /**

@@ -15,7 +15,7 @@
              "diameter" : 3,
              "girth" : 25,
              "clusterCoeff" : 0.58,
-             "betweenCentrl" : 0.33,
+             "betweenCentrl" : 0.330000,
              "truss" : [
                   3 : 25
              ]
