@@ -260,10 +260,8 @@ private:
 
         brandes_betweenness_centrality( m_adj1, v_centrality_map, e_centrality_map );
         
-        double avg_centrality = accumulate(v_centrality_vec.begin(), 
-                                           v_centrality_vec.end(), 0) / 
-                                           v_centrality_vec.size();
-        string val = to_string(avg_centrality);
+        string val;
+        Utils::vec_to_string<double>(v_centrality_vec, val);
         Stats::instance()->write_content(Stats::BETWEENCENTRL, val);
     }
 

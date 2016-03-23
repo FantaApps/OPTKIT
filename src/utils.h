@@ -109,19 +109,37 @@ public:
         printf("\n");
     }
 
+    template <typename T, typename L>
+    static void vec_pair_to_string(const vector<pair<T, L>> &v, string &ret)
+    {
+        for(auto it = v.begin(); it != v.end(); )
+        {
+            auto cur = it++;
+            if(it != v.end())
+            {
+                ret += to_string(cur->first) + "," + 
+                       to_string(cur->second) + "\n";
+            }
+            else
+            {
+                ret += to_string(cur->first) + "," + 
+                       to_string(cur->second);
+            }
+        }
+    }
+
     template <typename T>
     static void vec_to_string(const vector<T> &v, string &ret)
     {
-        std::ostringstream oss;
+        ostringstream oss;
 
-        if (!vec.empty())
+        if (!v.empty())
         {
-            std::copy(vec.begin(), vec.end()-1,
-                    std::ostream_iterator<int>(oss, ","));
-
-            // Now add the last element with no delimiter
-            oss << vec.back();
+            std::copy(v.begin(), v.end()-1,
+                    std::ostream_iterator<T>(oss, ","));
+            oss << v.back();
         }
+        ret = oss.str();
     }
 
     template <typename T>

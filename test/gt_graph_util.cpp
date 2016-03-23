@@ -52,7 +52,7 @@ TEST(BGLGraphProperty_1, Success)
 
     ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.311508");
-    ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), "0.311508");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), "2.16667,3.5,0.333333,4.83333,1,0.666667,4,1.5");
 
     std::remove("./bgl_janc.dot");
 }

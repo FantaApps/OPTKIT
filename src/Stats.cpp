@@ -171,12 +171,12 @@ string Stats::get_content_stmodel(int32_t option)
             }
         case TRUSS:
             {
-                Utils::vec_to_string<pair<int, int>>(m_gProperty.m_numTruss, ret);
+                Utils::vec_pair_to_string<int, int>(m_gProperty.m_numTruss, ret);
                 break;
             }
         case CLIQUE:
             {
-                Utils::vec_to_string<pair<int, int>>(m_gProperty.m_numClique, ret);
+                Utils::vec_pair_to_string<int, int>(m_gProperty.m_numClique, ret);
                 break;
             }
     }
