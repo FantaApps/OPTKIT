@@ -65,7 +65,7 @@ public:
         int32_t                          m_diameter;        ///< boost 
         int32_t                          m_girth;           ///< native 
         double                           m_clusterCoeff;    ///< boost
-        double                           m_betweenCentrl;   ///< boost
+        vector<double>                   m_betweenCentrl;   ///< boost
         vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
         vector<pair<int32_t, int32_t>>   m_numClique;       ///< boost
 
@@ -74,8 +74,7 @@ public:
                           m_numCC(0),
                           m_diameter(0),
                           m_girth(0),
-                          m_clusterCoeff(0.0),
-                          m_betweenCentrl(0.0)
+                          m_clusterCoeff(0.0)
         {}
     };
 

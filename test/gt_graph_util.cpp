@@ -48,9 +48,11 @@ TEST(BGLGraphProperty_1, Success)
 
     g.floyd_warshall();
     g.clustering_coeff();
+    g.betweeness_centrality();
 
     ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.311508");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), "0.311508");
 
     std::remove("./bgl_janc.dot");
 }

@@ -29,6 +29,7 @@
 #include <cassert>
 #include <vector>
 #include <glog/logging.h>
+#include <boost/lexical_cast.hpp>
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -106,6 +107,33 @@ public:
             printf("%d ", vec[i]);
         }
         printf("\n");
+    }
+
+    template <typename T>
+    static void vec_to_string(const vector<T> &v, string &ret)
+    {
+        std::ostringstream oss;
+
+        if (!vec.empty())
+        {
+            std::copy(vec.begin(), vec.end()-1,
+                    std::ostream_iterator<int>(oss, ","));
+
+            // Now add the last element with no delimiter
+            oss << vec.back();
+        }
+    }
+
+    template <typename T>
+    static void string_to_vec(string &s, vector<T> &ret)
+    {
+        vector<string> val = split(s, ',');
+        for(auto it = val.begin(); it != val.end(); ++it)
+        {
+            T  val = boost::lexical_cast<T>(*it); 
+            ret.push_back(val);
+        }
+        
     }
 
     /**
