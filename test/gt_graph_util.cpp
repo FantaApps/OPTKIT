@@ -57,7 +57,5 @@ TEST(BGLGraphProperty_1, Success)
             "2.166667,3.500000,0.333333,4.833333,1.000000,0.666667,4.000000,1.500000");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLIQUE), 
             "2,3\n3,5");
-
-    std::remove("./bgl_janc.dot");
 }
 
