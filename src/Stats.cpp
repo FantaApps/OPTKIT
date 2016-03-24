@@ -12,6 +12,10 @@
 
 #include "Stats.h"
 #include "utils.h"
+#include <boost/algorithm/string.hpp>
+#include <iostream>
+
+using namespace boost;
 
 Stats *Stats::m_instance = 0;
 
@@ -105,7 +109,9 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             }
         case CLIQUE:
             {
-                vector<string> val = Utils::split(content, ',');
+                vector<string> val;
+                split(val, content, is_any_of(",")); 
+                cout<<val[0]<<" "<<val[1]<<endl;
                 m_gProperty.m_numClique.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
