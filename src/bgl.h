@@ -38,6 +38,8 @@
 
 #include <boost/graph/bron_kerbosch_all_cliques.hpp>
 
+#include <boost/algorithm/string.hpp>
+
 using namespace boost;
 using namespace std; 
 
@@ -98,9 +100,17 @@ class BGL
         template <typename Clique, typename Graph>
             void clique(const Clique& c, const Graph& g)
             {
-                typename Clique::const_iterator i, end = c.end();
-                for(i = c.begin(); i != end; ++i) {
-                    os << g[*i].name << ",";
+                typename Clique::const_iterator i, cur, end = c.end();
+                for(i = c.begin(); i != end; ) {
+                    cur = i++;
+                    if(i != end)
+                    {
+                        os << g[*cur].name << ",";
+                    }
+                    else
+                    {
+                        os << g[*cur].name; 
+                    }
                 }
                 os << endl;
             }
@@ -270,8 +280,27 @@ private:
     **/
     void all_cliques()
     {
-        clique_printer<ostream> vis(cout);
+        stringstream ss;
+        clique_printer<stringstream> vis(ss);
         bron_kerbosch_all_cliques(m_udir, vis);
+        string val = ss.str();
+        trim_right(val);
+        vector<string> strs;
+        split(strs, val, is_any_of("\n"));
+        map<int, int> count;
+
+        for(auto lit = strs.begin(); lit != strs.end(); lit++)
+        {
+            vector<string> vets;
+            split(vets, *lit, is_any_of(","));
+            count[vets.size()]++;
+        }
+
+        for(auto it = count.begin(); it != count.end(); ++it)
+        {
+            string one_val = to_string(it->first) + "," + to_string(it->second);
+            Stats::instance()->write_content(Stats::CLIQUE, one_val);
+        }
     }
 
     template < typename Graph> 

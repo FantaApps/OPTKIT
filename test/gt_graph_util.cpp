@@ -49,12 +49,13 @@ TEST(BGLGraphProperty_1, Success)
     g.floyd_warshall();
     g.clustering_coeff();
     g.betweeness_centrality();
+    g.all_cliques();
 
     ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.311508");
     ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), 
             "2.166667,3.500000,0.333333,4.833333,1.000000,0.666667,4.000000,1.500000");
-
-    std::remove("./bgl_janc.dot");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::CLIQUE), 
+            "2,3\n3,5");
 }
 
