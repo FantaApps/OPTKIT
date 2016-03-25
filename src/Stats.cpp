@@ -189,39 +189,48 @@ string Stats::get_content_stmodel(int32_t option)
 
 void Stats::serialize_stmodel()
 {
+
+    using namespace json_spirit;
+
     ofstream writer (m_outFile);
+    Object stm;
+    stm["time"] = m_time;
+    stm["application"] = m_application;
 
-    writer<<"{"<<endl;
 
-    writer<<"   \"time\""<<" : "<<m_time<<","<<endl;
-    writer<<"   \"application\""<<" : "<<"\""<<m_application<<"\","<<endl;
-    writer<<"   \"content\""<<" : {"<<endl;
-    writer<<"        \"data name\""<<" : "<<"\""<<m_dataName<<"\","<<endl;
-    writer<<"        \"range\""<<" : "<<"[\n"
-        <<"             "<<m_range[0]<<",\n"
-        <<"             "<<m_range[1]<<",\n"
-        <<"             "<<m_range[2]<<"\n"
-        <<"        ],"<<endl;
-    writer<<"        \"graph property\""<<" : "<<"[\n"
-        <<"             \"numV\" : "<<m_gProperty.m_numV<<",\n"
-        <<"             \"numE\" : "<<m_gProperty.m_numE<<",\n"
-        <<"             \"numCC\" : "<<m_gProperty.m_numCC<<",\n"
-        <<"             \"diameter\" : "<<m_gProperty.m_diameter<<",\n"
-        <<"             \"girth\" : "<<m_gProperty.m_girth<<",\n"
-        <<"             \"clusterCoeff\" : "<<m_gProperty.m_clusterCoeff<<",\n"
-        <<"             \"betweenCentrl\" : "<<get_content_stmodel(BETWEENCENTRL)<<",\n"
-        <<"             \"truss\" : "<<"[\n";
-    for(size_t i=0; i<m_gProperty.m_numTruss.size(); i++)
-    {
-        writer<<"                  "<<m_gProperty.m_numTruss[i].first<<" : "<<m_gProperty.m_numTruss[i].second;
-        if(i!=m_gProperty.m_numTruss.size()-1)
-            writer<<",";
-        writer<<endl;
-    }
-    writer<<"             ]\n        ]\n";
+    Object content;
+    content["data name"] = m_dataName;
+    string range;
+    Utils::vec_to_string<int>(m_range, range);
+    content["range"] = range;
 
-    writer<<"    }"<<endl;
-    writer<<"}"<<endl;
+    Object gp;
+    gp["numV"] = m_gProperty.m_numV;
+    gp["numE"] = m_gProperty.m_numE;
+    gp["numCC"] = m_gProperty.m_numCC;
+    gp["diameter"] = m_gProperty.m_diameter;
+    gp["girth"] = m_gProperty.m_girth;
+    gp["clusterCoeff"] = m_gProperty.m_clusterCoeff;
+
+    string bc;
+    Utils::vec_to_string<double>(m_gProperty.m_betweenCentrl, bc);
+    gp["betweenCentrl"] = bc;
+
+    string allCC;
+    Utils::vec_pair_to_string<int, int>(m_gProperty.m_numClique, allCC);
+    gp["clique"] = allCC;
+
+    string truss;
+    Utils::vec_pair_to_string<int, int>(m_gProperty.m_numTruss, truss);
+    gp["truss"] = truss;
+
+    content["graph property"] = gp;
+    
+    stm["content"] = content;
+
+    Array arr;
+    arr.push_back(stm);
+    write_formatted( stm, writer );
 
     writer.close();
 }

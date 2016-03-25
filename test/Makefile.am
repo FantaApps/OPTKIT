@@ -9,7 +9,7 @@ graphutiltest_SOURCES= gt_csr.cpp            ../src/csr.h        ../src/csr.cpp 
 TESTS=graphutiltest
 
 if DEBUG
-AM_CXXFLAGS = -g  -I$(top_srcdir)/src -I/usr/local/include -D__USE_XOPEN2K8 -lgtest_main -lgtest -DUSE_GTEST -lglog -std=c++11 -Wall -lboost_unit_test_framework-mt 
+AM_CXXFLAGS = -g  -I$(top_srcdir)/src -I/usr/local/include -D__USE_XOPEN2K8 -lgtest_main -lgtest -DUSE_GTEST -lglog -std=c++11 -Wall -ljson_spirit 
 else
-AM_CXXFLAGS = -g -I$(top_srcdir)/src -I/usr/local/include -DUSE_DEBUG -D__USE_XOPEN2K8 -lgtest_main -lgtest -DUSE_GTEST -lglog -std=c++11 -Wall -lboost_unit_test_framework-mt
+AM_CXXFLAGS = -g -I$(top_srcdir)/src -I/usr/local/include -DUSE_DEBUG -D__USE_XOPEN2K8 -lgtest_main -lgtest -DUSE_GTEST -lglog -std=c++11 -Wall -ljson_spirit
 endif

@@ -59,3 +59,43 @@ TEST(BGLGraphProperty_1, Success)
             "2,3\n3,5");
 }
 
+/**
+ * @brief   Test a small graph one color for janc graph
+**/
+TEST(BGLInitGraph_2, Success)
+{
+    BGL g("../data/MC/jwang.gr");
+    ofstream writer ("bgl_jwang.dot");
+    g.print_dependencies<Adj>(writer,  g.m_adj);
+    g.print_dependencies<Adj1>(writer, g.m_adj1);
+    g.print_udependencies<Udir>(writer, g.m_udir);
+    writer.close();
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/bgl/bgl_jwang.dot", "./bgl_jwang.dot"),
+              TstUtil::OPTKIT_TEST_PASS);
+
+    std::remove("./bgl_jwang.dot");
+}
+
+/**
+ * @brief   Test a small graph one color for janc graph
+**/
+TEST(BGLGraphProperty_2, Success)
+{
+    BGL g("../data/MC/jwang.gr");
+
+    Stats::instance()->m_application = "stmodel";    
+
+    g.floyd_warshall();
+    g.clustering_coeff();
+    g.betweeness_centrality();
+    g.all_cliques();
+
+    ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.447373");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), 
+            "2.166667,3.500000,0.333333,4.833333,1.000000,0.666667,4.000000,1.500000,0.533333,0.000000,0.900000,9.433333,1.000000,0.000000,26.266667,0.900000,0.000000,9.233333,0.000000,0.000000,0.000000,0.000000,1.000000,0.333333,2.700000,97.300000,0.333333,2.033333,57.033333");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::CLIQUE), 
+            "2,3\n3,5\n2,3\n3,12\n4,5");
+}
+

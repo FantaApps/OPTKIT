@@ -336,6 +336,8 @@ private:
 
     FRIEND_TEST(BGLInitGraph_1,     Success);
     FRIEND_TEST(BGLGraphProperty_1, Success);
+    FRIEND_TEST(BGLInitGraph_2,     Success);
+    FRIEND_TEST(BGLGraphProperty_2, Success);
 };
 
 #endif

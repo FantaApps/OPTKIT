@@ -1,24 +1,19 @@
 {
-   "time" : 1000,
-   "application" : "stmodel",
-   "content" : {
+    "application" : "stmodel",
+    "content" : {
         "data name" : "gtest",
-        "range" : [
-             1,
-             1,
-             1
-        ],
-        "graph property" : [
-             "numV" : 10,
-             "numE" : 1000,
-             "numCC" : 5,
-             "diameter" : 3,
-             "girth" : 25,
-             "clusterCoeff" : 0.58,
-             "betweenCentrl" : 0.330000,
-             "truss" : [
-                  3 : 25
-             ]
-        ]
-    }
+        "graph property" : {
+            "betweenCentrl" : "0.330000",
+            "clique" : "",
+            "clusterCoeff" : 0.57999999999999996,
+            "diameter" : 3,
+            "girth" : 25,
+            "numCC" : 5,
+            "numE" : 1000,
+            "numV" : 10,
+            "truss" : "3,25"
+        },
+        "range" : "1,1,1"
+    },
+    "time" : "1000"
 }
