@@ -6,7 +6,6 @@ before_install:
   - sudo apt-get update -qq
 install:
   - sudo apt-get install -qq g++-4.8 libboost-all-dev libgtest-dev cmake
-  - sudo apt-get install cmake 
   - export CXX="g++-4.8"
 before_script:
   - cd /usr/src/gtest
