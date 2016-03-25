@@ -18,6 +18,8 @@
 #include "utils.h"
 #include "Config.h"
 #include "gtest/gtest_prod.h"
+#include <jsonpack.hpp>
+#include <json_spirit/json_spirit.h>
 
 using namespace std;
 
@@ -135,6 +137,8 @@ private:
 
     FRIEND_TEST(StatsTest_1,  Success);
     FRIEND_TEST(BGLGraphProperty_1, Success);
+    FRIEND_TEST(BGLGraphProperty_2, Success);
+
 };
 
 #endif // __H_STATS__ 
