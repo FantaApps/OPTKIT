@@ -18,7 +18,6 @@
 #include "utils.h"
 #include "Config.h"
 #include "gtest/gtest_prod.h"
-#include <jsonpack.hpp>
 #include <json_spirit/json_spirit.h>
 
 using namespace std;

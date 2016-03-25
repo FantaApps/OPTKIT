@@ -232,38 +232,6 @@ void Stats::serialize_stmodel()
     arr.push_back(stm);
     write_formatted( stm, writer );
 
-    //writer<<"{"<<endl;
-
-    //writer<<"   \"time\""<<" : "<<m_time<<","<<endl;
-    //writer<<"   \"application\""<<" : "<<"\""<<m_application<<"\","<<endl;
-    //writer<<"   \"content\""<<" : {"<<endl;
-    //writer<<"        \"data name\""<<" : "<<"\""<<m_dataName<<"\","<<endl;
-    //writer<<"        \"range\""<<" : "<<"[\n"
-    //    <<"             "<<m_range[0]<<",\n"
-    //    <<"             "<<m_range[1]<<",\n"
-    //    <<"             "<<m_range[2]<<"\n"
-    //    <<"        ],"<<endl;
-    //writer<<"        \"graph property\""<<" : "<<"[\n"
-    //    <<"             \"numV\" : "<<m_gProperty.m_numV<<",\n"
-    //    <<"             \"numE\" : "<<m_gProperty.m_numE<<",\n"
-    //    <<"             \"numCC\" : "<<m_gProperty.m_numCC<<",\n"
-    //    <<"             \"diameter\" : "<<m_gProperty.m_diameter<<",\n"
-    //    <<"             \"girth\" : "<<m_gProperty.m_girth<<",\n"
-    //    <<"             \"clusterCoeff\" : "<<m_gProperty.m_clusterCoeff<<",\n"
-    //    <<"             \"betweenCentrl\" : "<<get_content_stmodel(BETWEENCENTRL)<<",\n"
-    //    <<"             \"truss\" : "<<"[\n";
-    //for(size_t i=0; i<m_gProperty.m_numTruss.size(); i++)
-    //{
-    //    writer<<"                  "<<m_gProperty.m_numTruss[i].first<<" : "<<m_gProperty.m_numTruss[i].second;
-    //    if(i!=m_gProperty.m_numTruss.size()-1)
-    //        writer<<",";
-    //    writer<<endl;
-    //}
-    //writer<<"             ]\n        ]\n";
-
-    //writer<<"    }"<<endl;
-    //writer<<"}"<<endl;
-
     writer.close();
 }
 

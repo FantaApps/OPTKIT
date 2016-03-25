@@ -18,6 +18,9 @@ before_script:
   - sudo ./configure
   - sudo make 
   - sudo make install
+  - cd ..
+  - sudo git clone https://github.com/sirikata/json-spirit.git
+  - cd json-spirit; mkdir build; cd build; cmake .; make; sudo make install  
   - cd ${TRAVIS_BUILD_DIR} 
   - chmod +x init.sh 
   - ./init.sh 
