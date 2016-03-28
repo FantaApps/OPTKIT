@@ -51,7 +51,7 @@ TEST(SmallCrimeDataTest_1, Success)
     ASSERT_EQ(v[2], 3);
     ASSERT_EQ(v[3], 4);
 
-    vector<pair<int32_t, int32_t>> edges = stm.build_edges(1, 1, 1);
+    edge_list edges = stm.build_edges(1, 1, 1);
     stm.serialize_edges(edges);
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/small_crime_edges.txt", "./crime_edges.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
@@ -83,7 +83,7 @@ TEST(NYCrimeDataTest_1, Success)
     string input_file = "../data/truss/ny_crime.csv"; 
     CrimeSTModel stm(input_file);
 
-    vector<pair<int32_t, int32_t>> edges = stm.build_edges(1, 1, 1);
+    edge_list edges = stm.build_edges(1, 1, 1);
     stm.serialize_edges(edges);
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_edges.txt", "./crime_edges.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 

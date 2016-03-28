@@ -20,6 +20,9 @@
 
 using namespace std;
 
+typedef vector<pair<int32_t, int32_t>>         edge_list;
+typedef vector<vector<pair<int32_t, int32_t>>> edge_list_CC;
+
 /**
  * @class STModel 
  *
@@ -47,7 +50,9 @@ public:
 
     virtual int32_t         query_cont(int32_t max[3], int32_t min[3]) = 0;
 
-    virtual vector<pair<int32_t, int32_t>> build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap) = 0;
+    virtual edge_list       build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap) = 0;
+
+    virtual edge_list_CC    build_edge_list_CC(int32_t x_gap, int32_t y_gap, int32_t z_gap) = 0;
 };
 
 #endif // __H_ST_MODEL__ 
