@@ -19,6 +19,7 @@
 
 #include "gtest/gtest_prod.h"
 
+
 /**
  * @class SpatialTemporalGraphBuilder
  *
@@ -67,10 +68,10 @@ public:
 
     ~CrimeSTModel(){}
 
-    virtual vector<int32_t>                query_list(int32_t min[3], int32_t max[3]);
-    virtual int32_t                        query_cont(int32_t min[3], int32_t max[3]);
-    virtual vector<pair<int32_t, int32_t>> build_edges(int32_t x_gap, int32_t y_gap, 
-                                               int32_t z_gap);
+    virtual vector<int32_t> query_list(int32_t min[3], int32_t max[3]);
+    virtual int32_t         query_cont(int32_t min[3], int32_t max[3]);
+    virtual edge_list       build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap);
+    virtual edge_list_CC    build_edge_list_CC(int32_t x_gap, int32_t y_gap, int32_t z_gap);
 
 protected:
     vector<Node>                    nodes;      ///< nodes read from CSV file
@@ -110,8 +111,11 @@ private:
     
 
     void serialize();
-    void serialize_edges(vector<pair<int32_t, int32_t>> &edges);
+    void serialize_edges(edge_list &edges);
     void interpret_CC(const char *fIn, const char *fOut);
+
+    void    union_find(const edge_list &el, vector<int32_t> &parent);
+    int32_t find(const vector<int32_t> &parent, int32_t pos);
 
     FRIEND_TEST(SmallCrimeDataTest_1, Success);
     FRIEND_TEST(NYCrimeDataTest_1, Success);

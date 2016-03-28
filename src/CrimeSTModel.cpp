@@ -98,7 +98,7 @@ int32_t CrimeSTModel::query_cont(int32_t min[3], int32_t max[3])
  *
  * @return      a list of egdes
 **/
-vector<pair<int32_t, int32_t>> CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
+edge_list CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
 {
     ASSERT(x_gap>=0 && y_gap>=0 && z_gap>=0);
 
@@ -127,6 +127,80 @@ vector<pair<int32_t, int32_t>> CrimeSTModel::build_edges(int32_t x_gap, int32_t 
 }
 
 /**
+ * @brief       get the edge list and group them by connected components
+ *
+ * @param[in]       x_gap       range in x coordinate
+ * @param[in]       y_gap       range in y coordinate
+ * @param[in]       z_gap       range in z coordinate
+ *
+ * @return          edge list of connected components 
+**/
+edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int32_t z_gap)
+{
+    edge_list_CC ret;
+
+    edge_list el = build_edges(x_gap, y_gap, z_gap);
+
+    vector<int32_t> parent(nodes.size(), -1);
+    union_find(el, parent);
+
+    int32_t cur_CC = -1;
+    for(auto it = el.begin(); it != el.end(); ++it)
+    {
+        int CC_id = parent[it->first];
+
+        if(CC_id != cur_CC)
+        {
+            edge_list now_el;
+            ret.push_back(now_el);
+            cur_CC = CC_id;
+        }
+
+        ret.back().push_back(*it);
+    }
+
+    return ret;
+}
+
+/**
+ * @brief       union find algorithm to group connected components
+ *
+ * @param[in]       edge_list       list of edges
+ * @param[out]      parent          parent index list
+ *
+ * @return      N/A
+**/
+void CrimeSTModel::union_find(const edge_list &el, vector<int32_t> &parent)
+{
+    for(auto it = el.begin(); it != el.end(); ++it)
+    {
+        int32_t from = find(parent, it->first);
+        int32_t to   = find(parent, it->second);
+        if(from != to)
+        {
+            parent[from] = to;
+        }
+    }
+}
+
+/**
+ * @brief       find the parent in the union find algorithm
+ *
+ * @param[in]       parent          parent index list
+ * @param[in]       pos             which position to search
+ *
+ * @return      the root parent idx
+**/
+int32_t CrimeSTModel::find(const vector<int32_t> &parent, int32_t pos)
+{
+    while(parent[pos] != -1)
+    {
+        pos = parent[pos];
+    }
+    return pos;
+}
+
+/**
  * @brief       serialize model into file, for test purpose
 **/
 void CrimeSTModel::serialize()
@@ -145,7 +219,7 @@ void CrimeSTModel::serialize()
 /**
  * @brief       serialize edges into file, for test purpose
 **/
-void CrimeSTModel::serialize_edges(vector<pair<int32_t, int32_t>> &edges)
+void CrimeSTModel::serialize_edges(edge_list &edges)
 {
     sort(edges.begin(), edges.end(), Utils::smaller);
 

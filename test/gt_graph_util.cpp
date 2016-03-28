@@ -14,6 +14,8 @@
 
 #include <gtest/gtest.h>
 #include "bgl.h"
+#include "STModel.h"
+#include "CrimeSTModel.h" 
 #include "test_util.h" 
 
 using namespace boost;
@@ -99,3 +101,17 @@ TEST(BGLGraphProperty_2, Success)
             "2,3\n3,5\n2,3\n3,12\n4,5");
 }
 
+/**
+ * Analyze shootings in Philadelphia and find 
+ * an elevated risk of near-repeat shootings 
+ * occurring within 2 weeks and within one city 
+ * block of previous incidents
+ *
+ * 100 meter, 200 meter, 400 meter
+**/
+
+TEST(BGLSTModel_1, Success)
+{
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
+}
