@@ -93,7 +93,7 @@ TEST(BGLGraphProperty_2, Success)
     g.betweeness_centrality();
     g.all_cliques();
 
-    ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
+    ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "4");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.447373");
     ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), 
             "2.166667,3.500000,0.333333,4.833333,1.000000,0.666667,4.000000,1.500000,0.533333,0.000000,0.900000,9.433333,1.000000,0.000000,26.266667,0.900000,0.000000,9.233333,0.000000,0.000000,0.000000,0.000000,1.000000,0.333333,2.700000,97.300000,0.333333,2.033333,57.033333");
