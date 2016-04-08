@@ -20,8 +20,14 @@
 #include "gtest/gtest_prod.h"
 #include <json_spirit/json_spirit.h>
 
+
 using namespace std;
 
+typedef vector<int32_t>                         int_feature_l;
+typedef vector<double>                          double_feature_l;
+typedef vector<double_feature_l>                double_feature_ll;
+typedef vector<pair<int32_t, int32_t>>          int_pair_feature_l;
+typedef vector<vector<pair<int32_t, int32_t>>>  int_pair_feature_ll;
 
 /**
  * @class Stats
@@ -47,9 +53,9 @@ public:
     {
         RANGE = 0,
         DATANAME,
+        NUMCC,
         NUMV,
         NUME,
-        NUMCC,
         DIAMETER,
         GIRTH,
         CLUSTERCOEFF,
@@ -60,22 +66,17 @@ public:
 
     struct GraphProperty
     {
-        int32_t                          m_numV;            ///< native code
-        int32_t                          m_numE;            ///< native code
-        int32_t                          m_numCC;           ///< native code
-        int32_t                          m_diameter;        ///< boost 
-        int32_t                          m_girth;           ///< native 
-        double                           m_clusterCoeff;    ///< boost
-        vector<double>                   m_betweenCentrl;   ///< boost
-        vector<pair<int32_t, int32_t>>   m_numTruss;        ///< native
-        vector<pair<int32_t, int32_t>>   m_numClique;       ///< boost
+        int32_t               m_numCC;           ///< native code
+        int_feature_l         m_numV;            ///< native code
+        int_feature_l         m_numE;            ///< native code
+        int_feature_l         m_diameter;        ///< boost
+        int_feature_l         m_girth;           ///< native
+        double_feature_l      m_clusterCoeff;    ///< boost
+        double_feature_ll     m_betweenCentrl;   ///< boost
+        int_pair_feature_ll   m_numTruss;        ///< native
+        int_pair_feature_ll   m_numClique;       ///< boost
 
-        GraphProperty() : m_numV(0), 
-                          m_numE(0),
-                          m_numCC(0),
-                          m_diameter(0),
-                          m_girth(0),
-                          m_clusterCoeff(0.0)
+        GraphProperty() : m_numCC(0)
         {}
     };
 
@@ -134,9 +135,10 @@ private:
     vector<int32_t> m_range;        ///< x,y and time
     GraphProperty   m_gProperty;    ///< graph properties
 
-    FRIEND_TEST(StatsTest_1,  Success);
+    FRIEND_TEST(StatsTest_1,        Success);
     FRIEND_TEST(BGLGraphProperty_1, Success);
     FRIEND_TEST(BGLGraphProperty_2, Success);
+    FRIEND_TEST(BGLSTModel_1,       Success);
 
 };
 

@@ -17,11 +17,10 @@
 #include <iostream>
 #include <fstream>
 #include "../libs/RTree.h"
+#include "utils.h"
 
 using namespace std;
 
-typedef vector<pair<int32_t, int32_t>>         edge_list;
-typedef vector<vector<pair<int32_t, int32_t>>> edge_list_CC;
 
 /**
  * @class STModel 

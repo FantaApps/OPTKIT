@@ -138,6 +138,6 @@ TEST(StatsTest_1, Success)
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/simple_stats.txt", "./stats.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
-    //std::remove("./stats.txt");
+    std::remove("./stats.txt");
 }
 

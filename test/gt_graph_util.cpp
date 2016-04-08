@@ -4,6 +4,7 @@
  *  @brief    Unittest of graph utilies.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   03/27/16 - test NYC crime data 
  *  stplaydog   03/20/16 - When compiling boost::graphviz with gtest, 
  *                         there will be shared_ptr issues, we addressed this isue
  *                         by printing edges.
@@ -107,11 +108,34 @@ TEST(BGLGraphProperty_2, Success)
  * occurring within 2 weeks and within one city 
  * block of previous incidents
  *
- * 100 meter, 200 meter, 400 meter
+ * we only test 200 meter
 **/
 
 TEST(BGLSTModel_1, Success)
 {
     string input_file = "../data/truss/ny_crime.csv"; 
     CrimeSTModel stm(input_file);
+
+    edge_list_CC el_cc = stm.build_edge_list_CC(200, 200, 30);
+
+    Stats::instance()->m_application = "stmodel";    
+
+    for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
+    {
+        BGL g(*it);
+        
+        // set numV, numE, numCC
+        
+        g.floyd_warshall();
+        g.clustering_coeff();
+        g.betweeness_centrality();
+        g.all_cliques();
+    }
+
+    Stats::instance()->serialize();
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/bgl/nycrime_stats.txt", "./stats.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./stats.txt");
 }
