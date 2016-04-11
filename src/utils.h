@@ -31,6 +31,7 @@
 #include <glog/logging.h>
 #include <boost/lexical_cast.hpp>
 
+
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
@@ -72,6 +73,10 @@ OPTKIT_DEF;
 
 using namespace std;
 
+
+typedef vector<pair<int32_t, int32_t>>         edge_list;
+typedef vector<vector<pair<int32_t, int32_t>>> edge_list_CC;
+
 class Utils
 {
 public:
@@ -109,6 +114,7 @@ public:
         printf("\n");
     }
 
+
     template <typename T, typename L>
     static void vec_pair_to_string(const vector<pair<T, L>> &v, string &ret)
     {
@@ -128,6 +134,26 @@ public:
         }
     }
 
+    template <typename T, typename L>
+    static void vec_vec_pair_to_string(const vector<vector<pair<T, L>>> &v, string &ret)
+    {
+        string tmp;
+        for(auto it = v.begin(); it != v.end(); )
+        {
+            auto cur = it++;
+            if(it != v.end())
+            {
+                vec_pair_to_string<T, L>(*cur, tmp); 
+                ret += tmp + "\n"; 
+            }
+            else
+            {
+                vec_pair_to_string<T, L>(*cur, tmp); 
+                ret += tmp; 
+            }
+        }
+    }
+
     template <typename T>
     static void vec_to_string(const vector<T> &v, string &ret)
     {
@@ -141,6 +167,26 @@ public:
             else
             {
                 ret += to_string(*cur); 
+            }
+        }
+    }
+
+    template <typename T>
+    static void vec_vec_to_string(const vector<vector<T>> &v, string &ret)
+    {
+        string tmp;
+        for(auto it = v.begin(); it != v.end(); )
+        {
+            auto cur = it++;
+            if(it != v.end())
+            {
+                vec_to_string<T>(*cur, tmp); 
+                ret += tmp + "\n";
+            }
+            else
+            {
+                vec_to_string<T>(*cur, tmp); 
+                ret += tmp;
             }
         }
     }

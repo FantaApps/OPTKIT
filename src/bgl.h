@@ -157,27 +157,27 @@ public:
         }
     }
 
-    BGL(vector<pair<int32_t, int32_t>> &edges)
+    BGL(const edge_list &edges)
     {
-            NameMap                   nm(get(&Actor::name, m_udir));
-            map<std::string, UVertex> verts;
+        NameMap                   nm(get(&Actor::name, m_udir));
+        map<std::string, UVertex> verts;
 
-            for(auto it = edges.begin(); it != edges.end(); ++it)
-            {
-                add_one_edge(it->first, it->second, nm, verts);
-            }
+        for(auto it = edges.begin(); it != edges.end(); ++it)
+        {
+            add_one_edge(it->first, it->second, nm, verts);
+        }
     }
 
     /**
      * @brief       Constructor and Destructor
      *
-     **/
+    **/
     BGL() {};
     ~BGL() {};
 
-        Adj  get_adj() {return m_adj;}     ///< Adjacency graph
-        Adj1 get_adj1() {return m_adj1;}    ///< Another adj graph
-        Udir get_udir() {return m_udir;}    ///< undirected graph
+    Adj  get_adj() {return m_adj;}     ///< Adjacency graph
+    Adj1 get_adj1() {return m_adj1;}    ///< Another adj graph
+    Udir get_udir() {return m_udir;}    ///< undirected graph
 
 private:
 
@@ -298,7 +298,15 @@ private:
 
         for(auto it = count.begin(); it != count.end(); ++it)
         {
-            string one_val = to_string(it->first) + "," + to_string(it->second);
+            string one_val;
+            if(it == count.begin())
+            {
+                one_val = to_string(it->first) + "," + to_string(it->second) + ",NEW";
+            }
+            else
+            {
+                one_val = to_string(it->first) + "," + to_string(it->second) + ",OLD";
+            }
             Stats::instance()->write_content(Stats::CLIQUE, one_val);
         }
     }
@@ -338,6 +346,7 @@ private:
     FRIEND_TEST(BGLGraphProperty_1, Success);
     FRIEND_TEST(BGLInitGraph_2,     Success);
     FRIEND_TEST(BGLGraphProperty_2, Success);
+    FRIEND_TEST(BGLSTModel_1,       Success);
 };
 
 #endif

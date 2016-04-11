@@ -67,12 +67,12 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             }
         case NUMV:
             {
-                m_gProperty.m_numV = stoi(content);
+                m_gProperty.m_numV.push_back(stoi(content));
                 break;
             }
         case NUME:
             {
-                m_gProperty.m_numE = stoi(content);
+                m_gProperty.m_numE.push_back(stoi(content));
                 break;
             }
         case NUMCC:
@@ -82,35 +82,48 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             }
         case DIAMETER:
             {
-                m_gProperty.m_diameter = stoi(content);
+                m_gProperty.m_diameter.push_back(stoi(content));
                 break;
             }
         case GIRTH:
             {
-                m_gProperty.m_girth = stoi(content);
+                m_gProperty.m_girth.push_back(stoi(content));
                 break;
             }
         case CLUSTERCOEFF:
             {
-                m_gProperty.m_clusterCoeff = stod(content);
+                m_gProperty.m_clusterCoeff.push_back(stod(content));
                 break;
             }
         case BETWEENCENTRL:
             {
-                Utils::string_to_vec<double>(content, m_gProperty.m_betweenCentrl);
+                double_feature_l tmp;
+                Utils::string_to_vec<double>(content, tmp);
+                m_gProperty.m_betweenCentrl.push_back(tmp);
                 break;
             }
         case TRUSS:
             {
-                vector<string> val = Utils::split(content, ',');
-                m_gProperty.m_numTruss.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                vector<string> val; 
+                split(val, content, is_any_of(",")); 
+                if(val[2] == "NEW")
+                {
+                    int_pair_feature_l tmp;
+                    m_gProperty.m_numTruss.push_back(tmp);
+                }
+                m_gProperty.m_numTruss.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
         case CLIQUE:
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
-                m_gProperty.m_numClique.push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                if(val[2] == "NEW")
+                {
+                    int_pair_feature_l tmp;
+                    m_gProperty.m_numClique.push_back(tmp);
+                }
+                m_gProperty.m_numClique.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
     }
@@ -140,12 +153,12 @@ string Stats::get_content_stmodel(int32_t option)
             }
         case NUMV:
             {
-                ret = to_string(m_gProperty.m_numV);
+                Utils::vec_to_string<int>(m_gProperty.m_numV, ret);
                 break;
             }
         case NUME:
             {
-                ret = to_string(m_gProperty.m_numE);
+                Utils::vec_to_string<int>(m_gProperty.m_numE, ret);
                 break;
             }
         case NUMCC:
@@ -155,32 +168,32 @@ string Stats::get_content_stmodel(int32_t option)
             }
         case DIAMETER:
             {
-                ret = to_string(m_gProperty.m_diameter);
+                Utils::vec_to_string<int>(m_gProperty.m_diameter, ret);
                 break;
             }
         case GIRTH:
             {
-                ret = to_string(m_gProperty.m_girth);
+                Utils::vec_to_string<int>(m_gProperty.m_girth, ret);
                 break;
             }
         case CLUSTERCOEFF:
             {
-                ret = to_string(m_gProperty.m_clusterCoeff);
+                Utils::vec_to_string<double>(m_gProperty.m_clusterCoeff, ret);
                 break;
             }
         case BETWEENCENTRL:
             {
-                Utils::vec_to_string<double>(m_gProperty.m_betweenCentrl, ret);
+                Utils::vec_vec_to_string<double>(m_gProperty.m_betweenCentrl, ret);
                 break;
             }
         case TRUSS:
             {
-                Utils::vec_pair_to_string<int, int>(m_gProperty.m_numTruss, ret);
+                Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numTruss, ret);
                 break;
             }
         case CLIQUE:
             {
-                Utils::vec_pair_to_string<int, int>(m_gProperty.m_numClique, ret);
+                Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numClique, ret);
                 break;
             }
     }
@@ -193,6 +206,8 @@ void Stats::serialize_stmodel()
     using namespace json_spirit;
 
     ofstream writer (m_outFile);
+    string tmp;
+
     Object stm;
     stm["time"] = m_time;
     stm["application"] = m_application;
@@ -205,23 +220,28 @@ void Stats::serialize_stmodel()
     content["range"] = range;
 
     Object gp;
-    gp["numV"] = m_gProperty.m_numV;
-    gp["numE"] = m_gProperty.m_numE;
-    gp["numCC"] = m_gProperty.m_numCC;
-    gp["diameter"] = m_gProperty.m_diameter;
-    gp["girth"] = m_gProperty.m_girth;
-    gp["clusterCoeff"] = m_gProperty.m_clusterCoeff;
+    Utils::vec_to_string<int>(m_gProperty.m_numV, tmp);
+    gp["numV"]         = tmp; tmp = "";
+    Utils::vec_to_string<int>(m_gProperty.m_numE, tmp);
+    gp["numE"]         = tmp; tmp = "";
+    gp["numCC"]        = m_gProperty.m_numCC;
+    Utils::vec_to_string<int>(m_gProperty.m_diameter, tmp);
+    gp["diameter"]     = tmp; tmp = "";
+    Utils::vec_to_string<int>(m_gProperty.m_girth, tmp);
+    gp["girth"]        = tmp; tmp = "";
+    Utils::vec_to_string<double>(m_gProperty.m_clusterCoeff, tmp);
+    gp["clusterCoeff"] = tmp; tmp = "";
 
     string bc;
-    Utils::vec_to_string<double>(m_gProperty.m_betweenCentrl, bc);
+    Utils::vec_vec_to_string<double>(m_gProperty.m_betweenCentrl, bc);
     gp["betweenCentrl"] = bc;
 
     string allCC;
-    Utils::vec_pair_to_string<int, int>(m_gProperty.m_numClique, allCC);
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numClique, allCC);
     gp["clique"] = allCC;
 
     string truss;
-    Utils::vec_pair_to_string<int, int>(m_gProperty.m_numTruss, truss);
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numTruss, truss);
     gp["truss"] = truss;
 
     content["graph property"] = gp;

@@ -468,7 +468,15 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
             output_one_CC(writer, i, visited, cnt, c);
             fprintf(writer, "\n");
 
-            string ktruss = Config::instance()->get("ktruss")+","+to_string(cnt);
+            string ktruss;
+            if(Config::instance()->get("ktruss") == "3truss")
+            {
+                ktruss = Config::instance()->get("ktruss")+","+to_string(cnt) + ",NEW";
+            }
+            else
+            {
+                ktruss = Config::instance()->get("ktruss")+","+to_string(cnt) + ",OLD";
+            }
             Stats::instance()->write_content(Stats::TRUSS, ktruss); 
         }
     }
