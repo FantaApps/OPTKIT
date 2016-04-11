@@ -87,7 +87,16 @@ TEST(BGLGraphProperty_2, Success)
 {
     BGL g("../data/MC/jwang.gr");
 
-    Stats::instance()->m_application = "stmodel";    
+    Stats::instance()->m_application = "stmodel";
+    Stats::instance()->m_gProperty.m_numCC = 0;
+    Stats::instance()->m_gProperty.m_numV.clear();
+    Stats::instance()->m_gProperty.m_numE.clear();
+    Stats::instance()->m_gProperty.m_diameter.clear();
+    Stats::instance()->m_gProperty.m_girth.clear();
+    Stats::instance()->m_gProperty.m_clusterCoeff.clear();
+    Stats::instance()->m_gProperty.m_betweenCentrl.clear();
+    Stats::instance()->m_gProperty.m_numTruss.clear();
+    Stats::instance()->m_gProperty.m_numClique.clear();
 
     g.floyd_warshall();
     g.clustering_coeff();
@@ -97,9 +106,9 @@ TEST(BGLGraphProperty_2, Success)
     ASSERT_EQ(Stats::instance()->get_content(Stats::DIAMETER), "3");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLUSTERCOEFF), "0.447373");
     ASSERT_EQ(Stats::instance()->get_content(Stats::BETWEENCENTRL), 
-            "2.166667,3.500000,0.333333,4.833333,1.000000,0.666667,4.000000,1.500000,0.533333,0.000000,0.900000,9.433333,1.000000,0.000000,26.266667,0.900000,0.000000,9.233333,0.000000,0.000000,0.000000,0.000000,1.000000,0.333333,2.700000,97.300000,0.333333,2.033333,57.033333");
+            "0.533333,0.000000,0.900000,9.433333,1.000000,0.000000,26.266667,0.900000,0.000000,9.233333,0.000000,0.000000,0.000000,0.000000,1.000000,0.333333,2.700000,97.300000,0.333333,2.033333,57.033333");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLIQUE), 
-            "2,3\n3,5\n2,3\n3,12\n4,5");
+            "2,3\n3,12\n4,5");
 }
 
 /**

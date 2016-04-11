@@ -122,6 +122,17 @@ TEST(StatsTest_1, Success)
     
     st->m_application = "stmodel";    
 
+    Stats::instance()->m_gProperty.m_numCC = 0;
+    Stats::instance()->m_gProperty.m_numV.clear();
+    Stats::instance()->m_gProperty.m_numE.clear();
+    Stats::instance()->m_gProperty.m_diameter.clear();
+    Stats::instance()->m_gProperty.m_girth.clear();
+    Stats::instance()->m_gProperty.m_clusterCoeff.clear();
+    Stats::instance()->m_gProperty.m_betweenCentrl.clear();
+    Stats::instance()->m_gProperty.m_numTruss.clear();
+    Stats::instance()->m_gProperty.m_numClique.clear();
+
+
     string tmp = "1,1,1"; st->write_content((int32_t)Stats::RANGE,         tmp);
     tmp = "gtest";        st->write_content((int32_t)Stats::DATANAME,      tmp); 
     tmp = "10";           st->write_content((int32_t)Stats::NUMV,          tmp);
@@ -131,13 +142,13 @@ TEST(StatsTest_1, Success)
     tmp = "25";           st->write_content((int32_t)Stats::GIRTH,         tmp);
     tmp = "0.58";         st->write_content((int32_t)Stats::CLUSTERCOEFF,  tmp);
     tmp = "0.33";         st->write_content((int32_t)Stats::BETWEENCENTRL, tmp);
-    tmp = "3,25";         st->write_content((int32_t)Stats::TRUSS,         tmp);
+    tmp = "3truss,25,NEW";     st->write_content((int32_t)Stats::TRUSS,         tmp);
 
     st->serialize();
 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/simple_stats.txt", "./stats.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
-    std::remove("./stats.txt");
+    //std::remove("./stats.txt");
 }
 

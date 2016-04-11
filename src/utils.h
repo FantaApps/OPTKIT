@@ -180,13 +180,13 @@ public:
             auto cur = it++;
             if(it != v.end())
             {
-                ret += tmp + "\n";
                 vec_to_string<T>(*cur, tmp); 
+                ret += tmp + "\n";
             }
             else
             {
-                ret += tmp;
                 vec_to_string<T>(*cur, tmp); 
+                ret += tmp;
             }
         }
     }

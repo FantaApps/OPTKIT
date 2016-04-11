@@ -221,16 +221,16 @@ void Stats::serialize_stmodel()
 
     Object gp;
     Utils::vec_to_string<int>(m_gProperty.m_numV, tmp);
-    gp["numV"]         = tmp;
+    gp["numV"]         = tmp; tmp = "";
     Utils::vec_to_string<int>(m_gProperty.m_numE, tmp);
-    gp["numE"]         = tmp;
+    gp["numE"]         = tmp; tmp = "";
     gp["numCC"]        = m_gProperty.m_numCC;
     Utils::vec_to_string<int>(m_gProperty.m_diameter, tmp);
-    gp["diameter"]     = tmp;
+    gp["diameter"]     = tmp; tmp = "";
     Utils::vec_to_string<int>(m_gProperty.m_girth, tmp);
-    gp["girth"]        = tmp;
+    gp["girth"]        = tmp; tmp = "";
     Utils::vec_to_string<double>(m_gProperty.m_clusterCoeff, tmp);
-    gp["clusterCoeff"] = tmp;
+    gp["clusterCoeff"] = tmp; tmp = "";
 
     string bc;
     Utils::vec_vec_to_string<double>(m_gProperty.m_betweenCentrl, bc);

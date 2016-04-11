@@ -5,12 +5,12 @@
         "graph property" : {
             "betweenCentrl" : "0.330000",
             "clique" : "",
-            "clusterCoeff" : 0.57999999999999996,
-            "diameter" : 3,
-            "girth" : 25,
+            "clusterCoeff" : "0.580000",
+            "diameter" : "3",
+            "girth" : "25",
             "numCC" : 5,
-            "numE" : 1000,
-            "numV" : 10,
+            "numE" : "1000",
+            "numV" : "10",
             "truss" : "3,25"
         },
         "range" : "1,1,1"
