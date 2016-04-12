@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/11/16 - fix a bug in union find algorithm
  *  stplaydog   03/27/16 - add union find related functions 
  *  stplaydog   03/03/16 - add function to intepret CC files
  *  stplaydog   02/12/16 - add build_edges 
@@ -14,6 +15,7 @@
 **/
 
 #include <string>
+#include <map>
 #include <fstream>
 #include <sstream>
 #include "../libs/CSVparser.h" 
@@ -146,18 +148,28 @@ edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int3
     union_find(el, parent);
 
     int32_t cur_CC = -1;
+    int32_t cnt = 0;
+    std::map<int32_t, int32_t> dic;
+
     for(auto it = el.begin(); it != el.end(); ++it)
     {
-        int CC_id = parent[it->first];
+        int CC_id = find(parent, it->first);
 
         if(CC_id != cur_CC)
         {
             edge_list now_el;
             ret.push_back(now_el);
             cur_CC = CC_id;
+            cnt = 0;
+            dic.clear();
         }
-
-        ret.back().push_back(*it);
+        if(dic.find(it->first) == dic.end())
+            dic[it->first] = cnt++;
+        if(dic.find(it->second) == dic.end())
+            dic[it->second] = cnt++;
+        int32_t from = dic[it->first];
+        int32_t to   = dic[it->second];
+        ret.back().push_back(pair<int32_t, int32_t>(from, to));
     }
 
     return ret;

@@ -4,6 +4,7 @@
  *  @brief    Some utility implementations.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/11/16 - instroduced vet to string and string to vec functions 
  *  stplaydog   08/02/15 - Creation
 **/
 
@@ -137,9 +138,9 @@ public:
     template <typename T, typename L>
     static void vec_vec_pair_to_string(const vector<vector<pair<T, L>>> &v, string &ret)
     {
-        string tmp;
         for(auto it = v.begin(); it != v.end(); )
         {
+            string tmp;
             auto cur = it++;
             if(it != v.end())
             {
@@ -174,9 +175,9 @@ public:
     template <typename T>
     static void vec_vec_to_string(const vector<vector<T>> &v, string &ret)
     {
-        string tmp;
         for(auto it = v.begin(); it != v.end(); )
         {
+            string tmp;
             auto cur = it++;
             if(it != v.end())
             {

@@ -4,6 +4,7 @@
  *  @brief    Unittest of graph utilies.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/11/16 - make everything work
  *  stplaydog   03/27/16 - test NYC crime data 
  *  stplaydog   03/20/16 - When compiling boost::graphviz with gtest, 
  *                         there will be shared_ptr issues, we addressed this isue
@@ -122,29 +123,28 @@ TEST(BGLGraphProperty_2, Success)
 
 TEST(BGLSTModel_1, Success)
 {
-    //string input_file = "../data/truss/ny_crime.csv"; 
-    //CrimeSTModel stm(input_file);
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
 
-    //edge_list_CC el_cc = stm.build_edge_list_CC(200, 200, 30);
+    edge_list_CC el_cc = stm.build_edge_list_CC(200, 200, 30);
 
-    //Stats::instance()->m_application = "stmodel";    
+    Stats::instance()->m_application = "stmodel";    
+    Stats::instance()->m_outFile     = "./stats.txt";    
 
-    //for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
-    //{
-    //    BGL g(*it);
-    //    
-    //    // set numV, numE, numCC
-    //    
-    //    g.floyd_warshall();
-    //    g.clustering_coeff();
-    //    g.betweeness_centrality();
-    //    g.all_cliques();
-    //}
+    for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
+    {
+        BGL g(*it);
+        
+        g.floyd_warshall();
+        g.clustering_coeff();
+        g.betweeness_centrality();
+        g.all_cliques();
+    }
 
-    //Stats::instance()->serialize();
+    Stats::instance()->serialize();
 
-    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/bgl/nycrime_stats.txt", "./stats.txt"), 
-    //        TstUtil::OPTKIT_TEST_PASS); 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/bgl/nycrime_stats.txt", "./stats.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
-    //std::remove("./stats.txt");
+    std::remove("./stats.txt");
 }
