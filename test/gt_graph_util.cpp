@@ -4,6 +4,7 @@
  *  @brief    Unittest of graph utilies.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/11/16 - make everything work
  *  stplaydog   03/27/16 - test NYC crime data 
  *  stplaydog   03/20/16 - When compiling boost::graphviz with gtest, 
  *                         there will be shared_ptr issues, we addressed this isue

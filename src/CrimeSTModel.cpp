@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/11/16 - fix a bug in union find algorithm
  *  stplaydog   03/27/16 - add union find related functions 
  *  stplaydog   03/03/16 - add function to intepret CC files
  *  stplaydog   02/12/16 - add build_edges 

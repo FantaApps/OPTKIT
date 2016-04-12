@@ -4,6 +4,7 @@
  *  @brief    Some utility implementations.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/11/16 - instroduced vet to string and string to vec functions 
  *  stplaydog   08/02/15 - Creation
 **/
 
