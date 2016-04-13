@@ -113,6 +113,44 @@ TEST(NYCrimeDataTest_1, Success)
 }
 
 /**
+ * @brief   Test building graph from edge list, and test vertex mapping 
+ *
+**/
+TEST(NYCrimeDataTest_2, Success)
+{
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
+
+    edge_list edges = stm.build_edges(200, 200, 30);
+    stm.serialize_edges(edges);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_edges1.txt", "./crime_edges.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./crime_edges.txt");
+    
+    stm.serialize();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_st1.txt", "./crime_data.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./crime_data.txt");
+
+    // now test graph generation and truss decomposition
+    CSR g(edges);
+
+    Truss t(g.get_num_e(), g.get_num_c());
+
+    t.truss_decomosition(g, "truss.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_truss_alg1_1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    // also do some real data validation
+    stm.interpret_CC("./truss.txt", "./truss_stmodel.txt");
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/ny_crime_truss_stmodel_1.txt", "./truss_stmodel.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./truss.txt");
+    std::remove("./truss_stmodel.txt");
+}
+
+/**
  * @brief   Test stats to serilize to json file 
  *
 **/
