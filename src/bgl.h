@@ -179,6 +179,18 @@ public:
     Adj1 get_adj1() {return m_adj1;}    ///< Another adj graph
     Udir get_udir() {return m_udir;}    ///< undirected graph
 
+    /**
+     * @brief       compute all graph properties
+     *
+    **/
+    void compute_all()
+    {
+        floyd_warshall();
+        clustering_coeff();
+        betweeness_centrality();
+        all_cliques();
+    }
+
 private:
 
     void add_one_edge(int32_t v_from, int32_t v_to, NameMap &nm, map<std::string, UVertex> &verts)

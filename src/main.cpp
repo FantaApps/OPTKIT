@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/12/16 - Usng main, we can collect all basic graph info now.
  *  stplaydog   03/05/16 - Use the new parser 
  *  stplaydog   12/13/15 - Fixed bugs related to print_help() 
  *  stplaydog   08/02/15 - Fixed bugs to make it compile.
@@ -138,6 +139,14 @@ void process(Parser &parser)
             CSR g(edges);
             Truss t(g.get_num_e(), g.get_num_c());
             t.truss_decomosition(g, oufile.c_str(), 5);
+
+            edge_list_CC el_cc = stm.build_edge_list_CC(200, 200, 30);
+            for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
+            {
+                BGL g(*it);
+                g.compute_all();
+            }
+            Stats::instance()->serialize();
         }
         else
         {
