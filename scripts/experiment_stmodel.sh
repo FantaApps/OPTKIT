@@ -17,55 +17,59 @@ DATA_HOME=${SCRIPT_HOME}/../data/
 #
 # For small NY crime test data
 #
-for XY in 100 200 500 1000
+for XY in 100 200 
 do
-    for TIME in 0 30 60 
+    for TIME in 0 30
     do
+        echo process ${DATA_HOME}truss/ny_crime.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
-                             --input ${DATA_HOME}truss/ny_crime.csv  \
-                             --output ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json \
-                             --coord ${XY} ${XY} ${TIME}
+                             -i ${DATA_HOME}truss/ny_crime.csv  \
+                             -o ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json \
+                             -c ${XY} -c ${XY} -c ${TIME}
     done
 done
 
 #
 # For real CHI crime test data
 #
-for XY in 100 200 500 1000
+for XY in 100 200 
 do
-    for TIME in 0 30 60
+    for TIME in 0 30
     do
+        echo process ${DATA_HOME}truss/CHI_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
-                             --input ${DATA_HOME}stmodel/CHI_processed.csv  \
-                             --output ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json \
-                             --coord ${XY} ${XY} ${TIME}
+                             -i ${DATA_HOME}stmodel/CHI_processed.csv  \
+                             -o ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json \
+                             -c ${XY} -c ${XY} -c ${TIME}
     done
 done
 
 #
 # For real DC crime test data
 #
-for XY in 100 200 500 1000
+for XY in 100 200 
 do
-    for TIME in 0 30 60
+    for TIME in 0 30
     do
+        echo process ${DATA_HOME}truss/DC_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
-                             --input ${DATA_HOME}stmodel/DC_processed.csv  \
-                             --output ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json \
-                             --coord ${XY} ${XY} ${TIME}
+                             -i ${DATA_HOME}stmodel/DC_processed.csv  \
+                             -o ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json \
+                             -c ${XY} -c ${XY} -c ${TIME}
     done
 done
 
 #
 # For real NYC crime test data
 #
-for XY in 100 200 500 1000
+for XY in 100 200 
 do
-    for TIME in 0 30 60
+    for TIME in 0 30
     do
+        echo process ${DATA_HOME}truss/NY_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
-                             --input ${DATA_HOME}stmodel/NY_processed.csv  \
-                             --output ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json \
-                             --coord ${XY} ${XY} ${TIME}
+                             -i ${DATA_HOME}stmodel/NY_processed.csv  \
+                             -o ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json \
+                             -c ${XY} -c ${XY} -c ${TIME}
     done
 done

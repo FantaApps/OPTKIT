@@ -20,6 +20,7 @@
 #include <sstream>
 #include "../libs/CSVparser.h" 
 #include "CrimeSTModel.h" 
+#include "Stats.h" 
 #include "utils.h" 
 
 /**
@@ -126,6 +127,11 @@ edge_list CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
         }
     }
 
+    string val = to_string(nodes.size());
+    Stats::instance()->write_content(Stats::NUMV, val); 
+    val = to_string(ret.size());
+    Stats::instance()->write_content(Stats::NUME, val); 
+
     return ret;
 }
 
@@ -171,6 +177,9 @@ edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int3
         int32_t to   = dic[it->second];
         ret.back().push_back(pair<int32_t, int32_t>(from, to));
     }
+
+    string val = to_string(ret.size());
+    Stats::instance()->write_content(Stats::NUMCC, val); 
 
     return ret;
 }
