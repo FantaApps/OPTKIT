@@ -18,6 +18,7 @@ lines = reader.readlines()
 
 
 i = 0
+writer.write("time,x,y,freq,type\n")
 for line in lines:
     items = line.split(",")
     if data_type == "DC" and i != 0:
@@ -31,7 +32,7 @@ for line in lines:
             items2 = items[2].split(" ")
             if len(items2) > 1 and i != 0:
                 timestr = datetime.strptime(items[2].split(" ")[0], "%m/%d/%Y").strftime('%Y/%m/%d')
-                writer.write(timestr+","+items[17]+","+items[18]+",1,"+items[12]+"\n")
+                writer.write(timestr+","+items[17]+","+items[18]+",1,"+items[11]+"\n")
     elif data_type == "CHI":
         if i != 0 and items[15] != '' and items[16] != '':
             timestr = datetime.strptime(items[2].split(" ")[0], "%m/%d/%Y").strftime('%Y/%m/%d')

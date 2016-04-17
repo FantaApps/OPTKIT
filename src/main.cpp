@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/16/16 - Fixed some minor bugs 
  *  stplaydog   04/12/16 - Usng main, we can collect all basic graph info now.
  *  stplaydog   03/05/16 - Use the new parser 
  *  stplaydog   12/13/15 - Fixed bugs related to print_help() 
@@ -28,8 +29,8 @@ void define_arguments(Parser &parser);
 void parse_arguments(Parser &parser, int argc, const char* argv[]);
 void process(Parser &parser);
 
-BoolOption        truss         ('t', "truss",      true , "truss apllication");
-BoolOption        stmodel       ('s', "stmodel",    true , "stmodel application");
+BoolOption        truss         ('t', "truss",      false, "truss apllication");
+BoolOption        stmodel       ('s', "stmodel",    false, "stmodel application");
 StringOption      input         ('i', "input",      true , "input file name");
 StringOption      output        ('o', "output",     true , "output file name");
 StringListOption  coord         ('c', "coord",      false, "spatial temporal coordinates");
@@ -96,16 +97,12 @@ void parse_arguments(Parser &parser, int argc, const char* argv[])
     Config::instance()->set(key, val);
 
     key = "coord";
+    val = "";
     list<string> values = coord.getValue();
-    int i=0;
-    for(auto entry = values.begin(); i<3; i++, ++entry)
-    {
-        if(i>0)
-        {
-            val += ",";
-        }
-        val += *entry;
-    }
+    vector<int> v;
+    for(auto it = values.begin(); it != values.end(); ++it)
+        v.push_back(stoi(*it));
+    Utils::vec_to_string<int>(v, val);
     Config::instance()->set(key, val);
 }
 
