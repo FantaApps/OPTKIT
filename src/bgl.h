@@ -297,7 +297,6 @@ private:
         bron_kerbosch_all_cliques(m_udir, vis);
         string val = ss.str();
         trim_right(val);
-        cout<<val<<endl;
         vector<string> strs;
         split(strs, val, is_any_of("\n"));
         map<int, int> count;
