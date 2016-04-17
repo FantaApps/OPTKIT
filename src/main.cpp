@@ -133,16 +133,26 @@ void process(Parser &parser)
             vector<pair<int32_t, int32_t>> edges = stm.build_edges(stoi(_coord[0]), 
                                                                    stoi(_coord[1]), 
                                                                    stoi(_coord[2]));
+            // compute truss
             CSR g(edges);
             Truss t(g.get_num_e(), g.get_num_c());
             t.truss_decomosition(g, oufile.c_str(), 5);
 
-            edge_list_CC el_cc = stm.build_edge_list_CC(200, 200, 30);
+            // compute bgl related info
+            edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),                                                                          
+                                                        stoi(_coord[1]),                                                                          
+                                                        stoi(_coord[2]));
             for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
             {
                 BGL g(*it);
                 g.compute_all();
             }
+
+            string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
+            Stats::instance()->write_content(Stats::RANGE, range); 
+            
+            Stats::instance()->write_content(Stats::DATANAME, infile); 
+
             Stats::instance()->serialize();
         }
         else
