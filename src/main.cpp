@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/16/16 - Fixed some minor bugs 
  *  stplaydog   04/12/16 - Usng main, we can collect all basic graph info now.
  *  stplaydog   03/05/16 - Use the new parser 
  *  stplaydog   12/13/15 - Fixed bugs related to print_help() 
