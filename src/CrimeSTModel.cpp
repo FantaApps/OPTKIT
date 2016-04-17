@@ -4,8 +4,9 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/17/16 - Fixed a bug for union find algorithm
  *  stplaydog   04/11/16 - fix a bug in union find algorithm
- *  stplaydog   03/27/16 - add union find related functions 
+ *  stplaydog   03/27/16 - add union find related functions
  *  stplaydog   03/03/16 - add function to intepret CC files
  *  stplaydog   02/12/16 - add build_edges 
  *  stplaydog   02/11/16 - add query_list     
@@ -20,7 +21,7 @@
 #include <sstream>
 #include "../libs/CSVparser.h" 
 #include "CrimeSTModel.h" 
-#include "Stats.h" 
+#include "Stats.h"
 #include "utils.h" 
 
 /**
@@ -128,9 +129,9 @@ edge_list CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
     }
 
     string val = to_string(nodes.size());
-    Stats::instance()->write_content(Stats::NUMV, val); 
+    Stats::instance()->write_content(Stats::NUMV, val);
     val = to_string(ret.size());
-    Stats::instance()->write_content(Stats::NUME, val); 
+    Stats::instance()->write_content(Stats::NUME, val);
 
     return ret;
 }
@@ -146,40 +147,51 @@ edge_list CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
 **/
 edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int32_t z_gap)
 {
-    edge_list_CC ret;
+    edge_list_CC                      ret;
+    std::map<int, edge_list>          mp;
+    std::map<int, int>                mp_cnt;
+    std::map<int, std::map<int, int>> mp_dic;
 
     edge_list el = build_edges(x_gap, y_gap, z_gap);
 
     vector<int32_t> parent(nodes.size(), -1);
     union_find(el, parent);
 
-    int32_t cur_CC = -1;
-    int32_t cnt = 0;
-    std::map<int32_t, int32_t> dic;
 
     for(auto it = el.begin(); it != el.end(); ++it)
     {
+        if(it->first > it->second) continue;
+
         int CC_id = find(parent, it->first);
 
-        if(CC_id != cur_CC)
+        if(mp.find(CC_id) == mp.end())
         {
-            edge_list now_el;
-            ret.push_back(now_el);
-            cur_CC = CC_id;
-            cnt = 0;
-            dic.clear();
+            edge_list            now_el;
+            std::map<int, int>   dic;
+
+            mp[CC_id]          = now_el;
+            mp_cnt[CC_id]      = 0;
+            mp_dic[CC_id]      = dic;
         }
-        if(dic.find(it->first) == dic.end())
-            dic[it->first] = cnt++;
-        if(dic.find(it->second) == dic.end())
-            dic[it->second] = cnt++;
-        int32_t from = dic[it->first];
-        int32_t to   = dic[it->second];
-        ret.back().push_back(pair<int32_t, int32_t>(from, to));
+        if(mp_dic[CC_id].find(it->first) == mp_dic[CC_id].end())
+            mp_dic[CC_id][it->first] = mp_cnt[CC_id]++;
+        if(mp_dic[CC_id].find(it->second) == mp_dic[CC_id].end())
+            mp_dic[CC_id][it->second] = mp_cnt[CC_id]++;
+
+        int32_t from = mp_dic[CC_id][it->first];
+        int32_t to   = mp_dic[CC_id][it->second];
+
+        mp[CC_id].push_back(pair<int32_t, int32_t>(from, to));
+        mp[CC_id].push_back(pair<int32_t, int32_t>(to, from));
+    }
+
+    for(auto it = mp.begin(); it != mp.end(); ++it)
+    {
+        ret.push_back(it->second);
     }
 
     string val = to_string(ret.size());
-    Stats::instance()->write_content(Stats::NUMCC, val); 
+    Stats::instance()->write_content(Stats::NUMCC, val);
 
     return ret;
 }
