@@ -14,6 +14,8 @@ SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OPTKIT_HOME=${SCRIPT_HOME}/../src/
 DATA_HOME=${SCRIPT_HOME}/../data/
 
+mkdir -p ${DATA_HOME}/experiments/stmodel/
+
 #
 # For small NY crime test data
 #
