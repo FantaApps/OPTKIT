@@ -62,6 +62,7 @@ int32_t main(int32_t argc , const char *argv[])
  **/
 void define_arguments(Parser &parser)
 {
+    LOG(INFO) << "Define arguments...";
     parser.addOption(truss)
         .addOption(stmodel)
         .addOption(input)
@@ -71,6 +72,7 @@ void define_arguments(Parser &parser)
 
 void parse_arguments(Parser &parser, int argc, const char* argv[])
 {
+    LOG(INFO) << "Parse arguments...";
     vector<string> otherArguments = parser.parse(argc, (char**)argv);
 
     string key, val;
@@ -80,21 +82,25 @@ void parse_arguments(Parser &parser, int argc, const char* argv[])
         key = "application";
         val = "truss";
         Config::instance()->set(key, val);
+        LOG(INFO) << "Application is truss decomposition...";
     }
     else if(stmodel.isSet())
     {
         key = "application";
         val = "stmodel";
         Config::instance()->set(key, val);
+        LOG(INFO) << "Application is Spatial Temporal Crime Model...";
     }
 
     key = "infile";
     val = input.getValue();
     Config::instance()->set(key, val);
+    LOG(INFO) << "Infile: "<<val;
 
     key = "outfile";
     val = output.getValue();
     Config::instance()->set(key, val);
+    LOG(INFO) << "Outfile: "<<val;
 
     key = "coord";
     val = "";
@@ -104,6 +110,8 @@ void parse_arguments(Parser &parser, int argc, const char* argv[])
         v.push_back(stoi(*it));
     Utils::vec_to_string<int>(v, val);
     Config::instance()->set(key, val);
+    LOG(INFO) << "Coord: "<<val;
+
 }
 
 /**
@@ -127,36 +135,51 @@ void process(Parser &parser)
     {
         if(coord.isSet())
         {
+            LOG(INFO) << "Initializing Crime Spatial Temporal model...";
             CrimeSTModel stm(infile.c_str());
+
+            LOG(INFO) << "Building edges based on Crime Spatial Temporal model...";
             string coord_val = Config::instance()->get("coord");
             vector<string> _coord = Utils::split(coord_val, ',');
             vector<pair<int32_t, int32_t>> edges = stm.build_edges(stoi(_coord[0]), 
                                                                    stoi(_coord[1]), 
                                                                    stoi(_coord[2]));
+
+            LOG(INFO) << "Building CSR based on edges...";
             // compute truss
             CSR g(edges);
+
+            LOG(INFO) << "Start initializing truss...";
             Truss t(g.get_num_e(), g.get_num_c());
+
+            LOG(INFO) << "Start performing truss decomposition...";
             t.truss_decomosition(g, oufile.c_str(), 5);
 
+            LOG(INFO) << "Start getting edge list by CC...";
             // compute bgl related info
-            edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),                                                                          
-                                                        stoi(_coord[1]),                                                                          
+            edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),                                                              
+                                                        stoi(_coord[1]),                                                               
                                                         stoi(_coord[2]));
+
+            DLOG(INFO) << "There are "<<el_cc.size()<<"number of CCs in total, start processing...";
+
+            int i=0;
             for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
             {
+                DLOG(INFO) << "computing "<<i++<<"th CC with "<<(*it).size()<<" number of edges...";
                 BGL g(*it);
                 g.compute_all();
             }
 
+            LOG(INFO)<<"Writing results to JSON file...";
             string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
             Stats::instance()->write_content(Stats::RANGE, range); 
-            
             Stats::instance()->write_content(Stats::DATANAME, infile); 
-
             Stats::instance()->serialize();
         }
         else
         {
+            LOG(ERROR)<<"Coordinates are not specified!";
             fprintf(stderr, "You should specify coordiates!\n");
             ERROR_PRINT();
         }
