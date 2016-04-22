@@ -111,6 +111,8 @@ CSR::CSR(const char *in_file)
     /* Frees */
     delete [] idx;
     fclose(reader);
+
+    DLOG(INFO) << "Finished initializing CSR";
 }
 
 /**
@@ -122,7 +124,7 @@ CSR::CSR(const char *in_file)
 **/
 CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
 {
-    DLOG(INFO) << "Initiating CSR...";
+    DLOG(INFO) << "Sorting edges, number of edges is: "<<edges.size();
 
     sort(edges.begin(), edges.end(), Utils::smaller);
 
@@ -131,6 +133,9 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
     num_v = 0;
     for(uint32_t i=0; i<edges.size(); i++)
     {
+        DLOG_EVERY_N(INFO, 10000)<<"Computing vertex mapping ("
+                                 <<i<<"/"<<edges.size()<<")";
+
         int32_t v_origin = edges[i].first;
         if(dic.find(v_origin) == dic.end())
         {
@@ -141,8 +146,10 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
         count[dic[v_origin]]++;
     }
 
+    DLOG(INFO) << "Allocating data structure..";
     allocate_data_structure(num_v, num_e);
 
+    DLOG(INFO) << "Computing prefix sum..";
     int sum = 0;
     for(int32_t i=0; i<num_v; i++)
     {
@@ -150,6 +157,7 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
         v_idx[0][i] = sum;
     }
     
+    DLOG(INFO) << "Putting edge index..";
     for(uint32_t i=0; i<edges.size(); ++i)    
     {
         e_idx[0][i] = dic[edges[i].second];

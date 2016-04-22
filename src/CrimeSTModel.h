@@ -53,17 +53,13 @@ public:
        in_file(input_file),
        serial_num(0)
     {
-        LOG(INFO) << "Reading data...";
+        LOG(INFO) << "Reading data..";
 
         read_data();
 
-        LOG(INFO) << "Finished reading data...";
-
-        DLOG(INFO) << "Building model...";
+        LOG(INFO) << "Building model..";
 
         build_model();
-
-        DLOG(INFO) << "Finished building model...";
     }
 
     ~CrimeSTModel(){}

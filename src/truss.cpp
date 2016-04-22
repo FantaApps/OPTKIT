@@ -62,10 +62,12 @@ void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32
 
     int32_t k = 3;
 
+    DLOG(INFO)<<"Computing initial support..";
     compute_sup(g, c);
 
     while(g.get_num_e() > 0)
     {
+        DLOG(INFO)<<"Executing support reduction operation of k="<<k;
         while(sup_e_opr(g, k));
 
         if(g.get_num_e() > 0)
@@ -135,6 +137,9 @@ void Truss::compute_sup(CSR &g, int32_t c)
 {
     for(int32_t i=0; i<g.get_num_v(); i++)
     {
+        DLOG_EVERY_N(INFO, 10000)<<"Computing suuport of vertex ("<<i
+                                 <<"/"<<g.get_num_v()<<")";
+
         pair<int32_t, int32_t> rg1 = g.get_e_range(i);
         for(int32_t j=rg1.first; j<rg1.second; j++)
         {
@@ -160,6 +165,9 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
     bool ret = false;
     for(int32_t i=0; i<g.get_num_v(); ++i)
     {
+        DLOG_EVERY_N(INFO, 10000)<<"Execute support operation of vertex ("<<i
+                                 <<"/"<<g.get_num_v()<<")";
+
         pair<int32_t, int32_t> rg = g.get_e_range(i);
 
         for(int32_t j=rg.first; j<rg.second; ++j)
@@ -178,8 +186,10 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
         }
     }
 
+    DLOG(INFO)<<"Reconstructing graph..";
     g.reconstruct();
 
+    DLOG(INFO)<<"Reordering support array..";
     /* moving elements in e_sup */
     int32_t cur=0, nxt=0;
     while(nxt < num_e)
