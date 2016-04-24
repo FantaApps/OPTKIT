@@ -6,6 +6,7 @@
 # @brief    This script runs experiment for stmodel 
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   04/24/16 - Add logger support 
 #   stplaydog   04/16/16 - Add real data support 
 #   stplaydog   03/05/16 - Creation
 #
@@ -27,7 +28,8 @@ do
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}truss/ny_crime.csv  \
                              -o ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json \
-                             -c ${XY} -c ${XY} -c ${TIME}
+                             -c ${XY} -c ${XY} -c ${TIME} \
+                             -l ny_crime_${XY}_${XY}_${TIME}_
     done
 done
 
@@ -42,7 +44,8 @@ do
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/CHI_processed.csv  \
                              -o ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json \
-                             -c ${XY} -c ${XY} -c ${TIME}
+                             -c ${XY} -c ${XY} -c ${TIME} \
+                             -l CHI_${XY}_${XY}_${TIME}_
     done
 done
 
@@ -57,7 +60,8 @@ do
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/DC_processed.csv  \
                              -o ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json \
-                             -c ${XY} -c ${XY} -c ${TIME}
+                             -c ${XY} -c ${XY} -c ${TIME} \
+                             -l DC_${XY}_${XY}_${TIME}_
     done
 done
 
@@ -72,6 +76,7 @@ do
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/NY_processed.csv  \
                              -o ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json \
-                             -c ${XY} -c ${XY} -c ${TIME}
+                             -c ${XY} -c ${XY} -c ${TIME} \
+                             -l NY_${XY}_${XY}_${TIME}_
     done
 done

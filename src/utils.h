@@ -4,6 +4,7 @@
  *  @brief    Some utility implementations.
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/24/16 - Add check_create_dir 
  *  stplaydog   04/11/16 - instroduced vet to string and string to vec functions 
  *  stplaydog   08/02/15 - Creation
 **/
@@ -31,6 +32,8 @@
 #include <vector>
 #include <glog/logging.h>
 #include <boost/lexical_cast.hpp>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 
 #define RED     "\x1b[31m"
@@ -203,6 +206,19 @@ public:
         }
         
     }
+
+    static int check_create_dir(const char *path)
+    {
+        struct stat info;
+
+        if(stat( path, &info ) != 0)
+            return 0;
+        else if(info.st_mode & S_IFDIR)
+            return 1;
+        else
+            return 0;
+    }
+
 
     /**
      * @brief       used for sorting pairs

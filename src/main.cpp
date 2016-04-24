@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   04/24/16 - Add logger support 
  *  stplaydog   04/16/16 - Fixed some minor bugs 
  *  stplaydog   04/12/16 - Usng main, we can collect all basic graph info now.
  *  stplaydog   03/05/16 - Use the new parser 
@@ -25,12 +26,22 @@
 #include <getopt.h>
 #include "../libs/Parser.h"
 
+#ifdef WINDOWS
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+#endif
+
+void set_logger();
 void define_arguments(Parser &parser);
-void parse_arguments(Parser &parser, int argc, const char* argv[]);
+void parse_arguments(Parser &parser);
 void process(Parser &parser);
 
 BoolOption        truss         ('t', "truss",      false, "truss apllication");
 BoolOption        stmodel       ('s', "stmodel",    false, "stmodel application");
+StringOption      logger        ('l', "logger",     false, "log file name");
 StringOption      input         ('i', "input",      true , "input file name");
 StringOption      output        ('o', "output",     true , "output file name");
 StringListOption  coord         ('c', "coord",      false, "spatial temporal coordinates");
@@ -42,17 +53,63 @@ StringListOption  coord         ('c', "coord",      false, "spatial temporal coo
 **/
 int32_t main(int32_t argc , const char *argv[])
 {
-    google::InitGoogleLogging("optkit");
-    LOG(INFO) << "Initiating OPTKIT...";
-
     Parser parser;
     define_arguments(parser);
-    parse_arguments(parser, argc, argv);
+    vector<string> otherArguments = parser.parse(argc, (char**)argv);
+
+    set_logger();
+
+    parse_arguments(parser);
     process(parser);
 
-    BGL bgl;
-
     return 1;
+}
+
+/**
+ * @brief   Set up google log, it does following things:
+ *          1) determine the logging folder, which is in OPTKIT/log;
+ *          2) If folder does not exist, create one;
+ *          3) If log file name is specified, use this name, else just use folder.
+ *
+ * @return N/A
+**/
+void set_logger()
+{
+    char cCurrentPath[FILENAME_MAX];
+    if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+    {
+        ERROR_PRINT();
+    }
+    cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
+    char *optkitPath = strstr(cCurrentPath, "OPTKIT") + 6;
+    *optkitPath = '\0';
+    string log_dir = cCurrentPath;
+    log_dir += "/log/";
+
+    if(!Utils::check_create_dir(log_dir.c_str()))
+    {
+        string mkdir_expr = "mkdir -p ";
+        mkdir_expr       += log_dir;
+        const int dir_err = system(mkdir_expr.c_str());
+        if (-1 == dir_err)
+        {
+            printf("Error creating directory!n");
+            ERROR_PRINT();
+        }
+    }
+
+    if(logger.isSet())
+    {
+        log_dir += logger.getValue(); 
+        google::SetLogDestination(google::INFO, log_dir.c_str());
+    }
+    else
+    {
+        FLAGS_log_dir = log_dir.c_str();
+    }
+
+    google::InitGoogleLogging("optkit");
+    LOG(INFO) << "Initiating OPTKIT...";
 }
 
 /**
@@ -62,18 +119,17 @@ int32_t main(int32_t argc , const char *argv[])
  **/
 void define_arguments(Parser &parser)
 {
-    LOG(INFO) << "Define arguments...";
     parser.addOption(truss)
         .addOption(stmodel)
         .addOption(input)
         .addOption(output)
+        .addOption(logger)
         .addOption(coord);
 }
 
-void parse_arguments(Parser &parser, int argc, const char* argv[])
+void parse_arguments(Parser &parser)
 {
     LOG(INFO) << "Parse arguments...";
-    vector<string> otherArguments = parser.parse(argc, (char**)argv);
 
     string key, val;
 
