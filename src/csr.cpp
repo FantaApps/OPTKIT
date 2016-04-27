@@ -133,9 +133,6 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
     num_v = 0;
     for(uint32_t i=0; i<edges.size(); i++)
     {
-        DLOG_EVERY_N(INFO, 10000)<<"Computing vertex mapping ("
-                                 <<i<<"/"<<edges.size()<<")";
-
         int32_t v_origin = edges[i].first;
         if(dic.find(v_origin) == dic.end())
         {

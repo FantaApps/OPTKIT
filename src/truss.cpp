@@ -137,9 +137,6 @@ void Truss::compute_sup(CSR &g, int32_t c)
 {
     for(int32_t i=0; i<g.get_num_v(); i++)
     {
-        DLOG_EVERY_N(INFO, 10000)<<"Computing suuport of vertex ("<<i
-                                 <<"/"<<g.get_num_v()<<")";
-
         pair<int32_t, int32_t> rg1 = g.get_e_range(i);
         for(int32_t j=rg1.first; j<rg1.second; j++)
         {
@@ -165,9 +162,6 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
     bool ret = false;
     for(int32_t i=0; i<g.get_num_v(); ++i)
     {
-        DLOG_EVERY_N(INFO, 10000)<<"Execute support operation of vertex ("<<i
-                                 <<"/"<<g.get_num_v()<<")";
-
         pair<int32_t, int32_t> rg = g.get_e_range(i);
 
         for(int32_t j=rg.first; j<rg.second; ++j)

@@ -35,7 +35,6 @@ void CrimeSTModel::read_data()
 
     for(uint32_t i=0; i<file.rowCount(); i++)
     {
-        DLOG_EVERY_N(INFO, 10000)<<"Reading data of ("<<i<<"/"<<file.rowCount()<<")";
         Node n;
 
         n.id = serial_num++;
@@ -57,7 +56,6 @@ void CrimeSTModel::build_model()
 {
     for(uint32_t i=0; i<nodes.size(); i++)
     {
-        DLOG_EVERY_N(INFO, 10000)<<"Inserting point of ("<<i<<"/"<<nodes.size()<<")";
         rt.Insert(nodes[i].coord, nodes[i].coord, &(nodes[i]));
     } 
 }
@@ -120,10 +118,6 @@ edge_list CrimeSTModel::build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap)
         max[0] = n.coord[0] + x_gap; max[1] = n.coord[1] + y_gap; max[2] = n.coord[2] + z_gap;
 
         vector<int32_t> v = query_list(min, max);
-
-        DLOG_EVERY_N(INFO, 10000)<<"Building edge for v ("<<n.id<<"/"
-                                 <<nodes.size()<<") with "<<v.size()
-                                 <<" number of edges";
 
         for(auto i = v.begin(); i != v.end(); ++i)
         {

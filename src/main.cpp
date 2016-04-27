@@ -217,12 +217,10 @@ void process(Parser &parser)
                                                         stoi(_coord[1]),                                                               
                                                         stoi(_coord[2]));
 
-            DLOG(INFO) << "There are "<<el_cc.size()<<"number of CCs in total, start processing...";
+            DLOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
 
-            int i=0;
             for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
             {
-                DLOG(INFO) << "computing "<<i++<<"th CC with "<<(*it).size()<<" number of edges...";
                 BGL g(*it);
                 g.compute_all();
             }
@@ -230,6 +228,8 @@ void process(Parser &parser)
             LOG(INFO)<<"Writing results to JSON file...";
             string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
             Stats::instance()->write_content(Stats::RANGE, range); 
+            string girth_val = "1000";
+            Stats::instance()->write_content(Stats::GIRTH, girth_val); 
             Stats::instance()->write_content(Stats::DATANAME, infile); 
             Stats::instance()->serialize();
         }
