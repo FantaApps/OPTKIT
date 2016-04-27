@@ -6,6 +6,7 @@
 # @brief    This script runs experiment for stmodel 
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   04/27/16 - Add upload result script 
 #   stplaydog   04/24/16 - Add logger support 
 #   stplaydog   04/16/16 - Add real data support 
 #   stplaydog   03/05/16 - Creation
@@ -30,6 +31,7 @@ do
                              -o ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l ny_crime_${XY}_${XY}_${TIME}_
+        python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json
     done
 done
 
@@ -46,6 +48,7 @@ do
                              -o ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l CHI_${XY}_${XY}_${TIME}_
+        python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json
     done
 done
 
@@ -62,6 +65,7 @@ do
                              -o ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l DC_${XY}_${XY}_${TIME}_
+        python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json
     done
 done
 
@@ -78,5 +82,6 @@ do
                              -o ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l NY_${XY}_${XY}_${TIME}_
+        python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json
     done
 done

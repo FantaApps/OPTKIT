@@ -228,6 +228,8 @@ void process(Parser &parser)
             LOG(INFO)<<"Writing results to JSON file...";
             string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
             Stats::instance()->write_content(Stats::RANGE, range); 
+            string girth_val = "1000";
+            Stats::instance()->write_content(Stats::GIRTH, girth_val); 
             Stats::instance()->write_content(Stats::DATANAME, infile); 
             Stats::instance()->serialize();
         }
