@@ -62,12 +62,12 @@ void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32
 
     int32_t k = 3;
 
-    DLOG(INFO)<<"Computing initial support..";
+    LOG(INFO)<<"Computing initial support..";
     compute_sup(g, c);
 
     while(g.get_num_e() > 0)
     {
-        DLOG(INFO)<<"Executing support reduction operation of k="<<k;
+        LOG(INFO)<<"Executing support reduction operation of k="<<k;
         while(sup_e_opr(g, k));
 
         if(g.get_num_e() > 0)
@@ -180,10 +180,10 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
         }
     }
 
-    DLOG(INFO)<<"Reconstructing graph..";
+    LOG(INFO)<<"Reconstructing graph..";
     g.reconstruct();
 
-    DLOG(INFO)<<"Reordering support array..";
+    LOG(INFO)<<"Reordering support array..";
     /* moving elements in e_sup */
     int32_t cur=0, nxt=0;
     while(nxt < num_e)

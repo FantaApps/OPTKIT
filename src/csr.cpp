@@ -35,7 +35,7 @@ CSR::CSR(const char *in_file)
     int32_t color = OPTKIT_NULL;
     int32_t sum   = 0;
 
-    DLOG(INFO) << "Initiating CSR...";
+    LOG(INFO) << "Initiating CSR...";
 
     /* Read the head information, 
        and allocate according variables */
@@ -112,7 +112,7 @@ CSR::CSR(const char *in_file)
     delete [] idx;
     fclose(reader);
 
-    DLOG(INFO) << "Finished initializing CSR";
+    LOG(INFO) << "Finished initializing CSR";
 }
 
 /**
@@ -124,7 +124,7 @@ CSR::CSR(const char *in_file)
 **/
 CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
 {
-    DLOG(INFO) << "Sorting edges, number of edges is: "<<edges.size();
+    LOG(INFO) << "Sorting edges, number of edges is: "<<edges.size();
 
     sort(edges.begin(), edges.end(), Utils::smaller);
 
@@ -143,10 +143,10 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
         count[dic[v_origin]]++;
     }
 
-    DLOG(INFO) << "Allocating data structure..";
+    LOG(INFO) << "Allocating data structure..";
     allocate_data_structure(num_v, num_e);
 
-    DLOG(INFO) << "Computing prefix sum..";
+    LOG(INFO) << "Computing prefix sum..";
     int sum = 0;
     for(int32_t i=0; i<num_v; i++)
     {
@@ -154,7 +154,7 @@ CSR::CSR(vector<pair<int32_t, int32_t>> &edges)
         v_idx[0][i] = sum;
     }
     
-    DLOG(INFO) << "Putting edge index..";
+    LOG(INFO) << "Putting edge index..";
     for(uint32_t i=0; i<edges.size(); ++i)    
     {
         e_idx[0][i] = dic[edges[i].second];

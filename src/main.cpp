@@ -218,7 +218,7 @@ void process(Parser &parser)
                 Truss t(g1.get_num_e(), g1.get_num_c());
 
                 LOG(INFO) << "Start performing truss decomposition...";
-                string CC_truss_out = oufile + "_" + to_string(i) + ".txt"
+                string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
                 t.truss_decomosition(g1, oufile.c_str(), 5);
 
                 LOG(INFO) << "Start performing graph computations...";

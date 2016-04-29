@@ -129,7 +129,7 @@ public:
         int32_t v_to  = OPTKIT_NULL;
         int32_t color = OPTKIT_NULL;
 
-        DLOG(INFO) << "Initiating BGL...";
+        LOG(INFO) << "Initiating BGL...";
 
         /* Read the head information, 
            and allocate according variables */
