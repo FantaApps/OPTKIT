@@ -29,7 +29,7 @@
 **/
 void CrimeSTModel::read_data()
 {
-    DLOG(INFO)<<"Initializing CSV Parser..";
+    LOG(INFO)<<"Initializing CSV Parser..";
     csv::Parser file = csv::Parser(in_file.c_str());
     struct tm tm;
 
@@ -153,15 +153,15 @@ edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int3
     std::map<int, int>                mp_cnt;
     std::map<int, std::map<int, int>> mp_dic;
 
-    DLOG(INFO) << "Let build edge list first..";
+    LOG(INFO) << "Let's build edge list first..";
     edge_list el = build_edges(x_gap, y_gap, z_gap);
 
-    DLOG(INFO) << "Execute union find algorithm..";
+    LOG(INFO) << "Execute union find algorithm..";
     vector<int32_t> parent(nodes.size(), -1);
     union_find(el, parent);
 
     
-    DLOG(INFO) << "Build edge list based on connected components..";
+    LOG(INFO) << "Build edge list based on connected components..";
     for(auto it = el.begin(); it != el.end(); ++it)
     {
         if(it->first > it->second) continue;

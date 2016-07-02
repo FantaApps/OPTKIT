@@ -155,6 +155,7 @@ void parse_arguments(Parser &parser)
 
     key = "outfile";
     val = output.getValue();
+    val += ".json";
     Config::instance()->set(key, val);
     LOG(INFO) << "Outfile: "<<val;
 
@@ -194,33 +195,33 @@ void process(Parser &parser)
             LOG(INFO) << "Initializing Crime Spatial Temporal model...";
             CrimeSTModel stm(infile.c_str());
 
-            LOG(INFO) << "Building edges based on Crime Spatial Temporal model...";
             string coord_val = Config::instance()->get("coord");
             vector<string> _coord = Utils::split(coord_val, ',');
-            vector<pair<int32_t, int32_t>> edges = stm.build_edges(stoi(_coord[0]), 
-                                                                   stoi(_coord[1]), 
-                                                                   stoi(_coord[2]));
-
-            LOG(INFO) << "Building CSR based on edges...";
-            // compute truss
-            CSR g(edges);
-
-            LOG(INFO) << "Start initializing truss...";
-            Truss t(g.get_num_e(), g.get_num_c());
-
-            LOG(INFO) << "Start performing truss decomposition...";
-            t.truss_decomosition(g, oufile.c_str(), 5);
 
             LOG(INFO) << "Start getting edge list by CC...";
             // compute bgl related info
-            edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),                                                              
-                                                        stoi(_coord[1]),                                                               
+            edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),
+                                                        stoi(_coord[1]),
                                                         stoi(_coord[2]));
 
-            DLOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
-
-            for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
+            LOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
+            
+            int i=0;
+            for(auto it = el_cc.begin(); it != el_cc.end(); ++it, i++)
             {
+                LOG(INFO)<<"Computing the "<<i<<"th CC...";
+                // compute truss
+                LOG(INFO) << "Building CSR based on edges...";
+                CSR g1(*it);
+
+                LOG(INFO) << "Start initializing truss...";
+                Truss t(g1.get_num_e(), g1.get_num_c());
+
+                LOG(INFO) << "Start performing truss decomposition...";
+                string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
+                t.truss_decomosition(g1, oufile.c_str(), 5);
+
+                LOG(INFO) << "Start performing graph computations...";
                 BGL g(*it);
                 g.compute_all();
             }

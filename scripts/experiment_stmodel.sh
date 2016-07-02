@@ -28,7 +28,7 @@ do
         echo process ${DATA_HOME}truss/ny_crime.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}truss/ny_crime.csv  \
-                             -o ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json \
+                             -o ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME} \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l ny_crime_${XY}_${XY}_${TIME}_
         python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/ny_crime_${XY}_${XY}_${TIME}.json
@@ -45,7 +45,7 @@ do
         echo process ${DATA_HOME}truss/CHI_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/CHI_processed.csv  \
-                             -o ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json \
+                             -o ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME} \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l CHI_${XY}_${XY}_${TIME}_
         python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME}.json
@@ -62,7 +62,7 @@ do
         echo process ${DATA_HOME}truss/DC_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/DC_processed.csv  \
-                             -o ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json \
+                             -o ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME} \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l DC_${XY}_${XY}_${TIME}_
         python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME}.json
@@ -79,7 +79,7 @@ do
         echo process ${DATA_HOME}truss/NY_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/NY_processed.csv  \
-                             -o ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json \
+                             -o ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME} \
                              -c ${XY} -c ${XY} -c ${TIME} \
                              -l NY_${XY}_${XY}_${TIME}_
         python ${SCRIPT_HOME}/OPTKITLoadData.py ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME}.json
