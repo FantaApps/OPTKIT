@@ -172,10 +172,9 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
                 if(i < to)
                 {
                     reduce_one_edge(g, i, to);
+                    g.remove_e_by_v(i, to);
+                    ret = true;
                 }
-                g.remove_e_by_eidx(j);
-                e_sup[c][j] = -1;
-                ret = true;
             }
         }
     }
@@ -223,5 +222,23 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
     for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
     {
         --e_sup[c][*it];
+    }
+
+    pair<int32_t, int32_t> rg1 = g.get_e_range(u);
+    for(int i=rg1.first; i<rg1.second; i++)
+    {
+        if(g.get_to_v(i) == v)
+        {
+            e_sup[c][i] = -1;
+        }
+    }
+
+    pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+    for(int i=rg2.first; i<rg2.second; i++)
+    {
+        if(g.get_to_v(i) == u)
+        {
+            e_sup[c][i] = -1;
+        }
     }
 }
