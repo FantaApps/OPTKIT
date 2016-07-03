@@ -70,6 +70,8 @@ public:
 
     int32_t get_to_v(int32_t pos, int32_t c = 0);
 
+    int32_t search_to_v(int32_t from, int32_t to, int32_t c = 0);
+
     pair<int32_t, int32_t> get_e_range(int32_t v, int32_t c = 0);
 
     bool remove_e(int32_t from, int32_t to, int c = 0);

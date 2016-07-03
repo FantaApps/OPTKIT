@@ -225,21 +225,11 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
         --e_sup[c][*it];
     }
 
-    pair<int32_t, int32_t> rg1 = g.get_e_range(u);
-    pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+    int32_t from_e = g.search_to_v(u, v);
+    int32_t to_e   = g.search_to_v(v, u);
 
-    auto cmp = [](const void* a, const void* b)
-    {
-        return (int) ((*(int32_t*)a) == (*(int32_t*)b));
-    };
-
-    int32_t from_e = *(int32_t*)bsearch(&v, e_sup[c], rg1.second - rg1.first,  
-                                  sizeof(int32_t), 
-                                   cmp);
-    int32_t to_e = *(int32_t*)bsearch(&u, e_sup[c], rg2.second - rg2.first,  
-                                  sizeof(int32_t), 
-                                   cmp);
-
-    e_sup[c][from_e] = -1;
-    e_sup[c][to_e]   = -1;
+    if(from_e != -1)
+        e_sup[c][from_e] = -1;
+    if(to_e != -1)
+        e_sup[c][to_e]   = -1;
 }

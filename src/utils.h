@@ -243,6 +243,21 @@ public:
             return false;
         }
     }
+
+    static int bsearch(int *A, int N, int value) {
+        int low = 0;
+        int high = N - 1;
+        while (low <= high) {
+            int mid = low + ((high - low) / 2);
+            if (A[mid] > value)
+                high = mid - 1;
+            else if (A[mid] < value)
+                low = mid + 1;
+            else
+                return mid; // found
+        }
+        return -1; // not found
+    }
 };
 
 #endif
