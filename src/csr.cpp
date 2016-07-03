@@ -351,7 +351,16 @@ int32_t CSR::get_to_v(int32_t pos, int32_t c)
     return e_idx[c][pos];
 }
 
-int32_t CSR::search_to_v(int32_t from, int32_t to, int32_t c)
+/**
+ * @brief   given from and to vertex, search the according edge index
+ *
+ * @param[in]       from        from vertex
+ * @param[in]       to          to vertex
+ * @paran[c]        c           which color
+ *
+ * @return      index
+**/
+int32_t CSR::search_e(int32_t from, int32_t to, int32_t c)
 {
     pair<int32_t, int32_t> rg1 = get_e_range(from);
     int32_t ret = Utils::bsearch(e_idx[c] + rg1.first, 
@@ -425,20 +434,54 @@ void CSR::reconstruct(int32_t c)
  * @return      Ture if there is such an edge to be removed
  *              else return false.
 **/
-bool CSR::remove_e(int32_t from, int32_t to, int c)
+bool CSR::remove_e_by_v(int32_t from, int32_t to, int c)
 {
-    int32_t from_e = search_to_v(from, to); 
-    int32_t to_e   = search_to_v(to,from); 
+    int8_t find = 0;
+    pair<int32_t, int32_t> rg_from = get_e_range(from, c); 
+    pair<int32_t, int32_t> rg_to   = get_e_range(to, c); 
 
-    if(from_e != -1)
-        e_idx[c][from_e] = RMVD;
-    if(to_e != -1)
-        e_idx[c][to_e] = RMVD;
+    for(int32_t i=rg_from.first; i<rg_from.second; ++i)
+    {
+        if(e_idx[c][i] == to)
+        {
+            e_idx[c][i] = RMVD;
+            ++find;
+        }
+    }
 
-    if(from_e != -1 && to_e != -1)
+    for(int32_t i=rg_to.first; i<rg_to.second; ++i)
+    {
+        if(e_idx[c][i] == from)
+        {
+            e_idx[c][i] = RMVD;
+            ++find;
+        }
+    }
+
+    if(find == 2)
         return true;
     return false;
 }
+
+/**
+ * @brief       Remove one edge
+ *
+ * @param[in]       e_id        which e
+ * @param[in]       c           which color
+ *
+ * @return      Ture if there is such an edge to be removed
+ *              else return false.
+**/
+bool CSR::remove_e_by_eidx(int32_t e_id, int c)
+{
+    if(e_id < num_e)
+    {
+        e_idx[c][e_id] = -1;
+        return true;
+    }
+    return false;
+}
+
 
 /**
  * @brief   output the truss as connected components

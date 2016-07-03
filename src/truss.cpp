@@ -172,10 +172,10 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
                 if(i < to)
                 {
                     reduce_one_edge(g, i, to);
-                    g.remove_e(i, to);
-
-                    ret = true;
                 }
+                g.remove_e_by_eidx(j);
+                e_sup[c][j] = -1;
+                ret = true;
             }
         }
     }
@@ -224,12 +224,4 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
     {
         --e_sup[c][*it];
     }
-
-    int32_t from_e = g.search_to_v(u, v);
-    int32_t to_e   = g.search_to_v(v, u);
-
-    if(from_e != -1)
-        e_sup[c][from_e] = -1;
-    if(to_e != -1)
-        e_sup[c][to_e]   = -1;
 }
