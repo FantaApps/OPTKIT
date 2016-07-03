@@ -221,28 +221,33 @@ void Stats::serialize_stmodel()
 
     Object gp;
     Utils::vec_to_string<int>(m_gProperty.m_numV, tmp);
-    gp["numV"]         = tmp; tmp = "";
+    gp["numV"]         = tmp == "" ? "1" : tmp; 
+    tmp = "";
     Utils::vec_to_string<int>(m_gProperty.m_numE, tmp);
-    gp["numE"]         = tmp; tmp = "";
+    gp["numE"]         = tmp == "" ? "1" : tmp; 
+    tmp = "";
     gp["numCC"]        = m_gProperty.m_numCC;
     Utils::vec_to_string<int>(m_gProperty.m_diameter, tmp);
-    gp["diameter"]     = tmp; tmp = "";
+    gp["diameter"]     = tmp == "" ? "1" : tmp; 
+    tmp = "";
     Utils::vec_to_string<int>(m_gProperty.m_girth, tmp);
-    gp["girth"]        = tmp; tmp = "";
+    gp["girth"]        = tmp == "" ? "1" : tmp; 
+    tmp = "";
     Utils::vec_to_string<double>(m_gProperty.m_clusterCoeff, tmp);
-    gp["clusterCoeff"] = tmp; tmp = "";
+    gp["clusterCoeff"] = tmp == "" ? "1" : tmp; 
+    tmp = "";
 
     string bc;
     Utils::vec_vec_to_string<double>(m_gProperty.m_betweenCentrl, bc);
-    gp["betweenCentrl"] = bc;
+    gp["betweenCentrl"] = bc == "" ? "1" : bc;
 
     string allCC;
     Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numClique, allCC);
-    gp["clique"] = allCC;
+    gp["clique"] = allCC == "" ? "1" : allCC;
 
     string truss;
     Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numTruss, truss);
-    gp["truss"] = truss;
+    gp["truss"] = truss == "" ? "1" : truss;
 
     content["graph property"] = gp;
     

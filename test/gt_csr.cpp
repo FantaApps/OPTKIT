@@ -146,10 +146,10 @@ TEST(ReconstructTest_1, Success)
     /* Some basic setup */
     CSR g("../data/MC/janc.gr");
 
-    ASSERT_EQ(g.remove_e(0, 6), true);
-    ASSERT_EQ(g.remove_e(3, 7), true);
-    ASSERT_EQ(g.remove_e(2, 5), true);
-    ASSERT_EQ(g.remove_e(2, 5), false);
+    ASSERT_EQ(g.remove_e_by_v(0, 6), true);
+    ASSERT_EQ(g.remove_e_by_v(3, 7), true);
+    ASSERT_EQ(g.remove_e_by_v(2, 5), true);
+    ASSERT_EQ(g.remove_e_by_v(2, 5), false);
 
     g.reconstruct();
 
@@ -171,12 +171,12 @@ TEST(OutputAllCCTest_1, Success)
     /* Some basic setup */
     CSR g("../data/MC/janc.gr");
 
-    ASSERT_EQ(g.remove_e(0, 3), true);
-    ASSERT_EQ(g.remove_e(0, 6), true);
-    ASSERT_EQ(g.remove_e(1, 4), true);
-    ASSERT_EQ(g.remove_e(1, 6), true);
-    ASSERT_EQ(g.remove_e(2, 5), true);
-    ASSERT_EQ(g.remove_e(2, 6), true);
+    ASSERT_EQ(g.remove_e_by_v(0, 3), true);
+    ASSERT_EQ(g.remove_e_by_v(0, 6), true);
+    ASSERT_EQ(g.remove_e_by_v(1, 4), true);
+    ASSERT_EQ(g.remove_e_by_v(1, 6), true);
+    ASSERT_EQ(g.remove_e_by_v(2, 5), true);
+    ASSERT_EQ(g.remove_e_by_v(2, 6), true);
 
     g.reconstruct();
     ASSERT_EQ(g.get_num_e(), 14);
@@ -203,18 +203,18 @@ TEST(ReconstructTest_2, Success)
     /* Some basic setup */
     CSR g("../data/MC/jwang.gr");
 
-    ASSERT_EQ(g.remove_e(3, 7),   true);
-    ASSERT_EQ(g.remove_e(3, 9),   true);
-    ASSERT_EQ(g.remove_e(3, 17),  true);
-    ASSERT_EQ(g.remove_e(0, 3),   true);
+    ASSERT_EQ(g.remove_e_by_v(3, 7),   true);
+    ASSERT_EQ(g.remove_e_by_v(3, 9),   true);
+    ASSERT_EQ(g.remove_e_by_v(3, 17),  true);
+    ASSERT_EQ(g.remove_e_by_v(0, 3),   true);
 
-    ASSERT_EQ(g.remove_e(2, 20),  true);
-    ASSERT_EQ(g.remove_e(7, 20),  true);
-    ASSERT_EQ(g.remove_e(19, 20), true);
-    ASSERT_EQ(g.remove_e(17, 20), true);
+    ASSERT_EQ(g.remove_e_by_v(2, 20),  true);
+    ASSERT_EQ(g.remove_e_by_v(7, 20),  true);
+    ASSERT_EQ(g.remove_e_by_v(19, 20), true);
+    ASSERT_EQ(g.remove_e_by_v(17, 20), true);
 
-    ASSERT_EQ(g.remove_e(13, 17), true);
-    ASSERT_EQ(g.remove_e(6, 17), true);
+    ASSERT_EQ(g.remove_e_by_v(13, 17), true);
+    ASSERT_EQ(g.remove_e_by_v(6, 17), true);
 
     g.reconstruct();
 
