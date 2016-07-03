@@ -419,29 +419,28 @@ void CSR::reconstruct(int32_t c)
 **/
 bool CSR::remove_e(int32_t from, int32_t to, int c)
 {
-    int8_t find = 0;
     pair<int32_t, int32_t> rg_from = get_e_range(from, c); 
     pair<int32_t, int32_t> rg_to   = get_e_range(to, c); 
 
-    for(int32_t i=rg_from.first; i<rg_from.second; ++i)
-    {
-        if(e_idx[c][i] == to)
-        {
-            e_idx[c][i] = RMVD;
-            ++find;
-        }
-    }
 
-    for(int32_t i=rg_to.first; i<rg_to.second; ++i)
+    auto cmp = [](const void* a, const void* b)
     {
-        if(e_idx[c][i] == from)
-        {
-            e_idx[c][i] = RMVD;
-            ++find;
-        }
-    }
+        return (int) ((*(int32_t*)a) == (*(int32_t*)b));
+    };
 
-    if(find == 2)
+    int32_t from_e = *(int32_t*)bsearch(&to, e_idx[c], rg_from.second - rg_from.first,  
+                                  sizeof(int32_t), 
+                                   cmp);
+    int32_t to_e = *(int32_t*)bsearch(&from, e_idx[c], rg_to.second - rg_to.first,  
+                                  sizeof(int32_t), 
+                                   cmp);
+
+    if(from_e)
+        e_idx[c][from_e] = RMVD;
+    if(to_e)
+        e_idx[c][to_e] = RMVD;
+
+    if(from_e && to_e)
         return true;
     return false;
 }

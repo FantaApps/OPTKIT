@@ -42,7 +42,7 @@ for XY in 100 200
 do
     for TIME in 0 30
     do
-        echo process ${DATA_HOME}truss/CHI_processed.csv with x $XY y $XY time $TIME
+        echo process ${DATA_HOME}stmodel/CHI_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/CHI_processed.csv  \
                              -o ${DATA_HOME}experiments/stmodel/CHI_${XY}_${XY}_${TIME} \
@@ -59,7 +59,7 @@ for XY in 100 200
 do
     for TIME in 0 30
     do
-        echo process ${DATA_HOME}truss/DC_processed.csv with x $XY y $XY time $TIME
+        echo process ${DATA_HOME}stmodel/DC_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/DC_processed.csv  \
                              -o ${DATA_HOME}experiments/stmodel/DC_${XY}_${XY}_${TIME} \
@@ -76,7 +76,7 @@ for XY in 100 200
 do
     for TIME in 0 30
     do
-        echo process ${DATA_HOME}truss/NY_processed.csv with x $XY y $XY time $TIME
+        echo process ${DATA_HOME}stmodel/NY_processed.csv with x $XY y $XY time $TIME
         ${OPTKIT_HOME}optkit --stmodel                               \
                              -i ${DATA_HOME}stmodel/NY_processed.csv  \
                              -o ${DATA_HOME}experiments/stmodel/NY_${XY}_${XY}_${TIME} \

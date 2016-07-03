@@ -219,11 +219,11 @@ void process(Parser &parser)
 
                 LOG(INFO) << "Start performing truss decomposition...";
                 string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
-                t.truss_decomosition(g1, oufile.c_str(), 5);
+                t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
 
-                LOG(INFO) << "Start performing graph computations...";
-                BGL g(*it);
-                g.compute_all();
+                //LOG(INFO) << "Start performing graph computations...";
+                //BGL g(*it);
+                //g.compute_all();
             }
 
             LOG(INFO)<<"Writing results to JSON file...";
