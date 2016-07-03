@@ -230,6 +230,7 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
         if(g.get_to_v(i) == v)
         {
             e_sup[c][i] = -1;
+            break;
         }
     }
 
@@ -239,6 +240,7 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
         if(g.get_to_v(i) == u)
         {
             e_sup[c][i] = -1;
+            break;
         }
     }
 }

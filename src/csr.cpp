@@ -446,6 +446,7 @@ bool CSR::remove_e_by_v(int32_t from, int32_t to, int c)
         {
             e_idx[c][i] = RMVD;
             ++find;
+            break;
         }
     }
 
@@ -455,6 +456,7 @@ bool CSR::remove_e_by_v(int32_t from, int32_t to, int c)
         {
             e_idx[c][i] = RMVD;
             ++find;
+            break;
         }
     }
 

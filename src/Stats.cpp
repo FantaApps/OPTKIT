@@ -239,7 +239,7 @@ void Stats::serialize_stmodel()
 
     string bc;
     Utils::vec_vec_to_string<double>(m_gProperty.m_betweenCentrl, bc);
-    gp["betweenCentrl"] = bc == "" ? "1" : tmp;
+    gp["betweenCentrl"] = bc == "" ? "1" : bc;
 
     string allCC;
     Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numClique, allCC);
