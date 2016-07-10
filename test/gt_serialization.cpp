@@ -116,6 +116,22 @@ TEST(StatsSerializationTest_1, Success)
 **/
 TEST(CrimeSTModelSerializationTest_1, Success)
 {
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
+
+    {
+        ofstream ofs("./filename");
+        text_oarchive oa(ofs);
+        oa<<stm;
+    }
+
+    {
+        CrimeSTModel stm1();
+        ifstream ifs("./filename");
+        text_iarchive ia(ifs);
+        ia>>stm1;
+        ASSERT_EQ
+    }
 }
 
 /**
