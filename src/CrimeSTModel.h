@@ -39,6 +39,30 @@ public:
         int32_t coord[3];   ///< coordinate of the node in spatial time space
         int32_t freq;       ///< frequency of this crime
         string  type;       ///< crime type
+
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int version)
+        {
+            ar & id;
+            ar & coord;
+            ar & freq;
+            ar & type;
+        }
+        bool operator!= (const Node & node)
+        {
+            bool ret = true;
+            if(id == node.id && freq == node.freq && type == node.type)
+            {
+                ret = false;
+            }
+            if(ret && (coord[0] == node.coord[0] &&
+                       coord[1] == node.coord[1] &&
+                       coord[2] == node.coord[2]))
+            {
+                ret = false;
+            }
+            return ret;
+        }
     };
 
     /**
@@ -62,12 +86,57 @@ public:
         build_model();
     }
 
+    CrimeSTModel(){};
     ~CrimeSTModel(){}
+
+    bool operator== (const CrimeSTModel & stm)
+    {
+        bool ret = true;
+        if(&stm != this)
+        {
+            if(serial_num != stm.serial_num)
+            {
+                ret = false;
+            }
+            if(ret && in_file != stm.in_file)
+            {
+                ret = false;
+            }
+            if(ret)
+            {
+                for(size_t i=0; i<stm.nodes.size(); i++)
+                {
+                    if(nodes[i] != stm.nodes[i])
+                    {
+                        ret = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return ret;
+    }
 
     virtual vector<int32_t> query_list(int32_t min[3], int32_t max[3]);
     virtual int32_t         query_cont(int32_t min[3], int32_t max[3]);
     virtual edge_list       build_edges(int32_t x_gap, int32_t y_gap, int32_t z_gap);
     virtual edge_list_CC    build_edge_list_CC(int32_t x_gap, int32_t y_gap, int32_t z_gap);
+
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & nodes;
+        ar & in_file;
+        ar & serial_num;
+    }
+
+    void clear()
+    {
+        // we do not clear 
+        nodes.clear();
+        in_file    = "";
+        serial_num = 0 ;
+    }
 
 protected:
     vector<Node>                    nodes;      ///< nodes read from CSV file
