@@ -14,6 +14,9 @@
 
 #include "utils.h"
 #include <map>
+#include <boost/serialization/map.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 using namespace std;
 
@@ -48,12 +51,23 @@ public:
         return ret;
     }
 
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & m_params;
+    }
+
+    void clear()
+    {
+        m_params.clear();
+    }
+
 
 private:
     Config() {}
-    
+
     static Config *     m_instance;
-    
+
     map<string, string> m_params;
 };
 
