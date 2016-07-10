@@ -19,6 +19,7 @@
 #include "Config.h"
 #include "gtest/gtest_prod.h"
 #include <json_spirit/json_spirit.h>
+#include <boost/serialization/vector.hpp>
 
 
 using namespace std;
@@ -78,6 +79,33 @@ public:
 
         GraphProperty() : m_numCC(0)
         {}
+
+        void clear()
+        {
+            m_numCC = 0;
+            m_numV.clear();
+            m_numE.clear();
+            m_diameter.clear();
+            m_girth.clear();
+            m_clusterCoeff.clear();
+            m_betweenCentrl.clear();
+            m_numTruss.clear();
+            m_numClique.clear();
+        }
+
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int version)
+        {
+            ar & m_numCC;
+            ar & m_numV;
+            ar & m_numE;
+            ar & m_diameter;
+            ar & m_girth;
+            ar & m_clusterCoeff;
+            ar & m_betweenCentrl;
+            ar & m_numTruss;
+            ar & m_numClique;
+        }
     };
 
     static Stats *instance()
@@ -117,6 +145,26 @@ public:
         return ret;
     }
 
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & m_outFile;
+        ar & m_time;
+        ar & m_application;
+        ar & m_dataName;
+        ar & m_range;
+        ar & m_gProperty;
+    }
+
+    void clear()
+    {
+        m_outFile     = "";
+        m_time        = "";
+        m_application = "";
+        m_dataName    = "";
+        m_range.clear();
+    }
+
 private:
 
     Stats(string outFile); 
@@ -135,11 +183,11 @@ private:
     vector<int32_t> m_range;        ///< x,y and time
     GraphProperty   m_gProperty;    ///< graph properties
 
-    FRIEND_TEST(StatsTest_1,        Success);
-    FRIEND_TEST(BGLGraphProperty_1, Success);
-    FRIEND_TEST(BGLGraphProperty_2, Success);
-    FRIEND_TEST(BGLSTModel_1,       Success);
-
+    FRIEND_TEST(StatsTest_1,              Success);
+    FRIEND_TEST(BGLGraphProperty_1,       Success);
+    FRIEND_TEST(BGLGraphProperty_2,       Success);
+    FRIEND_TEST(BGLSTModel_1,             Success);
+    FRIEND_TEST(StatsSerializationTest_1, Success);
 };
 
 #endif // __H_STATS__ 
