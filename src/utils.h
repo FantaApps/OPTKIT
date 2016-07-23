@@ -268,22 +268,17 @@ public:
     static void serialize_obj(Obj &o, const string &file_name)
     {
         using boost::archive::text_oarchive;
-        using boost::archive::text_iarchive;
-        using boost::archive::archive_exception;
 
-        {
-            ofstream ofs(file_name);
-            text_oarchive oa(ofs);
-            oa<<o;
-        }
+        ofstream ofs(file_name);
+        text_oarchive oa(ofs);
+        oa<<o;
     }
 
     template <typename Obj>
     static void deserialize_obj(Obj &o, const string &file_name)
     {
-        using boost::archive::text_oarchive;
         using boost::archive::text_iarchive;
-        using boost::archive::archive_exception;
+
         ifstream ifs(file_name);
         text_iarchive ia(ifs);
         ia>>o;
