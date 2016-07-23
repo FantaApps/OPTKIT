@@ -41,6 +41,7 @@ void process(Parser &parser);
 
 BoolOption        truss         ('t', "truss",      false, "truss apllication");
 BoolOption        stmodel       ('s', "stmodel",    false, "stmodel application");
+BoolOption        resume        ('r', "resume",     false, "resume from a previous run");
 StringOption      logger        ('l', "logger",     false, "log file name");
 StringOption      input         ('i', "input",      true , "input file name");
 StringOption      output        ('o', "output",     true , "output file name");
@@ -181,8 +182,10 @@ void process(Parser &parser)
     string infile = input.getValue();
     string oufile = output.getValue();
 
-
-    if(truss.isSet())
+    if(resume.isSet())
+    {
+    }
+    else if(truss.isSet())
     {
         CSR g(infile.c_str());
         Truss t(g.get_num_e(), g.get_num_c());
@@ -195,6 +198,10 @@ void process(Parser &parser)
             LOG(INFO) << "Initializing Crime Spatial Temporal model...";
             CrimeSTModel stm(infile.c_str());
 
+            Utils::serialize_obj<CrimeSTModel>(stm, "../run/config/stmodel.conf");
+            Config::instance()->set(string("stm"), "set");
+            Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
+
             string coord_val = Config::instance()->get("coord");
             vector<string> _coord = Utils::split(coord_val, ',');
 
@@ -204,11 +211,21 @@ void process(Parser &parser)
                                                         stoi(_coord[1]),
                                                         stoi(_coord[2]));
 
+            Utils::serialize_obj<edge_list_CC>(el_cc, "../run/config/el_cc.conf");
+            Config::instance()->set(string("el_cc"), "set");
+            Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
+
             LOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
+
+            string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
+            Stats::instance()->write_content(Stats::RANGE, range); 
+            string girth_val = "1000";
+            Stats::instance()->write_content(Stats::GIRTH, girth_val); 
+            Stats::instance()->write_content(Stats::DATANAME, infile); 
             
-            int i=0;
-            for(auto it = el_cc.begin(); it != el_cc.end(); ++it, i++)
+            for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
             {
+                int i = it-el_cc.begin();
                 LOG(INFO)<<"Computing the "<<i<<"th CC...";
                 // compute truss
                 LOG(INFO) << "Building CSR based on edges...";
@@ -224,14 +241,13 @@ void process(Parser &parser)
                 //LOG(INFO) << "Start performing graph computations...";
                 //BGL g(*it);
                 //g.compute_all();
+                Utils::serialize_obj<Stats>(*Stats::instance(),   "../run/config/stats.conf");
+                Config::instance()->set(string("iteration"), to_string(i));
+                Config::instance()->set(string("el_cc"), "set");
+                Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
             }
 
             LOG(INFO)<<"Writing results to JSON file...";
-            string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
-            Stats::instance()->write_content(Stats::RANGE, range); 
-            string girth_val = "1000";
-            Stats::instance()->write_content(Stats::GIRTH, girth_val); 
-            Stats::instance()->write_content(Stats::DATANAME, infile); 
             Stats::instance()->serialize();
         }
         else

@@ -34,6 +34,11 @@
 #include <boost/lexical_cast.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fstream>
+#include <boost/serialization/map.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include "./Config.h"
 
 
 #define RED     "\x1b[31m"
@@ -257,6 +262,31 @@ public:
                 return mid; // found
         }
         return -1; // not found
+    }
+
+    template <typename Obj>
+    static void serialize_obj(Obj &o, const string &file_name)
+    {
+        using boost::archive::text_oarchive;
+        using boost::archive::text_iarchive;
+        using boost::archive::archive_exception;
+
+        {
+            ofstream ofs(file_name);
+            text_oarchive oa(ofs);
+            oa<<o;
+        }
+    }
+
+    template <typename Obj>
+    static void deserialize_obj(Obj &o, const string &file_name)
+    {
+        using boost::archive::text_oarchive;
+        using boost::archive::text_iarchive;
+        using boost::archive::archive_exception;
+        ifstream ifs(file_name);
+        text_iarchive ia(ifs);
+        ia>>o;
     }
 };
 
