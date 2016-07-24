@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   07/24/16 - Add assignment operator 
  *  stplaydog   04/17/16 - Fixed a bug for union find algorithm
  *  stplaydog   04/11/16 - fix a bug in union find algorithm
  *  stplaydog   03/27/16 - add union find related functions

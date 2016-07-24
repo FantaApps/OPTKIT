@@ -176,3 +176,30 @@ TEST(EdgeListSerializationTest_1, Success)
 
     std::remove("./filename");
 }
+
+/**
+ * @brief   Test serialize edge list with connected components 
+ *
+**/
+TEST(EdgeListCCSerializationTest_1, Success)
+{
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
+    edge_list_CC edges = stm.build_edge_list_CC(200, 200, 30);
+
+    {
+        ofstream ofs("./filename");
+        text_oarchive oa(ofs);
+        oa<<edges;
+    }
+
+    {
+        edge_list_CC edges1;
+        ifstream ifs("./filename");
+        text_iarchive ia(ifs);
+        ia>>edges1;
+        ASSERT_EQ((edges == edges1), true);
+    }
+
+    std::remove("./filename");
+}

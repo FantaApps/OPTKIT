@@ -47,7 +47,8 @@ public:
     string get(const string &key)
     {
         string ret;
-        ret = m_params[key];
+        auto iter = m_params.find(key);
+        ret = iter == m_params.end() ? "NOT_FOUND" : iter->second;
         return ret;
     }
 
