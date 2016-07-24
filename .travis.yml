@@ -30,5 +30,6 @@ script:
   - make
   - make check
 after_failure:
-    - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # find core file
+    - find . -maxdepth 2 -name "core*" | head -n 1
+    - COREFILE=$(find . -maxdepth 2 -name "core*" | head -n 1) # find core file
     - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" ./src/optkit -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
