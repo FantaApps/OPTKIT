@@ -256,7 +256,8 @@ void Stats::serialize_stmodel()
     Array arr;
     arr.push_back(stm);
     write_formatted( stm, writer );
-
+    
+    writer<<"\n";
     writer.close();
 }
 

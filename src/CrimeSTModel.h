@@ -89,6 +89,18 @@ public:
     CrimeSTModel(){};
     ~CrimeSTModel(){}
 
+    CrimeSTModel& operator=(const CrimeSTModel & other)
+    {
+        if(&other != this)
+        {
+            nodes      = other.nodes;
+            in_file    = other.in_file;
+            serial_num = other.serial_num;
+            build_model();
+        }
+        return *this;
+    }
+
     bool operator== (const CrimeSTModel & stm)
     {
         bool ret = true;
