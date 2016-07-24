@@ -255,7 +255,7 @@ void process(Parser &parser)
             if(resume.isSet() && 
                Config::instance()->get("iteration") != "NOT_FOUND")
             {
-                iter = stoi(Config::instance()->get("iteration"))
+                iter = stoi(Config::instance()->get("iteration"));
             }
             
             for(auto it = el_cc.begin()+iter; it != el_cc.end(); ++it)
