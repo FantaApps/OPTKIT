@@ -26,10 +26,10 @@ before_script:
   - chmod +x init.sh 
   - ./init.sh 
   - ulimit -c unlimited -S
+  - mkdir -p ./data/experiments/stmodel
 script: 
   - make
   - make check
 after_failure:
-    - find . -maxdepth 2 -name "core*" | head -n 1
     - COREFILE=$(find . -maxdepth 2 -name "core*" | head -n 1) # find core file
     - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" ./src/optkit -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
