@@ -58,6 +58,13 @@ Truss::~Truss()
 **/
 void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32_t c)
 {
+    string truss_algo = Config::instance()->get("truss_algo");
+
+    if(truss_algo == "algo2")
+    {
+        build_sorted_sup_e(g, c);
+    }
+    
     FILE *writer = fopen(outfile, "w");
 
     int32_t k = 3;
@@ -68,7 +75,13 @@ void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32
     while(g.get_num_e() > 0)
     {
         LOG(INFO)<<"Executing support reduction operation of k="<<k;
-        while(sup_e_opr(g, k));
+        if(truss_algo == "algo2")
+        {
+        }
+        else
+        {
+            while(sup_e_opr(g, k));
+        }
 
         if(g.get_num_e() > 0)
         {
@@ -243,4 +256,27 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
             break;
         }
     }
+}
+
+void Truss::build_sorted_sup_e(CSR &g, int32_t c)
+{
+    for(int32_t i=0; i<g.get_num_v(); ++i)
+    {
+        pair<int32_t, int32_t> rg = g.get_e_range(i);
+
+        for(int32_t j=rg.first; j<rg.second; ++j)
+        {
+            int32_t to = g.get_to_v(j);
+            SortedSup s(i, to, e_sup[c][j]);
+            m_sortSupE.push_back(s);
+        }
+    }
+
+    sort(m_sortSupE.begin(), 
+         m_sortSupE.end(),
+         [] (const SortedSup & a, const SortedSup & b) -> bool
+         {
+             return a.m_eSup > b.m_eSup;
+         }
+        );
 }

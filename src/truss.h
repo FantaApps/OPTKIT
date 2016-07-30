@@ -43,10 +43,23 @@ public:
                             int32_t k_max, int32_t c = 0);
 
 private:
+    struct SortedSup 
+    {
+        int32_t m_vFrom;  ///
+        int32_t m_vTo;    ///
+        int32_t m_eSup;   ///
+
+        SortedSup(int32_t vFrom, int32_t vTo, int32_t eSup)
+            : m_vFrom(vFrom), m_vTo(vTo), m_eSup(eSup)
+        {}
+    };
+
     int32_t num_e;   ///< total number of edges
     int32_t num_c;   ///< number of colors 
                      ///< (different edges have differen colors)
     int32_t **e_sup; ///< edge support, for truss decomposition only
+
+    vector<SortedSup> m_sortSupE;
 
     int32_t get_num_e();
 
@@ -59,6 +72,8 @@ private:
     bool sup_e_opr(CSR &g, int32_t k, int32_t c = 0);
 
     void reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c = 0);
+
+    void build_sorted_sup_e(CSR &g, int32_t c=0);
 
     // These are google test related
     FRIEND_TEST(InitTrussTest_1,  Success);

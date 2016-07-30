@@ -38,7 +38,9 @@
 void set_logger();
 void define_arguments(Parser &parser);
 void parse_arguments(Parser &parser);
-void process(Parser &parser);
+void process();
+void process_with_context(const string &infile, const string &oufile);
+void process_without_context(const string &infile, const string &oufile);
 
 BoolOption        truss         ('t', "truss",      false, "truss apllication");
 BoolOption        stmodel       ('s', "stmodel",    false, "stmodel application");
@@ -62,7 +64,7 @@ int32_t main(int32_t argc , const char *argv[])
     set_logger();
 
     parse_arguments(parser);
-    process(parser);
+    process();
 
     return 0;
 }
@@ -178,7 +180,7 @@ void parse_arguments(Parser &parser)
  *
  * @param[in/out]       parser      This is the parameter parser
 **/
-void process(Parser &parser)
+void process()
 {
     string infile = input.getValue();
     string oufile = output.getValue();
@@ -191,142 +193,16 @@ void process(Parser &parser)
     }
     else if(stmodel.isSet())
     {
-        // Load config here
-        if(resume.isSet())
-        {
-            Utils::deserialize_obj<Config>(*Config::instance(), 
-                                           string("../run/config/config.conf"));
-        }
-
         if(coord.isSet())
         {
-            // Initialize Spatial Temporal model
-#ifdef USE_CONTEXT
-            CrimeSTModel stm;
-            if(resume.isSet() && Config::instance()->get("stm") == "set")
+            if(resume.isSet())
             {
-                LOG(INFO) << "Reloading Crime Spatial Temporal model...";
-                Utils::deserialize_obj<CrimeSTModel>(stm, 
-                        string("../run/config/stmodel.conf"));
+                process_with_context(infile, oufile);
             }
             else
             {
-                LOG(INFO) << "Initializing Crime Spatial Temporal model...";
-                stm = CrimeSTModel(infile.c_str());
+                process_without_context(infile, oufile);
             }
-
-            Utils::serialize_obj<CrimeSTModel>(stm, "../run/config/stmodel.conf");
-            Config::instance()->set(string("stm"), "set");
-            Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
-
-            // Build Edge Lists based on connected component
-            string coord_val = Config::instance()->get("coord");
-            vector<string> _coord = Utils::split(coord_val, ',');
-
-            edge_list_CC el_cc;
-            if(resume.isSet() && Config::instance()->get("el_cc") == "set")
-            {
-                LOG(INFO) << "Reloading edge list by CC...";
-                Utils::deserialize_obj<edge_list_CC>(el_cc, 
-                        string("../run/config/el_cc.conf"));
-            }
-            else
-            {
-                LOG(INFO) << "Start getting edge list by CC...";
-                el_cc = stm.build_edge_list_CC(stoi(_coord[0]),
-                                               stoi(_coord[1]),
-                                               stoi(_coord[2]));
-            }
-
-            Utils::serialize_obj<edge_list_CC>(el_cc, "../run/config/el_cc.conf");
-            Config::instance()->set(string("el_cc"), "set");
-            Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
-
-
-            // Process each connected component compute their graph properties
-            LOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
-
-            string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
-            Stats::instance()->write_content(Stats::RANGE, range); 
-            string girth_val = "1000";
-            Stats::instance()->write_content(Stats::GIRTH, girth_val); 
-            Stats::instance()->write_content(Stats::DATANAME, infile); 
-
-            int iter = 0;
-            if(resume.isSet() && 
-               Config::instance()->get("iteration") != "NOT_FOUND")
-            {
-                iter = stoi(Config::instance()->get("iteration"));
-            }
-            
-            for(auto it = el_cc.begin()+iter; it != el_cc.end(); ++it)
-            {
-                int i = it-el_cc.begin();
-                LOG(INFO)<<"Computing the "<<i<<"th CC...";
-                // compute truss
-                LOG(INFO) << "Building CSR based on edges...";
-                CSR g1(*it);
-
-                LOG(INFO) << "Start initializing truss...";
-                Truss t(g1.get_num_e(), g1.get_num_c());
-
-                LOG(INFO) << "Start performing truss decomposition...";
-                string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
-                t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
-
-                //LOG(INFO) << "Start performing graph computations...";
-                //BGL g(*it);
-                //g.compute_all();
-                Utils::serialize_obj<Stats>(*Stats::instance(),   "../run/config/stats.conf");
-                Config::instance()->set(string("iteration"), to_string(i));
-                Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
-            }
-
-            LOG(INFO)<<"Writing results to JSON file...";
-            Stats::instance()->serialize();
-#else
-            LOG(INFO) << "Initializing Crime Spatial Temporal model...";
-            CrimeSTModel stm(infile.c_str());
-
-            string coord_val = Config::instance()->get("coord");
-            vector<string> _coord = Utils::split(coord_val, ',');
-
-            LOG(INFO) << "Start getting edge list by CC...";
-            // compute bgl related info
-            edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),
-                    stoi(_coord[1]),
-                    stoi(_coord[2]));
-
-            LOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
-
-            int i=0;
-            for(auto it = el_cc.begin(); it != el_cc.end(); ++it, i++)
-            {
-                LOG(INFO)<<"Computing the "<<i<<"th CC...";
-                // compute truss
-                LOG(INFO) << "Building CSR based on edges...";
-                CSR g1(*it);
-
-                LOG(INFO) << "Start initializing truss...";
-                Truss t(g1.get_num_e(), g1.get_num_c());
-
-                LOG(INFO) << "Start performing truss decomposition...";
-                string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
-                t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
-
-                //LOG(INFO) << "Start performing graph computations...";
-                //BGL g(*it);
-                //g.compute_all();
-            }
-
-            LOG(INFO)<<"Writing results to JSON file...";
-            string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
-            Stats::instance()->write_content(Stats::RANGE, range); 
-            string girth_val = "1000";
-            Stats::instance()->write_content(Stats::GIRTH, girth_val); 
-            Stats::instance()->write_content(Stats::DATANAME, infile); 
-            Stats::instance()->serialize();
-#endif
         }
         else
         {
@@ -335,4 +211,138 @@ void process(Parser &parser)
             ERROR_PRINT();
         }
     }
+}
+
+void process_with_context(const string &infile, const string &oufile)
+{
+    Utils::deserialize_obj<Config>(*Config::instance(), 
+            string("../run/config/config.conf"));
+    // Initialize Spatial Temporal model
+    CrimeSTModel stm;
+    if(Config::instance()->get("stm") == "set")
+    {
+        LOG(INFO) << "Reloading Crime Spatial Temporal model...";
+        Utils::deserialize_obj<CrimeSTModel>(stm, 
+                string("../run/config/stmodel.conf"));
+    }
+    else
+    {
+        LOG(INFO) << "Initializing Crime Spatial Temporal model...";
+        stm = CrimeSTModel(infile.c_str());
+    }
+
+    Utils::serialize_obj<CrimeSTModel>(stm, "../run/config/stmodel.conf");
+    Config::instance()->set(string("stm"), "set");
+    Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
+
+    // Build Edge Lists based on connected component
+    string coord_val = Config::instance()->get("coord");
+    vector<string> _coord = Utils::split(coord_val, ',');
+
+    edge_list_CC el_cc;
+    if(Config::instance()->get("el_cc") == "set")
+    {
+        LOG(INFO) << "Reloading edge list by CC...";
+        Utils::deserialize_obj<edge_list_CC>(el_cc, 
+                string("../run/config/el_cc.conf"));
+    }
+    else
+    {
+        LOG(INFO) << "Start getting edge list by CC...";
+        el_cc = stm.build_edge_list_CC(stoi(_coord[0]),
+                stoi(_coord[1]),
+                stoi(_coord[2]));
+    }
+
+    Utils::serialize_obj<edge_list_CC>(el_cc, "../run/config/el_cc.conf");
+    Config::instance()->set(string("el_cc"), "set");
+    Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
+
+
+    // Process each connected component compute their graph properties
+    LOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
+
+    string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
+    Stats::instance()->write_content(Stats::RANGE, range); 
+    string girth_val = "1000";
+    Stats::instance()->write_content(Stats::GIRTH, girth_val); 
+    Stats::instance()->write_content(Stats::DATANAME, const_cast<string&>(infile)); 
+
+    int iter = 0;
+    if(resume.isSet() && 
+            Config::instance()->get("iteration") != "NOT_FOUND")
+    {
+        iter = stoi(Config::instance()->get("iteration"));
+    }
+
+    for(auto it = el_cc.begin()+iter; it != el_cc.end(); ++it)
+    {
+        int i = it-el_cc.begin();
+        LOG(INFO)<<"Computing the "<<i<<"th CC...";
+        // compute truss
+        LOG(INFO) << "Building CSR based on edges...";
+        CSR g1(*it);
+
+        LOG(INFO) << "Start initializing truss...";
+        Truss t(g1.get_num_e(), g1.get_num_c());
+
+        LOG(INFO) << "Start performing truss decomposition...";
+        string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
+        t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
+
+        //LOG(INFO) << "Start performing graph computations...";
+        //BGL g(*it);
+        //g.compute_all();
+        Utils::serialize_obj<Stats>(*Stats::instance(),   "../run/config/stats.conf");
+        Config::instance()->set(string("iteration"), to_string(i));
+        Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
+    }
+
+    LOG(INFO)<<"Writing results to JSON file...";
+    Stats::instance()->serialize();
+}
+
+void process_without_context(const string & infile, const string &oufile)
+{
+    LOG(INFO) << "Initializing Crime Spatial Temporal model...";
+    CrimeSTModel stm(infile.c_str());
+
+    string coord_val = Config::instance()->get("coord");
+    vector<string> _coord = Utils::split(coord_val, ',');
+
+    LOG(INFO) << "Start getting edge list by CC...";
+    // compute bgl related info
+    edge_list_CC el_cc = stm.build_edge_list_CC(stoi(_coord[0]),
+            stoi(_coord[1]),
+            stoi(_coord[2]));
+
+    LOG(INFO) << "There are "<<el_cc.size()<<" number of CCs in total, start processing...";
+
+    int i=0;
+    for(auto it = el_cc.begin(); it != el_cc.end(); ++it, i++)
+    {
+        LOG(INFO)<<"Computing the "<<i<<"th CC...";
+        // compute truss
+        LOG(INFO) << "Building CSR based on edges...";
+        CSR g1(*it);
+
+        LOG(INFO) << "Start initializing truss...";
+        Truss t(g1.get_num_e(), g1.get_num_c());
+
+        LOG(INFO) << "Start performing truss decomposition...";
+        string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
+        t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
+
+        //LOG(INFO) << "Start performing graph computations...";
+        //BGL g(*it);
+        //g.compute_all();
+    }
+
+    LOG(INFO)<<"Writing results to JSON file...";
+    string range = _coord[0] + "," + _coord[1] + "," + _coord[2];
+    Stats::instance()->write_content(Stats::RANGE, range); 
+    string girth_val = "1000";
+    Stats::instance()->write_content(Stats::GIRTH, girth_val); 
+    Stats::instance()->write_content(Stats::DATANAME, const_cast<string&>(infile)); 
+    Stats::instance()->serialize();
 }
