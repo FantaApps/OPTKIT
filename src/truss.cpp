@@ -59,11 +59,6 @@ Truss::~Truss()
 void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32_t c)
 {
     string truss_algo = Config::instance()->get("truss_algo");
-
-    if(truss_algo == "algo2")
-    {
-        build_sorted_sup_e(g, c);
-    }
     
     FILE *writer = fopen(outfile, "w");
 
@@ -72,11 +67,17 @@ void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32
     LOG(INFO)<<"Computing initial support..";
     compute_sup(g, c);
 
+    if(truss_algo == "algo2")
+    {
+        build_sorted_sup_e(g, c);
+    }
+
     while(g.get_num_e() > 0)
     {
         LOG(INFO)<<"Executing support reduction operation of k="<<k;
         if(truss_algo == "algo2")
         {
+            while(sup_e_opr_sorted(g, k));
         }
         else
         {
@@ -191,7 +192,37 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
             }
         }
     }
+    reconstruct(g);
+    return ret;
+}
 
+bool Truss::sup_e_opr_sorted(CSR &g, int32_t k, int32_t c)
+{
+    bool ret = false;
+    for(size_t i=0; i<m_sortSupE.size(); i++)
+    {
+        int32_t from = m_sortSupE[i].m_vFrom;
+        int32_t to   = m_sortSupE[i].m_vTo;
+        if(m_sortSupE[i].m_eSup <= (k-2))
+        {
+            if(from < to)
+            {
+                reduce_one_edge(g, from, to);
+                g.remove_e_by_v(from, to);
+                ret = true;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    reconstruct(g);
+    return ret;
+}
+
+void Truss::reconstruct(CSR &g, int32_t c)
+{
     LOG(INFO)<<"Reconstructing graph..";
     g.reconstruct();
 
@@ -213,7 +244,11 @@ bool Truss::sup_e_opr(CSR &g, int32_t k, int32_t c)
     }
     num_e = cur;
 
-    return ret;
+    if(Config::instance()->get("truss_algo") == "algo2")
+    {
+        m_sortSupE.clear();
+        build_sorted_sup_e(g, c);
+    }
 }
 
 
@@ -258,6 +293,55 @@ void Truss::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
     }
 }
 
+/**
+ * @brief   Reduce the support number of every edge connected to v by 1.
+ *
+ * @param[in]       u       one vertex id
+ * @param[in]       v       another vertex id
+ *
+ * @return      N/A
+**/
+//void Truss::reduce_one_edge_sorted(CSR & g, int32_t u, int32_t v, int32_t c)
+//{
+//    assert(u>=0 && u<g.get_num_v());
+//    assert(v>=0 && v<g.get_num_v());
+//
+//    vector<int32_t> W = g.get_intersect_edges(u, v); 
+//
+//    for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
+//    {
+//        --e_sup[c][*it];
+//    }
+//
+//    pair<int32_t, int32_t> rg1 = g.get_e_range(u);
+//    for(int i=rg1.first; i<rg1.second; i++)
+//    {
+//        if(g.get_to_v(i) == v)
+//        {
+//            e_sup[c][i] = -1;
+//            break;
+//        }
+//    }
+//
+//    pair<int32_t, int32_t> rg2 = g.get_e_range(v);
+//    for(int i=rg2.first; i<rg2.second; i++)
+//    {
+//        if(g.get_to_v(i) == u)
+//        {
+//            e_sup[c][i] = -1;
+//            break;
+//        }
+//    }
+//}
+
+/**
+ * @brief   in algo 2, we need to sort edges based on their support
+ *
+ * @param[in]   g       the CSR graph
+ * @param[in]   c       color
+ *
+ * @return      N/A
+**/
 void Truss::build_sorted_sup_e(CSR &g, int32_t c)
 {
     for(int32_t i=0; i<g.get_num_v(); ++i)
@@ -276,7 +360,7 @@ void Truss::build_sorted_sup_e(CSR &g, int32_t c)
          m_sortSupE.end(),
          [] (const SortedSup & a, const SortedSup & b) -> bool
          {
-             return a.m_eSup > b.m_eSup;
+             return a.m_eSup < b.m_eSup;
          }
         );
 }

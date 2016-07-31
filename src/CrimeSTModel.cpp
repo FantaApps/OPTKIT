@@ -211,13 +211,15 @@ edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int3
 **/
 void CrimeSTModel::union_find(const edge_list &el, vector<int32_t> &parent)
 {
+    vector<bool> visited(parent.size(), false);
     for(auto it = el.begin(); it != el.end(); ++it)
     {
         int32_t from = find(parent, it->first);
         int32_t to   = find(parent, it->second);
-        if(from != to)
+        if(from != to && !visited[from])
         {
-            parent[from] = to;
+            parent[from]  = to;
+            visited[from] = true;
         }
     }
 }

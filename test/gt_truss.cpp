@@ -19,6 +19,11 @@
 #include "truss.h"
 #include "test_util.h" 
 
+using namespace std;
+using boost::archive::text_oarchive;
+using boost::archive::text_iarchive;
+using boost::archive::archive_exception;
+
 /**
  * @brief   Test a small graph one color for janc graph
 **/
@@ -222,4 +227,44 @@ TEST(TrussDecompositionTest_2, Success)
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./truss.txt");
+}
+
+/**
+ * @brief   test truss decomposition in J. Wang's paper example 
+**/
+TEST(TrussDecompositionTest_3, Success)
+{
+    /* Some basic setup */
+    //CSR g("../data/MC/jwang.gr");
+    //Truss t(g.get_num_e(), g.get_num_c());
+    //Config::instance()->set(string("truss_algo"), string("algo2"));
+
+    //T.truss_decomosition(g, "truss.txt", 5);
+    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
+    //        TstUtil::OPTKIT_TEST_PASS); 
+    //Exit(1);
+    //Std::remove("./truss.txt");
+}
+
+/**
+ * @brief   test truss decomposition in J. Wang's paper example 
+**/
+TEST(BuildSortedSupETest_1, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+    t.compute_sup(g);
+    t.build_sorted_sup_e(g);
+
+    {
+        ofstream ofs("./filename");
+        text_oarchive oa(ofs);
+        oa<<t;
+    }
+
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./filename"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("filename");
 }

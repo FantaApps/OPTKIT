@@ -23,6 +23,9 @@
 
 
 #include <iostream>
+#include <boost/serialization/vector.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 using namespace std;
 
@@ -35,6 +38,30 @@ using namespace std;
 class Truss {
 public:
 
+    /**
+     * @struct      SortedSup
+     *
+     * @brief       used to sort edges based on support
+    **/
+    struct SortedSup 
+    {
+        int32_t m_vFrom;  /// from vertex
+        int32_t m_vTo;    /// to vertex
+        int32_t m_eSup;   /// edge support
+
+        SortedSup(int32_t vFrom, int32_t vTo, int32_t eSup)
+            : m_vFrom(vFrom), m_vTo(vTo), m_eSup(eSup)
+        {}
+
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int version)
+        {
+            ar & m_vFrom;
+            ar & m_vTo;
+            ar & m_eSup;
+        }
+    };
+
     Truss(int32_t e_num, int32_t c_num);
 
     ~Truss();
@@ -42,24 +69,20 @@ public:
     void truss_decomosition(CSR &g, const char* outfile, 
                             int32_t k_max, int32_t c = 0);
 
-private:
-    struct SortedSup 
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
     {
-        int32_t m_vFrom;  ///
-        int32_t m_vTo;    ///
-        int32_t m_eSup;   ///
+        ar & m_sortSupE;
+    }
 
-        SortedSup(int32_t vFrom, int32_t vTo, int32_t eSup)
-            : m_vFrom(vFrom), m_vTo(vTo), m_eSup(eSup)
-        {}
-    };
+private:
 
     int32_t num_e;   ///< total number of edges
     int32_t num_c;   ///< number of colors 
                      ///< (different edges have differen colors)
     int32_t **e_sup; ///< edge support, for truss decomposition only
 
-    vector<SortedSup> m_sortSupE;
+    vector<SortedSup> m_sortSupE; ///< sorted edge supports
 
     int32_t get_num_e();
 
@@ -75,15 +98,22 @@ private:
 
     void build_sorted_sup_e(CSR &g, int32_t c=0);
 
+    void reconstruct(CSR &g, int32_t c=0);
+
+    bool sup_e_opr_sorted(CSR &g, int32_t k, int32_t c = 0);
+
+
     // These are google test related
-    FRIEND_TEST(InitTrussTest_1,  Success);
-    FRIEND_TEST(ReduceOneETest_1, Success);
-    FRIEND_TEST(ComputeSupTest_1, Success);
-    FRIEND_TEST(SupEOprTest_1,    Success);
-    FRIEND_TEST(InitTrussTest_2,  Success);
-    FRIEND_TEST(ReduceOneETest_2, Success);
-    FRIEND_TEST(ComputeSupTest_2, Success);
-    FRIEND_TEST(SupEOprTest_2,    Success);
+    FRIEND_TEST(InitTrussTest_1,          Success);
+    FRIEND_TEST(ReduceOneETest_1,         Success);
+    FRIEND_TEST(ComputeSupTest_1,         Success);
+    FRIEND_TEST(SupEOprTest_1,            Success);
+    FRIEND_TEST(InitTrussTest_2,          Success);
+    FRIEND_TEST(ReduceOneETest_2,         Success);
+    FRIEND_TEST(ComputeSupTest_2,         Success);
+    FRIEND_TEST(SupEOprTest_2,            Success);
+    FRIEND_TEST(BuildSortedSupETest_1,    Success);
+    FRIEND_TEST(TrussDecompositionTest_3, Success);
 
 };
 
