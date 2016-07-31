@@ -54,7 +54,6 @@ TEST(SmallCrimeDataTest_1, Success)
 
     edge_list edges = stm.build_edges(1, 1, 1);
     stm.serialize_edges(edges);
-    exit(1);
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/stmodel/small_crime_edges.txt", "./crime_edges.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./crime_edges.txt");
