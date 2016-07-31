@@ -283,6 +283,11 @@ public:
         text_iarchive ia(ifs);
         ia>>o;
     }
+
+    static unsigned getNumberOfDigits (unsigned i)
+    {
+        return i > 0 ? (int) log10 ((double) i) + 1 : 1;
+    }
 };
 
 #endif
