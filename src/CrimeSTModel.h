@@ -194,9 +194,10 @@ private:
     void    union_find(const edge_list &el, vector<int32_t> &parent);
     int32_t find(const vector<int32_t> &parent, int32_t pos);
 
-    FRIEND_TEST(SmallCrimeDataTest_1, Success);
-    FRIEND_TEST(NYCrimeDataTest_1,    Success);
-    FRIEND_TEST(NYCrimeDataTest_2,    Success);
+    FRIEND_TEST(SmallCrimeDataTest_1,    Success);
+    FRIEND_TEST(NYCrimeDataTest_1,       Success);
+    FRIEND_TEST(NYCrimeDataTest_2,       Success);
+    FRIEND_TEST(BGLConnectedComponent_1, Success);
 };
 
 #endif // SPATIAL_TEMPROAL_GRAPH_BUILDER__
