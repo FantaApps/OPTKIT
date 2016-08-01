@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include "truss.h"
 #include "test_util.h" 
+#include <stdlib.h>
 
 using namespace std;
 using boost::archive::text_oarchive;
@@ -262,6 +263,8 @@ TEST(BuildSortedSupETest_1, Success)
         text_oarchive oa(ofs);
         oa<<t;
     }
+
+    system("cat ./filename");
 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./filename"), 
             TstUtil::OPTKIT_TEST_PASS); 
