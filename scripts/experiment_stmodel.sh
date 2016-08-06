@@ -21,6 +21,8 @@ mkdir -p ${DATA_HOME}/experiments/stmodel/
 
 rm ${SCRIPT_HOME}/process
 
+NUM_PROC=`nproc`
+
 func_run_experiment()
 {
     echo START >> ${SCRIPT_HOME}/process
@@ -62,7 +64,7 @@ do
                     NUM_START=$((`cat ${SCRIPT_HOME}/process | grep START | wc -l`))
                     NUM_END=$((`cat ${SCRIPT_HOME}/process | grep END | wc -l`))
                     counter=$((NUM_START- NUM_END))
-                    if [[ "$counter" -lt "16" ]]
+                    if [[ "$counter" -lt "${NUM_PROC}" ]]
                     then
                         break
                     fi
