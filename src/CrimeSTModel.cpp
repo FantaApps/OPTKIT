@@ -211,13 +211,19 @@ edge_list_CC CrimeSTModel::build_edge_list_CC(int32_t x_gap, int32_t y_gap, int3
 **/
 void CrimeSTModel::union_find(const edge_list &el, vector<int32_t> &parent)
 {
+    vector<bool> visited(parent.size(), false);
     for(auto it = el.begin(); it != el.end(); ++it)
     {
+        if(visited[it->first])
+            continue;
+
+        visited[visited[it->first]] = true;
+
         int32_t from = find(parent, it->first);
         int32_t to   = find(parent, it->second);
         if(from != to)
         {
-            parent[from] = to;
+            parent[from]  = to;
         }
     }
 }
@@ -265,7 +271,10 @@ void CrimeSTModel::serialize_edges(edge_list &edges)
     FILE *writer = fopen("crime_edges.txt", "w");
     for(auto e : edges)
     {
-        fprintf(writer, "%d %d\n", e.first, e.second);
+        int u = e.first;
+        int v = e.second;
+        fprintf(writer, "%d(%d|%d|%d) %d(%d|%d|%d)\n", u, nodes[u].coord[0], nodes[u].coord[1], nodes[u].coord[2], 
+                                                       v, nodes[v].coord[0], nodes[v].coord[1], nodes[v].coord[2]);
     }
     fclose(writer);
 }

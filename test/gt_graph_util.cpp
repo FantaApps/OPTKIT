@@ -120,7 +120,6 @@ TEST(BGLGraphProperty_2, Success)
  *
  * we only test 200 meter
 **/
-
 TEST(BGLSTModel_1, Success)
 {
     string input_file = "../data/truss/ny_crime.csv"; 
@@ -147,4 +146,41 @@ TEST(BGLSTModel_1, Success)
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./stats.txt");
+}
+
+TEST(BGLConnectedComponent_1, Success)
+{
+    string input_file = "../data/truss/ny_crime.csv"; 
+    CrimeSTModel stm(input_file);
+
+    edge_list el = stm.build_edges(200, 200, 30);
+
+    vector<int32_t> parent(stm.nodes.size(), -1);
+    stm.union_find(el, parent);
+    vector<int32_t> comp(stm.nodes.size(), -1);
+    set<int> st;
+    for(size_t i=0; i<parent.size(); i++)
+    {
+        comp[i] = stm.find(parent, i); 
+        st.insert(comp[i]);
+    }
+
+    BGL g(el);
+    vector<int32_t> comp1(stm.nodes.size());
+    int num = g.connected_component(comp1); 
+
+    map<int, int> mp;
+
+    for(size_t i=0; i<comp.size(); i++)
+    {
+        auto it = mp.find(comp[i]);
+        if(it == mp.end())
+        {
+            it->second = comp1[i];
+        }
+        else 
+        {
+            ASSERT_EQ(it->second, comp1[i]);
+        }
+    }
 }

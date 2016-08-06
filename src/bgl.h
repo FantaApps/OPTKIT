@@ -40,6 +40,8 @@
 
 #include <boost/algorithm/string.hpp>
 
+#include <boost/graph/connected_components.hpp>
+
 using namespace boost;
 using namespace std; 
 
@@ -189,6 +191,12 @@ public:
         clustering_coeff();
         betweeness_centrality();
         all_cliques();
+    }
+
+    int connected_component(vector<int> &component)
+    {
+        int num = connected_components(m_adj, &component[0]);
+        return num;
     }
 
 private:
@@ -354,11 +362,12 @@ private:
     Adj1 m_adj1;    ///< Another adj graph
     Udir m_udir;    ///< undirected graph
 
-    FRIEND_TEST(BGLInitGraph_1,     Success);
-    FRIEND_TEST(BGLGraphProperty_1, Success);
-    FRIEND_TEST(BGLInitGraph_2,     Success);
-    FRIEND_TEST(BGLGraphProperty_2, Success);
-    FRIEND_TEST(BGLSTModel_1,       Success);
+    FRIEND_TEST(BGLInitGraph_1,          Success);
+    FRIEND_TEST(BGLGraphProperty_1,      Success);
+    FRIEND_TEST(BGLInitGraph_2,          Success);
+    FRIEND_TEST(BGLGraphProperty_2,      Success);
+    FRIEND_TEST(BGLSTModel_1,            Success);
+    FRIEND_TEST(BGLConnectedComponent_1, Success);
 };
 
 #endif
