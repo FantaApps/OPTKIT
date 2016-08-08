@@ -26,16 +26,15 @@ for line in lines:
         x = items[1].split(".")[0]
         y = items[2].split(".")[0]
         if len(str(x)) >= 6 and len(str(y)) >= 6:
-            if key in list:
-                list[key].append(items[0]+","+x+","+y+","+items[3]+","+key+"\n")
-            else:
+            if key not in list:
                 list[key] = []
+            list[key].append(items[0]+","+x+","+y+","+items[3]+","+key+"\n")
     else:
         first_line = line
 
 for key in list:
-    print key
     writer = open(sys.argv[2]+"/"+key, "w")
+    writer.write(first_line)
     for line in list[key]:
         writer.write(line)
     writer.close()

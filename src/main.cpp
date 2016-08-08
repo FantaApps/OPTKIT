@@ -290,9 +290,9 @@ void process_with_context(const string &infile, const string &oufile)
         string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
         t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
 
-        //LOG(INFO) << "Start performing graph computations...";
-        //BGL g(*it);
-        //g.compute_all();
+        LOG(INFO) << "Start performing graph computations...";
+        BGL g(*it);
+        g.compute_all();
         Utils::serialize_obj<Stats>(*Stats::instance(),   "../run/config/stats.conf");
         Config::instance()->set(string("iteration"), to_string(i));
         Utils::serialize_obj<Config>(*Config::instance(), "../run/config/config.conf");
@@ -333,9 +333,9 @@ void process_without_context(const string & infile, const string &oufile)
         string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
         t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
 
-        //LOG(INFO) << "Start performing graph computations...";
-        //BGL g(*it);
-        //g.compute_all();
+        LOG(INFO) << "Start performing graph computations...";
+        BGL g(*it);
+        g.compute_all();
     }
 
     LOG(INFO)<<"Writing results to JSON file...";
