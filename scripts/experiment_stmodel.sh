@@ -18,6 +18,9 @@ OPTKIT_HOME=${SCRIPT_HOME}/../src/
 DATA_HOME=${SCRIPT_HOME}/../data/
 
 mkdir -p ${DATA_HOME}/experiments/stmodel/
+mkdir -p ${DATA_HOME}/experiments/stmodel/CHI
+mkdir -p ${DATA_HOME}/experiments/stmodel/DC
+mkdir -p ${DATA_HOME}/experiments/stmodel/NY
 
 rm ${SCRIPT_HOME}/process
 
@@ -38,9 +41,12 @@ func_run_experiment()
                          -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}  \
                          -o ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME} \
                          -c ${XY} -c ${XY} -c ${TIME} \
-                         -l ${WHICH_FILE}_${XY}_${XY}_${TIME}_
+                         -l ${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_
 
-    cp ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
+    if [ -f ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ];
+    then
+        cp ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
+    fi
 
     echo END >> ${SCRIPT_HOME}/process
 }
@@ -48,7 +54,7 @@ func_run_experiment()
 #
 # For real crime test data
 #
-for WHICH_FILE in CHI DC NY
+for WHICH_FILE in DC NY CHI
 do
     for XY in 100 200 
     do

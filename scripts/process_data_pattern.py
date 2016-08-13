@@ -25,7 +25,7 @@ for line in lines:
         key =  items[4].strip().replace("/","").replace("  "," ").replace(" ", "_").replace("?", "")
         x = items[1].split(".")[0]
         y = items[2].split(".")[0]
-        if len(str(x)) >= 6 and len(str(y)) >= 6:
+        if len(str(x)) >= 6 and len(str(x)) < 9 and len(str(y)) >= 6 and len(str(y)) < 9:
             if key not in list:
                 list[key] = []
             list[key].append(items[0]+","+x+","+y+","+items[3]+","+key+"\n")
