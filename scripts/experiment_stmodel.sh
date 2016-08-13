@@ -6,6 +6,7 @@
 # @brief    This script runs experiment for stmodel 
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   08/12/16 - Also copy log for time analysis 
 #   stplaydog   08/06/16 - Parallel computing 
 #   stplaydog   04/27/16 - Add upload result script 
 #   stplaydog   04/24/16 - Add logger support 
@@ -16,6 +17,7 @@
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OPTKIT_HOME=${SCRIPT_HOME}/../src/
 DATA_HOME=${SCRIPT_HOME}/../data/
+LOG_HOME=${SCRIPT_HOME}/../log/
 
 mkdir -p ${DATA_HOME}/experiments/stmodel/
 mkdir -p ${DATA_HOME}/experiments/stmodel/CHI
@@ -23,6 +25,7 @@ mkdir -p ${DATA_HOME}/experiments/stmodel/DC
 mkdir -p ${DATA_HOME}/experiments/stmodel/NY
 
 rm ${SCRIPT_HOME}/process
+rm ${LOG_HOME}/*
 
 NUM_PROC=`nproc`
 
@@ -46,6 +49,7 @@ func_run_experiment()
     if [ -f ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ];
     then
         cp ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
+        cp ${LOG_HOME}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_* ${DATA_HOME}experiments/results/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.log
     fi
 
     echo END >> ${SCRIPT_HOME}/process
