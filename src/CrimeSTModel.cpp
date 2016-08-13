@@ -31,28 +31,36 @@
 void CrimeSTModel::read_data()
 {
     LOG(INFO)<<"Initializing CSV Parser..";
-    csv::Parser file = csv::Parser(in_file.c_str());
-    struct tm tm;
-
-    for(uint32_t i=0; i<file.rowCount(); i++)
+    try
     {
-        Node n;
+        csv::Parser file = csv::Parser(in_file.c_str());
+        struct tm tm;
 
-        n.id = serial_num++;
-        strptime(file[i][0].c_str(),"%Y/%m/%d", &tm); 
-        n.coord[2] = tm.tm_mon * 30 + tm.tm_mday;
-        n.coord[0] = stoi(file[i][1]);
-        n.coord[1] = stoi(file[i][2]);
-        n.freq = stoi(file[i][3]);
-        n.type = file[i][4];
+        for(uint32_t i=0; i<file.rowCount(); i++)
+        {
+            Node n;
 
-        nodes.push_back(n);
+            n.id = serial_num++;
+            strptime(file[i][0].c_str(),"%Y/%m/%d", &tm); 
+            n.coord[2] = tm.tm_mon * 30 + tm.tm_mday;
+            n.coord[0] = stoi(file[i][1]);
+            n.coord[1] = stoi(file[i][2]);
+            n.freq = stoi(file[i][3]);
+            n.type = file[i][4];
+
+            nodes.push_back(n);
+        }
+    }
+    catch (csv::Error &e)
+    {
+        cout<<e.what()<<endl;
+        exit(1);
     }
 }
 
 /**
  * @brief       build graph from ny crime data
-**/
+ **/
 void CrimeSTModel::build_model()
 {
     for(uint32_t i=0; i<nodes.size(); i++)

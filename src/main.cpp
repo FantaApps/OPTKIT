@@ -66,6 +66,7 @@ int32_t main(int32_t argc , const char *argv[])
     parse_arguments(parser);
     process();
 
+    LOG(INFO) << "Finishing OPTKIT...";
     return 0;
 }
 

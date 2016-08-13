@@ -167,7 +167,6 @@ TEST(BGLConnectedComponent_1, Success)
 
     BGL g(el);
     vector<int32_t> comp1(stm.nodes.size());
-    int num = g.connected_component(comp1); 
 
     map<int, int> mp;
 
