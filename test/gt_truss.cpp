@@ -232,6 +232,7 @@ TEST(TrussDecompositionTest_2, Success)
 
 /**
  * @brief   test truss decomposition in J. Wang's paper example 
+ *          using enhanced truss decomposition algo
 **/
 TEST(TrussDecompositionTest_3, Success)
 {
@@ -253,19 +254,21 @@ TEST(TrussDecompositionTest_3, Success)
 TEST(BuildSortedSupETest_1, Success)
 {
     /* Some basic setup */
-    CSR g("../data/MC/jwang.gr");
-    Truss t(g.get_num_e(), g.get_num_c());
-    t.compute_sup(g);
-    t.build_sorted_sup_e(g);
+    //CSR g("../data/MC/jwang.gr");
+    //Truss t(g.get_num_e(), g.get_num_c());
+    //t.compute_sup(g);
+    //t.build_sorted_sup_e(g);
 
-    {
-        ofstream ofs("./filename");
-        text_oarchive oa(ofs);
-        oa<<t;
-    }
+    //FILE *writer = fopen("./filename", "w");
+
+    //for(auto iter = t.m_sortSupE.begin(); iter != t.m_sortSupE.end(); ++iter)
+    //{
+    //    fprintf(writer, "%d %d %d\n", iter->m_vFrom, iter->m_vTo, iter->m_eSup);
+    //}
+    //fclose(writer);
 
     //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./filename"), 
     //        TstUtil::OPTKIT_TEST_PASS); 
 
-    std::remove("filename");
+    //std::remove("filename");
 }
