@@ -35,6 +35,8 @@ class StartTimeUnsetException(Exception):
     pass
 class TimeIncompleteException(Exception):
     pass
+class MalDataException(Exception):
+    pass
 
 class LogStats:
 
@@ -46,6 +48,7 @@ class LogStats:
         self.build_edge_listCC  = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
         self.compute_truss      = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
         self.compute_graph_prop = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
+        self.done_all           = False
 
         for line in file:
             if line.find("Reading data..") != -1:
@@ -68,6 +71,8 @@ class LogStats:
             elif re.search("Start performing graph computations", line):
                 self.setStartTime(self.compute_graph_prop, line)
                 self.setEndTime(self.compute_truss, line)
+            elif re.search("Finishing OPTKIT", line):
+                self.done_all = True
                 
     def setStartTime(self, which_item, timeStr): 
         if which_item[TimerType.START] != SetState.UNSET:
@@ -96,6 +101,8 @@ class LogStats:
                                   microseconds = timeMicroSecond.microsecond).total_seconds()
 
     def summary(self):
+        if self.done_all == False:
+            raise MalDataException("Experiment incomplete!")
         summaryStr = ""
         if self.read_data[TimerType.START] != SetState.UNSET or \
            self.read_data[TimerType.END] != SetState.UNSET:

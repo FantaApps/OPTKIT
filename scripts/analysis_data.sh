@@ -3,7 +3,8 @@
 #
 # Copy right YMSys, 2015,2016 Zhaoming Yin
 #
-# @brief    This script runs experiment for stmodel 
+# @brief    This script runs data analysis to generate latex tables and 
+#           R figures.
 #
 #   MODIFIED   (MM/DD/YY)
 #   stplaydog   08/13/16 - Creation 

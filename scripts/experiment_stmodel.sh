@@ -29,6 +29,13 @@ rm ${LOG_HOME}/*
 
 NUM_PROC=`nproc`
 
+BINARY_INFO=`objdump -h ${OPTKIT_HOME}/optkit | grep debug | wc -l`
+if [[ ${BINARY_INFO} != *"0"* ]];
+then
+    echo "You need to use the release build to run the experiment!"
+    exit 1
+fi
+
 func_run_experiment()
 {
     echo START >> ${SCRIPT_HOME}/process
@@ -50,6 +57,8 @@ func_run_experiment()
     then
         cp ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
         cp ${LOG_HOME}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_* ${DATA_HOME}experiments/results/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.log
+    else
+        echo "Data is wrong in ${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}"
     fi
 
     echo END >> ${SCRIPT_HOME}/process
@@ -62,7 +71,7 @@ for WHICH_FILE in DC NY CHI
 do
     for XY in 100 200 
     do
-        for TIME in 0 30
+        for TIME in 10 30
         do
             for FILE in $(ls  ${DATA_HOME}stmodel/${WHICH_FILE}/); 
             do  
