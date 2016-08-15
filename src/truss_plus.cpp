@@ -78,15 +78,17 @@ void TrussPlus::compute_sup(CSR &g, int32_t c)
 bool TrussPlus::sup_e_opr(CSR &g, int32_t k, int32_t c)
 {
     bool ret  = false;
-    int start = m_bin[1];
-    int end   = m_bin[k-1];
+    int start = m_bin[0];
+    int end   = m_bin[k-2];
     while(end > start)
     {
-        reduce_one_edge(g, m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
-        g.remove_e_by_v(m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
+        if(m_sortSupE[start].m_vFrom < m_sortSupE[start].m_vTo)
+        {
+            reduce_one_edge(g, m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
+            g.remove_e_by_v(m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
+            end = m_bin[k-2];
+        }
         start++;
-        end = m_bin[k-1];
-        ret = true;
     }
     return ret;
 }

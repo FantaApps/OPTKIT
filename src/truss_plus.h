@@ -68,5 +68,6 @@ private:
     // These are google test related
     FRIEND_TEST(BuildSortedSupETest_1,    Success);
     FRIEND_TEST(TrussDecompositionTest_3, Success);
+    FRIEND_TEST(ReduceOneETest_3,         Success);
 };
 #endif
