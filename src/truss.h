@@ -36,10 +36,17 @@ using namespace std;
 class Truss {
 public:
 
+    Truss() {};
     Truss(int32_t e_num, int32_t c_num);
     virtual ~Truss();
     void truss_decomosition(CSR &g, const char* outfile, 
                             int32_t k_max, int32_t c = 0);
+
+ protected:
+    virtual void print_sup();
+    virtual void compute_sup(CSR &g, int32_t c = 0);
+    virtual bool sup_e_opr(CSR &g, int32_t k, int32_t c = 0);
+    virtual void reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c = 0);
 
 private:
 
@@ -50,11 +57,8 @@ private:
 
     int32_t get_num_e();
     int32_t get_num_c();
-    virtual void print_sup();
-    virtual void compute_sup(CSR &g, int32_t c = 0);
-    virtual bool sup_e_opr(CSR &g, int32_t k, int32_t c = 0);
-    virtual void reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c = 0);
-    virtual void reconstruct(CSR &g, int32_t c=0);
+    void    reconstruct(CSR &g, int32_t c=0);
+
 
     // These are google test related
     FRIEND_TEST(InitTrussTest_1,          Success);
@@ -64,6 +68,8 @@ private:
     FRIEND_TEST(InitTrussTest_2,          Success);
     FRIEND_TEST(ReduceOneETest_2,         Success);
     FRIEND_TEST(ComputeSupTest_2,         Success);
+    FRIEND_TEST(BuildSortedSupETest_1,    Success);
+    FRIEND_TEST(TrussDecompositionTest_3, Success);
     FRIEND_TEST(SupEOprTest_2,            Success);
 };
 #endif

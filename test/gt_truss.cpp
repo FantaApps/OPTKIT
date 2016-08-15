@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 #include "truss.h"
+#include "truss_plus.h"
 #include "test_util.h" 
 #include <stdlib.h>
 
@@ -254,21 +255,14 @@ TEST(TrussDecompositionTest_3, Success)
 TEST(BuildSortedSupETest_1, Success)
 {
     /* Some basic setup */
-    //CSR g("../data/MC/jwang.gr");
-    //Truss t(g.get_num_e(), g.get_num_c());
-    //t.compute_sup(g);
-    //t.build_sorted_sup_e(g);
+    CSR g("../data/MC/jwang.gr");
+    Truss *t = new TrussPlus();
+    t->compute_sup(g);
 
-    //FILE *writer = fopen("./filename", "w");
+    t->print_sup();
+    
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
-    //for(auto iter = t.m_sortSupE.begin(); iter != t.m_sortSupE.end(); ++iter)
-    //{
-    //    fprintf(writer, "%d %d %d\n", iter->m_vFrom, iter->m_vTo, iter->m_eSup);
-    //}
-    //fclose(writer);
-
-    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./filename"), 
-    //        TstUtil::OPTKIT_TEST_PASS); 
-
-    //std::remove("filename");
+    std::remove("sup.txt");
 }
