@@ -16,6 +16,7 @@
 **/
 
 #include <gtest/gtest.h>
+#include <stdlib.h>
 #include "truss.h"
 #include "truss_plus.h"
 #include "test_util.h" 
@@ -260,6 +261,9 @@ TEST(BuildSortedSupETest_1, Success)
     t->compute_sup(g);
 
     t->print_sup();
+
+    system("cat ./sup.txt");
+    system("cat ../QA/unittest/truss/build_sort_sup_e.txt");
     
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
