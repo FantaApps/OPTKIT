@@ -13,9 +13,13 @@
 
 void TrussPlus::print_sup()
 {
-    Truss::print_sup();
+    FILE *writer = fopen("sup.txt", "w");
 
-    FILE *writer = fopen("sup.txt", "a");
+    for(auto iter = m_pos.begin(); iter != m_pos.end(); ++iter)
+    {
+        fprintf(writer, "%d ", m_sortSupE[*iter].m_eSup);
+    }
+    fprintf(writer, "\n");
 
     for(auto iter = m_sortSupE.begin(); iter != m_sortSupE.end(); ++iter)
     {
@@ -51,12 +55,16 @@ void TrussPlus::compute_sup(CSR &g, int32_t c)
 
     // compute bin
     int32_t max_sup = m_sortSupE.back().m_eSup;
-    m_bin.resize(max_sup + 1);
-    for(int32_t i=1; i<max_sup; ++i)
+    m_bin.resize(max_sup+1);
+    for(int32_t i=0; i<=max_sup; ++i)
     {
         m_bin[i] = (lower_bound(m_sortSupE.begin(), m_sortSupE.end(), SortedSup(i),
                    [] (const SortedSup & a, const SortedSup & b) -> bool
                       {return a.m_eSup < b.m_eSup;} ) - m_sortSupE.begin()); 
+        if(m_sortSupE[m_bin[i]].m_eSup != i)
+        {
+            m_bin[i] = i==0 ? 0 : m_bin[i-1];
+        }
     }
 
     // build edge index
