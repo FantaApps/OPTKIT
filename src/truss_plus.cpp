@@ -94,12 +94,6 @@ bool TrussPlus::sup_e_opr(CSR &g, int32_t k, int32_t c)
             reduce_one_edge(g, m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
             g.remove_e_by_v(m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
             end = m_bin[k-2];
-            if(k==4)
-            {
-                print_sup();
-                //if(m_sortSupE[start].m_vFrom == 2 && m_sortSupE[start].m_vTo == 9)
-                //    exit(1);
-            }
         }
         start++;
     }
