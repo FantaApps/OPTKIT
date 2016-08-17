@@ -63,8 +63,13 @@ void TrussPlus::compute_sup(CSR &g, int32_t c)
                       {return a.m_eSup < b.m_eSup;} ) - m_sortSupE.begin()); 
         if(m_sortSupE[m_bin[i]].m_eSup != i)
         {
-            m_bin[i] = i==0 ? 0 : m_bin[i-1];
+            m_bin[i] = i==0 ? 0 : -1;
         }
+        if(i!=0 && m_bin[i-1]==-1)
+        {
+            m_bin[i-1] = m_bin[i];
+        }
+
     }
 
     // build edge index
@@ -77,16 +82,20 @@ void TrussPlus::compute_sup(CSR &g, int32_t c)
 
 bool TrussPlus::sup_e_opr(CSR &g, int32_t k, int32_t c)
 {
+    DLOG(INFO)<<"==============="<<endl;
     bool ret  = false;
-    int start = m_bin[1];
-    int end   = m_bin[k-1];
+    int start = m_bin[k-3];
+    int end   = m_bin[k-2];
+    m_curK = k;
     while(end > start)
     {
-        reduce_one_edge(g, m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
-        g.remove_e_by_v(m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
+        if(m_sortSupE[start].m_vFrom < m_sortSupE[start].m_vTo)
+        {
+            reduce_one_edge(g, m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
+            g.remove_e_by_v(m_sortSupE[start].m_vFrom, m_sortSupE[start].m_vTo);
+            end = m_bin[k-2];
+        }
         start++;
-        end = m_bin[k-1];
-        ret = true;
     }
     return ret;
 }
@@ -98,9 +107,35 @@ void TrussPlus::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
 
     vector<int32_t> W = g.get_intersect_edges(u, v); 
 
+    DLOG(INFO)<<"----reduce"<<u<<" "<<v<<endl;
+
+    // This O(1) swap process is introduced in 
+    // An o(m) algorithm for cores decomposition of networks
     for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
     {
-        m_sortSupE[m_pos[*it]].m_eSup--;
+        int32_t old_pos = m_pos[*it];
+        DLOG(INFO)<<"edge "<<*it<<" "<<m_sortSupE[old_pos].m_vFrom<<" "<<m_sortSupE[old_pos].m_vTo<<" bin "<<m_sortSupE[old_pos].m_eSup<<endl;
+        assert(*it == m_sortSupE[old_pos].m_eIdx);
+
+        int sup = m_sortSupE[old_pos].m_eSup;
+
+        
+        // if edge in the current bin, do not swap
+        if(sup > (m_curK -3))
+        {
+            int32_t new_pos = m_bin[sup]++;
+            int32_t swapped_edge = m_sortSupE[new_pos].m_eIdx;
+            swap(m_sortSupE[old_pos], m_sortSupE[new_pos]);
+            // swap the index as well
+            m_pos[*it] = new_pos;
+            m_pos[swapped_edge] = old_pos;
+            m_sortSupE[new_pos].m_eSup--;
+            DLOG(INFO)<<"old "<<old_pos<<" new "<<new_pos<<endl;
+        }
+        else
+        {
+            m_sortSupE[old_pos].m_eSup--;
+        }
     }
 
     pair<int32_t, int32_t> rg1 = g.get_e_range(u);

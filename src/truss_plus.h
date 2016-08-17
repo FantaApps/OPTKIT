@@ -63,10 +63,12 @@ private:
     vector<int32_t>   m_bin;      ///< store the start position of 
                                   ///< each support
     vector<int32_t>   m_pos;      ///< index of each edge
+    int32_t           m_curK;     ///< current K value
 
 
     // These are google test related
     FRIEND_TEST(BuildSortedSupETest_1,    Success);
     FRIEND_TEST(TrussDecompositionTest_3, Success);
+    FRIEND_TEST(ReduceOneETest_3,         Success);
 };
 #endif

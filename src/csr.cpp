@@ -224,6 +224,14 @@ int32_t CSR::compute_num_edge_intersect(pair<int32_t, int32_t> rg1,
     int32_t i(rg1.first), j(rg2.first);
     while(i<rg1.second && j<rg2.second)
     {
+        if(e_idx[c][i] == RMVD)
+        {
+            i++;
+        }
+        if(e_idx[c][j] == RMVD)
+        {
+            j++;
+        }
         if(e_idx[c][i] == e_idx[c][j])
         {
             ++ret;
@@ -270,6 +278,14 @@ vector<int32_t> CSR::get_intersect_edges(int32_t u, int32_t v,
 
     while(i<rg1.second && j<rg2.second)
     {
+        if(e_idx[c][i] == RMVD)
+        {
+            i++;
+        }
+        if(e_idx[c][j] == RMVD)
+        {
+            j++;
+        }
         if(e_idx[c][i] == e_idx[c][j])
         {
             if(e_idx[c][i] != RMVD)
@@ -572,7 +588,10 @@ void CSR::visualize()
             pair<int32_t, int32_t> rg = get_e_range(i);
             for(int j=rg.first; j<rg.second; j++)
             {
-                fprintf(writer, "%d -- %d [color=%s];\n", i, e_idx[c][j], color);
+                if(e_idx[c][j] != -1)
+                {
+                    fprintf(writer, "%d -- %d [color=%s];\n", i, e_idx[c][j], color);
+                }
             }
         }
     }

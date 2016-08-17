@@ -67,9 +67,11 @@ private:
     FRIEND_TEST(SupEOprTest_1,            Success);
     FRIEND_TEST(InitTrussTest_2,          Success);
     FRIEND_TEST(ReduceOneETest_2,         Success);
+    FRIEND_TEST(ReduceOneETest_3,         Success);
     FRIEND_TEST(ComputeSupTest_2,         Success);
     FRIEND_TEST(BuildSortedSupETest_1,    Success);
     FRIEND_TEST(TrussDecompositionTest_3, Success);
     FRIEND_TEST(SupEOprTest_2,            Success);
+    FRIEND_TEST(SupEOprTest_3,            Success);
 };
 #endif

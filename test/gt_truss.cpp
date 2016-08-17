@@ -145,6 +145,25 @@ TEST(ReduceOneETest_2, Success)
 /**
  * @brief   test sup_e_opr 
 **/
+TEST(ReduceOneETest_3, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss *t = new TrussPlus();
+
+    t->compute_sup(g);
+    t->reduce_one_edge(g, 0, 3);
+
+    t->print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e2.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./sup.txt");
+}
+
+/**
+ * @brief   test sup_e_opr 
+**/
 TEST(SupEOprTest_1, Success)
 {
     /* Some basic setup */
@@ -192,9 +211,43 @@ TEST(SupEOprTest_2, Success)
             TstUtil::OPTKIT_TEST_PASS); 
 
 
-
     t.print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr1.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    std::remove("./sup.txt");
+    std::remove("./csr.dot");
+}
+
+/**
+ * @brief   test sup_e_opr 
+**/
+TEST(SupEOprTest_3, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/jwang.gr");
+    Truss *t = new TrussPlus();
+
+    t->compute_sup(g);
+    bool ret = t->sup_e_opr(g, 3);
+
+    ASSERT_EQ(ret, false);
+
+    g.visualize();
+    t->print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr1.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr2.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    ret = t->sup_e_opr(g, 4);
+    ASSERT_EQ(ret, false);
+
+    g.visualize();
+    t->print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr2.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr3.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");
@@ -262,9 +315,6 @@ TEST(BuildSortedSupETest_1, Success)
 
     t->print_sup();
 
-    system("cat ./sup.txt");
-    system("cat ../QA/unittest/truss/build_sort_sup_e.txt");
-    
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/build_sort_sup_e.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
