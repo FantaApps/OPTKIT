@@ -63,8 +63,13 @@ void TrussPlus::compute_sup(CSR &g, int32_t c)
                       {return a.m_eSup < b.m_eSup;} ) - m_sortSupE.begin()); 
         if(m_sortSupE[m_bin[i]].m_eSup != i)
         {
-            m_bin[i] = i==0 ? 0 : m_bin[i-1];
+            m_bin[i] = i==0 ? 0 : -1;
         }
+        if(i!=0 && m_bin[i-1]==-1)
+        {
+            m_bin[i-1] = m_bin[i];
+        }
+
     }
 
     // build edge index
@@ -92,6 +97,8 @@ bool TrussPlus::sup_e_opr(CSR &g, int32_t k, int32_t c)
             if(k==4)
             {
                 print_sup();
+                //if(m_sortSupE[start].m_vFrom == 2 && m_sortSupE[start].m_vTo == 9)
+                //    exit(1);
             }
         }
         start++;
@@ -113,7 +120,7 @@ void TrussPlus::reduce_one_edge(CSR & g, int32_t u, int32_t v, int32_t c)
     for(vector<int32_t>::iterator it = W.begin(); it != W.end(); ++it)
     {
         int32_t old_pos = m_pos[*it];
-        DLOG(INFO)<<"edge "<<*it<<" "<<m_sortSupE[old_pos].m_vFrom<<" "<<m_sortSupE[old_pos].m_vTo<<endl;
+        DLOG(INFO)<<"edge "<<*it<<" "<<m_sortSupE[old_pos].m_vFrom<<" "<<m_sortSupE[old_pos].m_vTo<<" bin "<<m_sortSupE[old_pos].m_eSup<<endl;
         assert(*it == m_sortSupE[old_pos].m_eIdx);
 
         int sup = m_sortSupE[old_pos].m_eSup;

@@ -249,7 +249,6 @@ TEST(SupEOprTest_3, Success)
             TstUtil::OPTKIT_TEST_PASS); 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr3.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
-    exit(1);
 
     std::remove("./sup.txt");
     std::remove("./csr.dot");
