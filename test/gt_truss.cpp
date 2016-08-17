@@ -237,9 +237,19 @@ TEST(SupEOprTest_3, Success)
     t->print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr1.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
-
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr2.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
+
+    ret = t->sup_e_opr(g, 4);
+    ASSERT_EQ(ret, false);
+
+    g.visualize();
+    t->print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr2.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr3.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    exit(1);
 
     std::remove("./sup.txt");
     std::remove("./csr.dot");
