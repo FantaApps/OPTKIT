@@ -155,6 +155,7 @@ TEST(ReduceOneETest_3, Success)
     t->reduce_one_edge(g, 0, 3);
 
     t->print_sup();
+    system("diff ./sup.txt ../QA/unittest/truss/sup_reduce_e2.txt");
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e2.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
