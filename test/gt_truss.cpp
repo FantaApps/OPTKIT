@@ -229,10 +229,9 @@ TEST(SupEOprTest_3, Success)
     Truss *t = new TrussPlus();
 
     t->compute_sup(g);
+
     bool ret = t->sup_e_opr(g, 3);
-
     ASSERT_EQ(ret, false);
-
     g.visualize();
     t->print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr1.dot", "./csr.dot"), 
@@ -242,12 +241,20 @@ TEST(SupEOprTest_3, Success)
 
     ret = t->sup_e_opr(g, 4);
     ASSERT_EQ(ret, false);
-
     g.visualize();
     t->print_sup();
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr2.dot", "./csr.dot"), 
             TstUtil::OPTKIT_TEST_PASS); 
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr3.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+
+    ret = t->sup_e_opr(g, 5);
+    ASSERT_EQ(ret, false);
+    g.visualize();
+    t->print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/csr_e_opr3.dot", "./csr.dot"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_e_opr4.txt", "./sup.txt"), 
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./sup.txt");
