@@ -6,6 +6,7 @@
 # @brief    This script runs experiment for stmodel 
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   08/20/16 - Avoid redundant computation 
 #   stplaydog   08/12/16 - Also copy log for time analysis 
 #   stplaydog   08/06/16 - Parallel computing 
 #   stplaydog   04/27/16 - Add upload result script 
@@ -38,6 +39,11 @@ fi
 
 func_run_experiment()
 {
+    # If result already exists, skip the running
+    if [ -f ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ];
+    then
+        return 0
+    fi
     echo START >> ${SCRIPT_HOME}/process
 
     local WHICH_FILE=$1
