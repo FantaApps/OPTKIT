@@ -37,6 +37,8 @@ class TimeIncompleteException(Exception):
     pass
 class MalDataException(Exception):
     pass
+class EndTimeShouldBeLaterThanStartTime(Exception):
+    pass
 
 class LogStats:
 
@@ -72,6 +74,7 @@ class LogStats:
                 self.setStartTime(self.compute_graph_prop, line)
                 self.setEndTime(self.compute_truss, line)
             elif re.search("Finishing OPTKIT", line):
+                self.setEndTime(self.compute_graph_prop, line)
                 self.done_all = True
                 
     def setStartTime(self, which_item, timeStr): 
@@ -87,16 +90,21 @@ class LogStats:
             raise StartTimeUnsetException("Start time is not set!")
         else:
             which_item[TimerType.END]      = self.parseTime(timeStr)
+            if which_item[TimerType.END] - which_item[TimerType.START] < 0:
+                raise EndTimeShouldBeLaterThanStartTime("End time should be later than start time" + timeStr)
             which_item[TimerType.SUMMARY] += which_item[TimerType.END] - \
                                              which_item[TimerType.START]
             which_item[TimerType.START] = SetState.UNSET
             which_item[TimerType.END]   = SetState.UNSET
 
     def parseTime(self, timeStr):
-        timeContent = timeStr.split(" ")[1]
-        timeMicroSecond = datetime.datetime.strptime(timeContent, "%H:%M:%S.%f")
-        return datetime.timedelta(hours   = timeMicroSecond.hour,  \
-                                  minutes = timeMicroSecond.minute,   \
+        month       = timeStr.split(" ")[0][1:3]
+        day         = timeStr.split(" ")[0][3:5]
+        timeContent = month+","+day+","+timeStr.split(" ")[1]
+        timeMicroSecond = datetime.datetime.strptime(timeContent, "%m,%d,%H:%M:%S.%f")
+        return datetime.timedelta(days    = timeMicroSecond.day,    \
+                                  hours   = timeMicroSecond.hour,   \
+                                  minutes = timeMicroSecond.minute, \
                                   seconds = timeMicroSecond.second, \
                                   microseconds = timeMicroSecond.microsecond).total_seconds()
 
@@ -144,13 +152,14 @@ def main(argv):
         print args.fname.replace(".log", "")+","+stats.summary()
     elif args.directory:
         os.chdir(args.fname)
-        for file in glob.glob("*.log"):
+        for file in glob.glob("*.*"):
             try:
                 reader = open(file)
                 stats = LogStats(reader)  
                 print file.replace(".log", "")+","+stats.summary()
             except:
-                print "Data Corruption in " + file
+                e = sys.exc_info()
+                print e
 
 if __name__ == "__main__":
     main(sys.argv)
