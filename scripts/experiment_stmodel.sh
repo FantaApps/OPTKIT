@@ -53,7 +53,7 @@ func_run_experiment()
 
     echo process ${DATA_HOME}stmodel/${WHICH_FILE}/$FILE with x $XY y $XY time $TIME 
 
-    ${OPTKIT_HOME}optkit --stmodel                               \
+    timeout 600s ${OPTKIT_HOME}optkit --stmodel --bgl                               \
                          -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}  \
                          -o ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME} \
                          -c ${XY} -c ${XY} -c ${TIME} \
@@ -64,7 +64,19 @@ func_run_experiment()
         cp ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
         cp ${LOG_HOME}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_* ${DATA_HOME}experiments/results/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.log
     else
-        echo "Data is wrong in ${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}"
+        timeout 600s ${OPTKIT_HOME}optkit --stmodel                \
+                     -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}  \
+                     -o ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME} \
+                     -c ${XY} -c ${XY} -c ${TIME} \
+                     -l ${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}
+        if [ -f ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ];
+        then
+            cp ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
+            cp ${LOG_HOME}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_* ${DATA_HOME}experiments/results/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.log
+        else
+            echo Data is wrong in ${DATA_HOME}stmodel/${WHICH_FILE}/$FILE with x $XY y $XY time $TIME
+        fi
+
     fi
 
     echo END >> ${SCRIPT_HOME}/process

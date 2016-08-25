@@ -45,6 +45,7 @@ void process_without_context(const string &infile, const string &oufile);
 BoolOption        truss         ('t', "truss",      false, "truss apllication");
 BoolOption        stmodel       ('s', "stmodel",    false, "stmodel application");
 BoolOption        resume        ('r', "resume",     false, "resume from a previous run");
+BoolOption        bgl           ('b', "bgl",        false, "enable BGL or not");
 StringOption      logger        ('l', "logger",     false, "log file name");
 StringOption      input         ('i', "input",      true , "input file name");
 StringOption      output        ('o', "output",     true , "output file name");
@@ -126,6 +127,7 @@ void define_arguments(Parser &parser)
 {
     parser.addOption(truss)
         .addOption(stmodel)
+        .addOption(bgl)
         .addOption(input)
         .addOption(output)
         .addOption(logger)
@@ -335,8 +337,11 @@ void process_without_context(const string & infile, const string &oufile)
         t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
 
         LOG(INFO) << "Start performing graph computations...";
-        BGL g(*it);
-        g.compute_all();
+        if(bgl.isSet())
+        {
+            BGL g(*it);
+            g.compute_all();
+        }
     }
 
     LOG(INFO)<<"Writing results to JSON file...";
