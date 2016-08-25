@@ -17,7 +17,7 @@
 **/
 TEST(NYCrime_Regression_Test_1, Success)
 {
-    int status = system("../src/optkit --stmodel " 
+    int status = system("../src/optkit --stmodel --bgl " 
                         " -i ../data/truss/ny_crime.csv "
                         " -o ../data/experiments/stmodel/ny_crime_100_100_0 "
                         " -c 100 -c 100 -c 0 "
