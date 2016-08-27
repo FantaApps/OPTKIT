@@ -25,6 +25,7 @@ import glob, os
 import re
 from os.path import basename
 
+import math
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -68,7 +69,7 @@ class JsonStats:
         i=0
         for key in stats_item:
             X[i] = int(key)
-            Y[i] = log(stats_item[key])
+            Y[i] = stats_item[key]
             i+=1
 
         return {'x':X,'y':Y} 
@@ -78,6 +79,7 @@ class JsonStats:
         print self.clique
         print self.truss
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'LK(2,3), delta=2')
+        plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = '2-OPT, delta=2')
         #plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         #plt.tick_params(labelsize=15)
         plt.ylabel("accumulated distance", fontsize=20)
