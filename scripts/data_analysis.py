@@ -107,10 +107,8 @@ class JsonStatsCollections:
         colors = ['k', 'b', 'r', 'g']
         i = 0
         for c in self.coll: 
-            print self.coll[c].clique 
-            print self.coll[c].truss
-            plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='-', marker=',', label = self.coll[c].name+'k-clique')
-            plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='-', marker='.', label = self.coll[c].name+'k-truss')
+            plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='-', marker=',', label = self.coll[c].name+'-clique')
+            plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='-', marker='.', label = self.coll[c].name+'-truss')
             i += 1
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)

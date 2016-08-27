@@ -18,19 +18,28 @@ ANALYSIS_HOME=${DATA_HOME}/analysis/
 RESULT_HOME=${DATA_HOME}/experiments/results/
 
 FILE_NAME=${ANALYSIS_HOME}result_`date +"%T"`
-echo process log data
-python log_analysis.py  -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp
-echo process json data
-python data_analysis.py -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp1
+#echo process log data
+#python log_analysis.py  -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp
+#echo process json data
+#python data_analysis.py -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp1
+#
+#for COLUMN_ID in 2 3 4 5 6 7 
+#do
+#    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp   > ${FILE_NAME}_${COLUMN_ID}_log
+#done
+#rm ${ANALYSIS_HOME}tmp
+#
+#for COLUMN_ID in 2 3 4 5 6 7 8 
+#do
+#    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp1   > ${FILE_NAME}_${COLUMN_ID}_json
+#done
+#rm ${ANALYSIS_HOME}tmp*
 
-for COLUMN_ID in 2 3 4 5 6 7 
+for PREFIX in NY_BUR CHI_BUR DC_BUR NY_ROB DC_ROB CHI_ROB NY_GRAND_LAR CHI_THEFT   
 do
-    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp   > ${FILE_NAME}_${COLUMN_ID}_log
+    echo "directory /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/" > config
+    echo "prefix $PREFIX" >> config
+    python data_analysis.py -p ./config
+    mv /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/${PREFIX}.png  ${ANALYSIS_HOME}
 done
-rm ${ANALYSIS_HOME}tmp
 
-for COLUMN_ID in 2 3 4 5 6 7 8 
-do
-    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp1   > ${FILE_NAME}_${COLUMN_ID}_json
-done
-rm ${ANALYSIS_HOME}tmp*
