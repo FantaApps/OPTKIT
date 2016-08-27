@@ -59,10 +59,10 @@ class JsonStats:
         items = stats_str.split("\n")
         for item in items:
             pair = item.split(",")
-            if pair[0] in stats_item:
-                stats_item[pair[0]] += int(pair[1])
+            if int(pair[0]) in stats_item:
+                stats_item[int(pair[0])] += int(pair[1])
             else:
-                stats_item[pair[0]] = int(pair[1])
+                stats_item[int(pair[0])] = int(pair[1])
         X = [0] * len(stats_item)
         Y = [0] * len(stats_item)
         i=0
