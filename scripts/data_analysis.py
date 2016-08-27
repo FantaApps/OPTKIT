@@ -25,8 +25,9 @@ import glob, os
 import re
 from os.path import basename
 
-from ggplot import *
-import pandas as pd
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 
 
 class JsonStats:
@@ -54,21 +55,35 @@ class JsonStats:
 
 
     def reduce(self, stats_str):
-        stats_item = [[0,0], [10,0], [50,0], [100,0], [500,0]]
+        stats_item = {} 
         items = stats_str.split("\n")
         for item in items:
             pair = item.split(",")
-            if int(pair[0]) > 0 and int(pair[0]) < 10:
-                stats_item[0][1] += int(pair[1])
+            if pair[0] in stats_item:
+                stats_item[pair[0]] += int(pair[1])
             else:
-                for i in range(5):
-                    if int(pair[0]) > stats_item[i-1][0] and \
-                       int(pair[0]) < stats_item[i][0]:
-                           stats_item[i][1] += int(pair[1])
-        return stats_item
+                stats_item[pair[0]] = int(pair[1])
+        X = [0] * len(stats_item)
+        Y = [0] * len(stats_item)
+        i=0
+        for key in stats_item:
+            X[i] = int(key)
+            Y[i] = stats_item[key]
+            i+=1
+
+        return {'x':X,'y':Y} 
 
     def plot(self):
-        
+        # write to csv files first
+        print self.clique
+        print self.truss
+        plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'LK(2,3), delta=2')
+        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        #plt.tick_params(labelsize=15)
+        plt.ylabel("accumulated distance", fontsize=20)
+        plt.xlabel("actual # evolutionary events", fontsize=20)
+        #plt.tight_layout()
+        plt.savefig("med2.png")
 
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
@@ -88,12 +103,14 @@ def main(argv):
     if args.file:
         stats  = JsonStats(args.fname)
         print stats.summary()
+        stats.plot()
     elif args.directory:
         os.chdir(args.fname)
         for file in glob.glob("*.json"):
             try:
                 stats = JsonStats(file)  
                 print stats.summary()
+                stats.plot()
             except:
                 print "Data Corruption in " + file
 
