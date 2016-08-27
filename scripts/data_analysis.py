@@ -68,7 +68,7 @@ class JsonStats:
         i=0
         for key in stats_item:
             X[i] = int(key)
-            Y[i] = stats_item[key]
+            Y[i] = log(stats_item[key])
             i+=1
 
         return {'x':X,'y':Y} 
