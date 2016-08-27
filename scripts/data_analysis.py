@@ -91,7 +91,6 @@ def main(argv):
     elif args.directory:
         os.chdir(args.fname)
         for file in glob.glob("*.json"):
-            print "process: " + file
             try:
                 stats = JsonStats(file)  
                 print stats.summary()
