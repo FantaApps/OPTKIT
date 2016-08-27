@@ -7,6 +7,7 @@
 #           R figures.
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   08/27/16 - Add scripts to plot data 
 #   stplaydog   08/20/16 - Add json data analytics 
 #   stplaydog   08/13/16 - Creation 
 #
@@ -18,22 +19,22 @@ ANALYSIS_HOME=${DATA_HOME}/analysis/
 RESULT_HOME=${DATA_HOME}/experiments/results/
 
 FILE_NAME=${ANALYSIS_HOME}result_`date +"%T"`
-#echo process log data
-#python log_analysis.py  -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp
-#echo process json data
-#python data_analysis.py -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp1
-#
-#for COLUMN_ID in 2 3 4 5 6 7 
-#do
-#    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp   > ${FILE_NAME}_${COLUMN_ID}_log
-#done
-#rm ${ANALYSIS_HOME}tmp
-#
-#for COLUMN_ID in 2 3 4 5 6 7 8 
-#do
-#    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp1   > ${FILE_NAME}_${COLUMN_ID}_json
-#done
-#rm ${ANALYSIS_HOME}tmp*
+echo process log data
+python log_analysis.py  -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp
+echo process json data
+python data_analysis.py -d ${RESULT_HOME} > ${ANALYSIS_HOME}tmp1
+
+for COLUMN_ID in 2 3 4 5 6 7 
+do
+    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp   > ${FILE_NAME}_${COLUMN_ID}_log
+done
+rm ${ANALYSIS_HOME}tmp
+
+for COLUMN_ID in 2 3 4 5 6 7 8 
+do
+    sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp1   > ${FILE_NAME}_${COLUMN_ID}_json
+done
+rm ${ANALYSIS_HOME}tmp*
 
 for PREFIX in NY_BUR CHI_BUR DC_BUR NY_ROB DC_ROB CHI_ROB NY_GRAND_LAR CHI_THEFT   
 do

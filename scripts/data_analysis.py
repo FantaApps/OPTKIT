@@ -9,6 +9,7 @@
 #           
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   08/27/16 - Add data plot functions 
 #   stplaydog   08/20/16 - Implementation 
 #   stplaydog   08/07/16 - Creation
 #
