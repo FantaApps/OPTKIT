@@ -78,12 +78,12 @@ class JsonStats:
         # write to csv files first
         print self.clique
         print self.truss
-        plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'LK(2,3), delta=2')
-        plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = '2-OPT, delta=2')
-        #plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
-        #plt.tick_params(labelsize=15)
-        plt.ylabel("accumulated distance", fontsize=20)
-        plt.xlabel("actual # evolutionary events", fontsize=20)
+        plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
+        plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
+        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        plt.tick_params(labelsize=15)
+        plt.ylabel("K", fontsize=20)
+        plt.xlabel("number of cohesive subgraphs", fontsize=20)
         #plt.tight_layout()
         plt.savefig("med2.png")
 
