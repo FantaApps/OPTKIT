@@ -25,6 +25,9 @@ import glob, os
 import re
 from os.path import basename
 
+from ggplot import *
+import pandas as pd
+
 
 class JsonStats:
 
@@ -51,15 +54,21 @@ class JsonStats:
 
 
     def reduce(self, stats_str):
-        stats_item = {}
+        stats_item = [[0,0], [10,0], [50,0], [100,0], [500,0]]
         items = stats_str.split("\n")
         for item in items:
             pair = item.split(",")
-            if int(pair[0]) not in stats_item:
-                stats_item[int(pair[0])] = int(pair[1])
+            if int(pair[0]) > 0 and int(pair[0]) < 10:
+                stats_item[0][1] += int(pair[1])
             else:
-                stats_item[int(pair[0])] += int(pair[1])
+                for i in range(5):
+                    if int(pair[0]) > stats_item[i-1][0] and \
+                       int(pair[0]) < stats_item[i][0]:
+                           stats_item[i][1] += int(pair[1])
         return stats_item
+
+    def plot(self):
+        
 
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
