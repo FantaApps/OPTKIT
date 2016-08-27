@@ -82,9 +82,9 @@ class JsonStats:
         plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
-        plt.ylabel("K", fontsize=20)
-        plt.xlabel("number of cohesive subgraphs", fontsize=20)
-        #plt.tight_layout()
+        plt.xlabel("K", fontsize=20)
+        plt.ylabel("number of cohesive subgraphs", fontsize=20)
+        plt.tight_layout()
         plt.savefig("med2.png")
 
     def summary(self):
