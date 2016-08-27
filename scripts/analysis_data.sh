@@ -7,6 +7,7 @@
 #           R figures.
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   08/27/16 - Add scripts to plot data 
 #   stplaydog   08/20/16 - Add json data analytics 
 #   stplaydog   08/13/16 - Creation 
 #
@@ -34,3 +35,12 @@ do
     sort -t',' -n -k ${COLUMN_ID} ${ANALYSIS_HOME}tmp1   > ${FILE_NAME}_${COLUMN_ID}_json
 done
 rm ${ANALYSIS_HOME}tmp*
+
+for PREFIX in NY_BUR CHI_BUR DC_BUR NY_ROB DC_ROB CHI_ROB NY_GRAND_LAR CHI_THEFT   
+do
+    echo "directory /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/" > config
+    echo "prefix $PREFIX" >> config
+    python data_analysis.py -p ./config
+    mv /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/${PREFIX}.png  ${ANALYSIS_HOME}
+done
+

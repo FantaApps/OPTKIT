@@ -9,6 +9,7 @@
 #           
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   08/27/16 - Add data plot functions 
 #   stplaydog   08/20/16 - Implementation 
 #   stplaydog   08/07/16 - Creation
 #
@@ -25,8 +26,10 @@ import glob, os
 import re
 from os.path import basename
 
-from ggplot import *
-import pandas as pd
+import math
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 
 
 class JsonStats:
@@ -54,21 +57,33 @@ class JsonStats:
 
 
     def reduce(self, stats_str):
-        stats_item = [[0,0], [10,0], [50,0], [100,0], [500,0]]
+        stats_item = {} 
         items = stats_str.split("\n")
         for item in items:
             pair = item.split(",")
-            if int(pair[0]) > 0 and int(pair[0]) < 10:
-                stats_item[0][1] += int(pair[1])
+            if int(pair[0]) in stats_item:
+                stats_item[int(pair[0])] += int(pair[1])
             else:
-                for i in range(5):
-                    if int(pair[0]) > stats_item[i-1][0] and \
-                       int(pair[0]) < stats_item[i][0]:
-                           stats_item[i][1] += int(pair[1])
-        return stats_item
+                stats_item[int(pair[0])] = int(pair[1])
+        X = [0] * len(stats_item)
+        Y = [0] * len(stats_item)
+        i=0
+        for key in stats_item:
+            X[i] = int(key)
+            Y[i] = stats_item[key]
+            i+=1
 
-    def plot(self):
-        
+        return {'x':X,'y':Y} 
+
+    def plot(self, ofname):
+        plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
+        plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
+        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        plt.tick_params(labelsize=15)
+        plt.xlabel("K", fontsize=20)
+        plt.ylabel("number of cohesive subgraphs", fontsize=20)
+        plt.tight_layout()
+        plt.savefig(ofname)
 
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
@@ -76,26 +91,69 @@ class JsonStats:
                 str(self.avgCluCoeff), str(self.varCluCoeff)]
         return ",".join(list)
 
+class JsonStatsCollections:
+
+    def __init__(self, dir, prefix):
+        os.chdir(dir)
+        self.coll = {}
+        for file in glob.glob("*.json"):
+            try:
+                if file.find(prefix) != -1:
+                    stats = JsonStats(file)  
+                    self.coll[file] = stats
+            except:
+                print "Data Corruption in " + file
+
+    def plot(self, ofname):
+        colors = ['k', 'b', 'r', 'g']
+        i = 0
+        for c in self.coll: 
+            plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='-', marker=',', label = self.coll[c].name+'-clique')
+            plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='-', marker='.', label = self.coll[c].name+'-truss')
+            i += 1
+        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        plt.tick_params(labelsize=15)
+        plt.xlabel("K", fontsize=20)
+        plt.ylabel("number of cohesive subgraphs", fontsize=20)
+        plt.tight_layout()
+        plt.savefig(ofname)
+
 def main(argv):
 
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-f", "--file", action="store_true")
     group.add_argument("-d", "--directory", action="store_true")
+    group.add_argument("-p", "--prefix", action="store_true")
     parser.add_argument("fname", help="file/directory name")
     args = parser.parse_args()
 
     if args.file:
         stats  = JsonStats(args.fname)
         print stats.summary()
+        ofname = args.fname.replace('json', '') + 'png'
+        stats.plot(ofname)
     elif args.directory:
         os.chdir(args.fname)
         for file in glob.glob("*.json"):
             try:
                 stats = JsonStats(file)  
                 print stats.summary()
+                ofname = file.replace("json", "") + "png"
+                stats.plot(ofname)
             except:
                 print "Data Corruption in " + file
+    elif args.prefix:
+        config = open(args.fname)
+        lines = config.readlines()
+        for line in lines:
+            if line.find("directory") != -1:
+                dir = line.strip().split(" ")[1]
+            if line.find("prefix") != -1:
+                pfx = line.strip().split(" ")[1]
+        coll = JsonStatsCollections(dir, pfx)
+        oname = dir + pfx + '.png'
+        coll.plot(oname)
 
 if __name__ == "__main__":
     main(sys.argv)
