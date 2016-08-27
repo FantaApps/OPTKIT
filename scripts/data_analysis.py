@@ -78,7 +78,7 @@ class JsonStats:
         print self.clique
         print self.truss
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'LK(2,3), delta=2')
-        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        #plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         #plt.tick_params(labelsize=15)
         plt.ylabel("accumulated distance", fontsize=20)
         plt.xlabel("actual # evolutionary events", fontsize=20)
