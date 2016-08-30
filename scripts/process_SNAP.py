@@ -10,6 +10,7 @@
 
 
 import sys
+import os, glob
 import argparse
 from os.path import basename
 
@@ -21,8 +22,10 @@ class SNAPGraph:
         v_map          = {}
         self.v_idx     = 0
         self.edge_list = []
+        line_num       = 0
 
         for line in lines:
+            print line
             if line.find("#") == -1:
                 vets = line.strip().replace("\t", " ").split(" ")
                 i    = 0 
@@ -33,17 +36,20 @@ class SNAPGraph:
                     if i != 0:
                         v_from = v_map[int(vets[i-1])]
                         v_to   = v_map[int(v)]
-                        comb   = [v_from, v_to] if v_from < v_to else [v_to, v_from] 
-                        if comb not in self.edge_list:
-                            edge_list.add(comb)
+                        comb   = str(v_from)+","+str(v_to) if v_from < v_to else str(v_to)+","+str(v_from) 
+                        self.edge_list.append(comb)
+                    i += 1
+        self.edge_list = list(set(self.edge_list))
+             
 
     # now we treat all graphs as undirected
     def output(self, ofile):
         writer = open(ofile, "w")
-        writer.write(str(self.v_idx)+" "+ str(len(self.edge_list))+" "+ '0')
+        writer.write(str(self.v_idx)+" "+ str(len(self.edge_list))+" "+ '0\n')
         for e in self.edge_list:
-            writer.write(str(e[0]) + " " + str(e[1]) + "\n")
-            writer.write(str(e[1]) + " " + str(e[0]) + "\n")
+            edge = e.split(",")
+            writer.write(edge[0] + " "+ edge[1]+" 1\n")
+            writer.write(edge[1] + " "+ edge[0]+" 1\n")
         writer.close()
 
 
@@ -64,12 +70,12 @@ def main(argv):
         os.chdir(args.fname)
         for file in glob.glob("*.txt"):
             try:
-                graph = SNAPGraph(args.fname)
-                ofile = args.fname.replace(".txt", ".gr")
+                print "process", file
+                graph = SNAPGraph(file)
+                ofile = file.replace(".txt", ".gr")
+                graph.output(ofile)
             except:
                 print "Data Corruption in " + file
 
 if __name__ == "__main__":
     main(sys.argv)
-                                                                                                                                                                                                                                                             73,1          Bot
-
