@@ -63,25 +63,16 @@ public:
                                         int32_t c = 0);
 
     int32_t get_num_v();
-
     int32_t get_num_e();
-
     int32_t get_num_c();
-
     int32_t get_to_v(int32_t pos, int32_t c = 0);
-
     int32_t search_e(int32_t from, int32_t to, int32_t c = 0);
-
     pair<int32_t, int32_t> get_e_range(int32_t v, int32_t c = 0);
-
+    bool remove_v(int32_t v, int c = 0);
     bool remove_e_by_v(int32_t from, int32_t to, int c = 0);
-
     bool remove_e_by_eidx(int32_t e_id, int c = 0);
-
     void reconstruct(int32_t c = 0);
-
     void output_all_CC(FILE *writer, bool with_edge = false, int32_t c = 0);
-
     void visualize();
 
 private:

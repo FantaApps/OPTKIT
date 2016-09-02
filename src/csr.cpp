@@ -481,6 +481,24 @@ bool CSR::remove_e_by_v(int32_t from, int32_t to, int c)
     return false;
 }
 
+bool CSR::remove_v(int32_t v, int c)
+{
+    pair<int32_t, int32_t> rg_from = get_e_range(v, c); 
+    for(int32_t i=rg_from.first; i<rg_from.second; ++i)
+    {
+        pair<int32_t, int32_t> rg_to = get_e_range(e_idx[c][i], c); 
+        for(int32_t j=rg_to.first; j<rg_to.second; ++j)
+        {
+            if(e_idx[c][j] == v)
+            {
+                e_idx[c][j] = RMVD;
+                break;
+            }
+        }
+        e_idx[c][i] = RMVD;
+    }
+}
+
 /**
  * @brief       Remove one edge
  *
