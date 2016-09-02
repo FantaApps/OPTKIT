@@ -8,6 +8,7 @@ graphutiltest_SOURCES= gt_csr.cpp            ../src/csr.h        ../src/csr.cpp 
 					   ../src/Stats.cpp      ../src/Config.h     ../src/Config.cpp \
 					   gt_stmodel.cpp        ../src/STModel.h    ../src/CrimeSTModel.h ../src/CrimeSTModel.cpp \ 
 					   gt_core.cpp           ../src/core.h       ../src/core.cpp \ 
+					   gt_dbscan.cpp         ../src/dbscan.h     ../src/dbscan.cpp \ 
                        ../libs/CSVparser.cpp ../libs/CSVparser.h test_util.h 
 TESTS=graphutiltest
 

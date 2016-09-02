@@ -9,8 +9,8 @@
 **/
 
 #pragma once
-#ifndef _H_TRUSS
-#define _H_TRUSS
+#ifndef _H_CORE
+#define _H_CORE
 
 #include "csr.h"
 #include <iostream>
@@ -33,12 +33,11 @@ public:
                 int32_t k_max, int32_t c = 0);
 
  protected:
+
     virtual void print_deg();
     virtual void compute_deg(CSR &g, int32_t c = 0);
     virtual bool deg_v_opr(CSR &g, int32_t k, int32_t c = 0);
     virtual void reduce_one_vet(CSR & g, int32_t v, int32_t c = 0);
-
-private:
 
     int32_t num_v;      ///< total number of edges
     int32_t num_free_v; ///< total number of edges
@@ -60,5 +59,7 @@ private:
     FRIEND_TEST(ReduceOneVTest_2, Success);
     FRIEND_TEST(DegVOprTest_1,    Success);
     FRIEND_TEST(DegEOprTest_2,    Success);
+    FRIEND_TEST(DegVOprTest_3,    Success);
+    FRIEND_TEST(DegVOprTest_4,    Success);
 };
 #endif
