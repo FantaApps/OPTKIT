@@ -497,6 +497,7 @@ bool CSR::remove_v(int32_t v, int c)
         }
         e_idx[c][i] = RMVD;
     }
+    return true;
 }
 
 /**
@@ -546,16 +547,27 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
             output_one_CC(writer, i, visited, cnt, c);
             fprintf(writer, "\n");
 
-            string ktruss;
-            if(Config::instance()->get("ktruss") == "3truss")
+            string kcomp;
+            if(Config::instance()->get("kcomp") == "3comp")
             {
-                ktruss = Config::instance()->get("ktruss")+","+to_string(cnt) + ",NEW";
+                kcomp = Config::instance()->get("kcomp")+","+to_string(cnt) + ",NEW";
             }
             else
             {
-                ktruss = Config::instance()->get("ktruss")+","+to_string(cnt) + ",OLD";
+                kcomp = Config::instance()->get("kcomp")+","+to_string(cnt) + ",OLD";
             }
-            Stats::instance()->write_content(Stats::TRUSS, ktruss); 
+            if(Config::instance()->get("comp") == "ktruss")
+            {
+                Stats::instance()->write_content(Stats::TRUSS, kcomp); 
+            }
+            else if(Config::instance()->get("comp") == "kcore")
+            {
+                Stats::instance()->write_content(Stats::CORE, kcomp); 
+            }
+            else if(Config::instance()->get("comp") == "dbscan")
+            {
+                Stats::instance()->write_content(Stats::DBSCAN, kcomp); 
+            }
         }
     }
 

@@ -30,5 +30,6 @@ TEST(NYCrime_Regression_Test_1, Success)
                                    "../QA/testcase/results/ny_crime_100_100_0.json", 
                                    true), 
                                    TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("../data/experiments/stmodel/ny_crime_100_100_0.json");
     // check logs
 }

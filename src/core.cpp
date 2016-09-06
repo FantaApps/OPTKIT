@@ -61,7 +61,7 @@ void Core::k_core(CSR &g, const char* outfile, int32_t k_max, int32_t c)
 
     while(get_num_v() > 0)
     {
-        LOG(INFO)<<"Executing degport reduction operation of k="<<k;
+        LOG(INFO)<<"Executing degree reduction operation of k="<<k;
         while(deg_v_opr(g, k));
 
         if(get_num_v() > 0)

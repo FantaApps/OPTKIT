@@ -87,8 +87,8 @@ class JsonStats:
 
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
-                str(self.numCC),       str(self.avgDiam), str(self.varDiam), \
-                str(self.avgCluCoeff), str(self.varCluCoeff)]
+                str(self.numCC),       str(round(self.avgDiam,2)), str(round(self.varDiam,2)), \
+                str(round(self.avgCluCoeff,2)), str(round(self.varCluCoeff,2)]
         return ",".join(list)
 
 class JsonStatsCollections:

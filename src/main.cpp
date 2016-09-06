@@ -17,15 +17,17 @@
 
 #include "list.h"
 #include "node.h"
-#include "../libs/RTree.h"
 #include "csr.h"
 #include "truss.h"
-#include "CrimeSTModel.h"
 #include "Stats.h"
 #include "Config.h"
 #include "bgl.h"
-#include <getopt.h>
+#include "core.h"
+#include "dbscan.h"
+#include "CrimeSTModel.h"
+#include "../libs/RTree.h"
 #include "../libs/Parser.h"
+#include <getopt.h>
 
 #ifdef WINDOWS
     #include <direct.h>
@@ -333,8 +335,21 @@ void process_without_context(const string & infile, const string &oufile)
         Truss t(g1.get_num_e(), g1.get_num_c());
 
         LOG(INFO) << "Start performing truss decomposition...";
+        Config::instance()->set("comp", "ktruss");
         string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
         t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
+
+        LOG(INFO) << "Start performing core decomposition...";
+        Config::instance()->set("comp", "kcore");
+        Core *core = new Core(g1.get_num_e(), g1.get_num_c());
+        string CC_core_out = oufile + "_" + to_string(i) + "_core.txt";
+        core->k_core(g1, CC_core_out.c_str(), 5);
+
+        LOG(INFO) << "Start performing dbscan decomposition...";
+        Config::instance()->set("comp", "dbscan");
+        Core *dbscan = new DBSCAN(g1.get_num_e(), g1.get_num_c());
+        string CC_dbscan_out = oufile + "_" + to_string(i) + "_dbscan.txt";
+        dbscan->k_core(g1, CC_dbscan_out.c_str(), 5);
 
         LOG(INFO) << "Start performing graph computations...";
         if(bgl.isSet())

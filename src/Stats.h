@@ -62,7 +62,9 @@ public:
         CLUSTERCOEFF,
         BETWEENCENTRL,
         TRUSS,
-        CLIQUE
+        CLIQUE,
+        CORE,
+        DBSCAN
     };
 
     struct GraphProperty
