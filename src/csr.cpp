@@ -548,7 +548,7 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
             fprintf(writer, "\n");
 
             string kcomp;
-            if(Config::instance()->get("kcomp") == "3comp")
+            if(Config::instance()->get("kcomp") == "3")
             {
                 kcomp = Config::instance()->get("kcomp")+","+to_string(cnt) + ",NEW";
             }

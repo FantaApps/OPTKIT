@@ -126,6 +126,30 @@ void Stats::write_content_stmodel(int32_t option, string &content)
                 m_gProperty.m_numClique.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
+        case CORE:
+            {
+                vector<string> val;
+                split(val, content, is_any_of(",")); 
+                if(val[2] == "NEW")
+                {
+                    int_pair_feature_l tmp;
+                    m_gProperty.m_numCore.push_back(tmp);
+                }
+                m_gProperty.m_numCore.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
+            }
+        case DBSCAN:
+            {
+                vector<string> val;
+                split(val, content, is_any_of(",")); 
+                if(val[2] == "NEW")
+                {
+                    int_pair_feature_l tmp;
+                    m_gProperty.m_numDBSCAN.push_back(tmp);
+                }
+                m_gProperty.m_numDBSCAN.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
+            }
     }
 }
 
@@ -194,6 +218,16 @@ string Stats::get_content_stmodel(int32_t option)
         case CLIQUE:
             {
                 Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numClique, ret);
+                break;
+            }
+        case CORE:
+            {
+                Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numCore, ret);
+                break;
+            }
+        case DBSCAN:
+            {
+                Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numDBSCAN, ret);
                 break;
             }
     }

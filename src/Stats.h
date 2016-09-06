@@ -78,6 +78,8 @@ public:
         double_feature_ll     m_betweenCentrl;   ///< boost
         int_pair_feature_ll   m_numTruss;        ///< native
         int_pair_feature_ll   m_numClique;       ///< boost
+        int_pair_feature_ll   m_numCore;         ///< boost
+        int_pair_feature_ll   m_numDBSCAN;       ///< boost
 
         GraphProperty() : m_numCC(0)
         {}
