@@ -218,3 +218,18 @@ TEST(CoreDecompositionTest_2, Success)
             TstUtil::OPTKIT_TEST_PASS); 
     std::remove("./core.txt");
 }
+
+/**
+ * @brief   test core decomposition of 4-clique 
+**/
+TEST(CoreDecompositionTest_3, Success)
+{
+    /* Some basic setup */
+    CSR g("../data/MC/4_clique.gr");
+    Core c(g.get_num_v(), g.get_num_c());
+
+    c.k_core(g, "core.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/core/4_core_alg1.txt", "./core.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./core.txt");
+}

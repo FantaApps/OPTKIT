@@ -106,11 +106,6 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val; 
                 split(val, content, is_any_of(",")); 
-                if(val[2] == "NEW")
-                {
-                    int_pair_feature_l tmp;
-                    m_gProperty.m_numTruss.push_back(tmp);
-                }
                 m_gProperty.m_numTruss.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
@@ -118,11 +113,6 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
-                if(val[2] == "NEW")
-                {
-                    int_pair_feature_l tmp;
-                    m_gProperty.m_numClique.push_back(tmp);
-                }
                 m_gProperty.m_numClique.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
@@ -130,11 +120,6 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
-                if(val[2] == "NEW")
-                {
-                    int_pair_feature_l tmp;
-                    m_gProperty.m_numCore.push_back(tmp);
-                }
                 m_gProperty.m_numCore.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
@@ -142,15 +127,19 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
-                if(val[2] == "NEW")
-                {
-                    int_pair_feature_l tmp;
-                    m_gProperty.m_numDBSCAN.push_back(tmp);
-                }
                 m_gProperty.m_numDBSCAN.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
     }
+}
+
+void Stats::add_one_CC()
+{
+    int_pair_feature_l tmp;
+    m_gProperty.m_numDBSCAN.push_back(tmp);
+    m_gProperty.m_numCore.push_back(tmp);
+    m_gProperty.m_numClique.push_back(tmp);
+    m_gProperty.m_numTruss.push_back(tmp);
 }
 
 /**
@@ -282,6 +271,14 @@ void Stats::serialize_stmodel()
     string truss;
     Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numTruss, truss);
     gp["truss"] = truss == "" ? "1" : truss;
+
+    string core;
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numCore, core);
+    gp["core"] = truss == "" ? "1" : core;
+
+    string dbscan;
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numDBSCAN, dbscan);
+    gp["dbscan"] = truss == "" ? "1" : dbscan;
 
     content["graph property"] = gp;
     

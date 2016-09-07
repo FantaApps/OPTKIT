@@ -67,7 +67,7 @@ void Core::k_core(CSR &g, const char* outfile, int32_t k_max, int32_t c)
         if(get_num_v() > 0)
         {
             fprintf(writer, "%d Core: \n", k);
-            string kcore = to_string(k)+"core";
+            string kcore = to_string(k);
             Config::instance()->set("kcore", kcore);
             g.output_all_CC(writer, true);
         }

@@ -149,6 +149,8 @@ public:
         return ret;
     }
 
+    void   add_one_CC();
+
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
@@ -173,8 +175,8 @@ private:
 
     Stats(string outFile); 
     Stats(); 
-    void serialize_stmodel();
-    void write_content_stmodel(int32_t option, string &content);
+    void   serialize_stmodel();
+    void   write_content_stmodel(int32_t option, string &content);
     string get_content_stmodel(int32_t option);
 
     static Stats*   m_instance;
