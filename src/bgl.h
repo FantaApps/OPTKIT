@@ -193,6 +193,16 @@ public:
         all_cliques();
     }
 
+    /**
+     * @brief       compute all graph properties
+     *
+    **/
+    void compute_core()
+    {
+        floyd_warshall();
+        clustering_coeff();
+    }
+
     int connected_component(vector<int> &component)
     {
         int num = connected_components(m_adj, &component[0]);

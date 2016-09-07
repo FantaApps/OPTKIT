@@ -357,6 +357,11 @@ void process_without_context(const string & infile, const string &oufile)
             BGL g(*it);
             g.compute_all();
         }
+        else
+        {
+            BGL g(*it);
+            g.compute_core();
+        }
     }
 
     LOG(INFO)<<"Writing results to JSON file...";

@@ -36,7 +36,7 @@ do
 done
 rm ${ANALYSIS_HOME}tmp*
 
-for PREFIX in NY_BUR CHI_BUR DC_BUR NY_ROB DC_ROB CHI_ROB NY_GRAND_LAR CHI_THEFT   
+for PREFIX in NY_BUR CHI_BUR DC_BUR NY_ROB DC_ROB CHI_ROB NY_THEFT CHI_THEFT DC_THEFT  
 do
     echo "directory /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/" > config
     echo "prefix $PREFIX" >> config
