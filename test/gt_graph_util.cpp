@@ -49,6 +49,7 @@ TEST(BGLGraphProperty_1, Success)
     BGL g("../data/MC/janc.gr");
 
     Stats::instance()->m_application = "stmodel";    
+    Stats::instance()->add_one_CC(); 
 
     g.floyd_warshall();
     g.clustering_coeff();
@@ -61,6 +62,7 @@ TEST(BGLGraphProperty_1, Success)
             "2.166667,3.500000,0.333333,4.833333,1.000000,0.666667,4.000000,1.500000");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLIQUE), 
             "2,3\n3,5");
+    Stats::instance()->m_gProperty.clear(); 
 }
 
 /**
@@ -68,6 +70,7 @@ TEST(BGLGraphProperty_1, Success)
 **/
 TEST(BGLInitGraph_2, Success)
 {
+    Stats::instance()->add_one_CC(); 
     BGL g("../data/MC/jwang.gr");
     ofstream writer ("bgl_jwang.dot");
     g.print_dependencies<Adj>(writer,  g.m_adj);
@@ -79,6 +82,7 @@ TEST(BGLInitGraph_2, Success)
               TstUtil::OPTKIT_TEST_PASS);
 
     std::remove("./bgl_jwang.dot");
+    Stats::instance()->m_gProperty.clear(); 
 }
 
 /**
@@ -89,15 +93,8 @@ TEST(BGLGraphProperty_2, Success)
     BGL g("../data/MC/jwang.gr");
 
     Stats::instance()->m_application = "stmodel";
-    Stats::instance()->m_gProperty.m_numCC = 0;
-    Stats::instance()->m_gProperty.m_numV.clear();
-    Stats::instance()->m_gProperty.m_numE.clear();
-    Stats::instance()->m_gProperty.m_diameter.clear();
-    Stats::instance()->m_gProperty.m_girth.clear();
-    Stats::instance()->m_gProperty.m_clusterCoeff.clear();
-    Stats::instance()->m_gProperty.m_betweenCentrl.clear();
-    Stats::instance()->m_gProperty.m_numTruss.clear();
-    Stats::instance()->m_gProperty.m_numClique.clear();
+
+    Stats::instance()->add_one_CC(); 
 
     g.floyd_warshall();
     g.clustering_coeff();
@@ -110,6 +107,7 @@ TEST(BGLGraphProperty_2, Success)
             "0.533333,0.000000,0.900000,9.433333,1.000000,0.000000,26.266667,0.900000,0.000000,9.233333,0.000000,0.000000,0.000000,0.000000,1.000000,0.333333,2.700000,97.300000,0.333333,2.033333,57.033333");
     ASSERT_EQ(Stats::instance()->get_content(Stats::CLIQUE), 
             "2,3\n3,12\n4,5");
+    Stats::instance()->m_gProperty.clear(); 
 }
 
 /**
@@ -129,10 +127,12 @@ TEST(BGLSTModel_1, Success)
 
     Stats::instance()->m_application = "stmodel";    
     Stats::instance()->m_outFile     = "./stats.txt";    
+    Stats::instance()->serialize();
 
     for(auto it = el_cc.begin(); it != el_cc.end(); ++it)
     {
         BGL g(*it);
+        Stats::instance()->add_one_CC(); 
         
         g.floyd_warshall();
         g.clustering_coeff();
@@ -146,6 +146,7 @@ TEST(BGLSTModel_1, Success)
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./stats.txt");
+    Stats::instance()->clear(); 
 }
 
 TEST(BGLConnectedComponent_1, Success)
