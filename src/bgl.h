@@ -319,14 +319,7 @@ private:
         for(auto it = count.begin(); it != count.end(); ++it)
         {
             string one_val;
-            if(it == count.begin())
-            {
-                one_val = to_string(it->first) + "," + to_string(it->second) + ",NEW";
-            }
-            else
-            {
-                one_val = to_string(it->first) + "," + to_string(it->second) + ",OLD";
-            }
+            one_val = to_string(it->first) + "," + to_string(it->second);
             Stats::instance()->write_content(Stats::CLIQUE, one_val);
         }
     }

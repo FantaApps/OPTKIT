@@ -146,7 +146,7 @@ TEST(BGLSTModel_1, Success)
             TstUtil::OPTKIT_TEST_PASS); 
 
     std::remove("./stats.txt");
-    Stats::instance()->clear(); 
+    Stats::instance()->m_gProperty.clear(); 
 }
 
 TEST(BGLConnectedComponent_1, Success)
@@ -183,4 +183,5 @@ TEST(BGLConnectedComponent_1, Success)
             ASSERT_EQ(it->second, comp1[i]);
         }
     }
+    Stats::instance()->m_gProperty.clear(); 
 }

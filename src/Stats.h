@@ -95,6 +95,8 @@ public:
             m_betweenCentrl.clear();
             m_numTruss.clear();
             m_numClique.clear();
+            m_numCore.clear();
+            m_numDBSCAN.clear();
         }
 
         template<class Archive>
@@ -169,6 +171,7 @@ public:
         m_application = "";
         m_dataName    = "";
         m_range.clear();
+        m_gProperty.clear();
     }
 
 private:
@@ -193,7 +196,9 @@ private:
     FRIEND_TEST(BGLGraphProperty_1,       Success);
     FRIEND_TEST(BGLGraphProperty_2,       Success);
     FRIEND_TEST(BGLSTModel_1,             Success);
+    FRIEND_TEST(BGLInitGraph_2,           Success);
     FRIEND_TEST(StatsSerializationTest_1, Success);
+    FRIEND_TEST(BGLConnectedComponent_1,  Success);
 };
 
 #endif // __H_STATS__ 

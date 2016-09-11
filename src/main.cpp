@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   09/10/16 - Bug fixing to make core work 
  *  stplaydog   07/24/16 - Add context switching support 
  *  stplaydog   04/24/16 - Add logger support 
  *  stplaydog   04/16/16 - Fixed some minor bugs 
@@ -343,21 +344,16 @@ void process_without_context(const string & infile, const string &oufile)
         Config::instance()->set("comp", "ktruss");
         string CC_truss_out = oufile + "_" + to_string(i) + ".txt";
         t.truss_decomosition(g1, CC_truss_out.c_str(), 5);
-        if(i==2)
-        {
-            g3.visualize();
-            exit(1);
-        }
 
         LOG(INFO) << "Start performing core decomposition...";
         Config::instance()->set("comp", "kcore");
-        Core *core = new Core(g2.get_num_e(), g2.get_num_c());
+        Core *core = new Core(g2.get_num_v(), g2.get_num_c());
         string CC_core_out = oufile + "_" + to_string(i) + "_core.txt";
         core->k_core(g2, CC_core_out.c_str(), 5);
 
         LOG(INFO) << "Start performing dbscan decomposition...";
         Config::instance()->set("comp", "dbscan");
-        Core *dbscan = new DBSCAN(g3.get_num_e(), g3.get_num_c());
+        Core *dbscan = new DBSCAN(g3.get_num_v(), g3.get_num_c());
         string CC_dbscan_out = oufile + "_" + to_string(i) + "_dbscan.txt";
         dbscan->k_core(g3, CC_dbscan_out.c_str(), 5);
 

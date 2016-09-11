@@ -148,18 +148,17 @@ TEST(ReduceOneETest_2, Success)
 TEST(ReduceOneETest_3, Success)
 {
     /* Some basic setup */
-    //CSR g("../data/MC/jwang.gr");
-    //Truss *t = new TrussPlus();
+    CSR g("../data/MC/jwang.gr");
+    Truss *t = new TrussPlus();
 
-    //t->compute_sup(g);
-    //t->reduce_one_edge(g, 0, 3);
+    t->compute_sup(g);
+    t->reduce_one_edge(g, 0, 3);
 
-    //t->print_sup();
-    //system("cat ./sup.txt");
-    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e2.txt", "./sup.txt"), 
-    //        TstUtil::OPTKIT_TEST_PASS); 
+    t->print_sup();
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/sup_reduce_e2.txt", "./sup.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
 
-    //std::remove("./sup.txt");
+    std::remove("./sup.txt");
 }
 
 /**
@@ -300,15 +299,14 @@ TEST(TrussDecompositionTest_2, Success)
 TEST(TrussDecompositionTest_3, Success)
 {
     /* Some basic setup */
-    //CSR g("../data/MC/jwang.gr");
-    //Truss t(g.get_num_e(), g.get_num_c());
-    //Config::instance()->set(string("truss_algo"), string("algo2"));
+    CSR g("../data/MC/jwang.gr");
+    Truss t(g.get_num_e(), g.get_num_c());
+    Config::instance()->set(string("truss_algo"), string("algo2"));
 
-    //T.truss_decomosition(g, "truss.txt", 5);
-    //ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
-    //        TstUtil::OPTKIT_TEST_PASS); 
-    //Exit(1);
-    //Std::remove("./truss.txt");
+    t.truss_decomosition(g, "truss.txt", 5);
+    ASSERT_EQ(TstUtil::compareFile("../QA/unittest/truss/jwang_truss_alg1.txt", "./truss.txt"), 
+            TstUtil::OPTKIT_TEST_PASS); 
+    std::remove("./truss.txt");
 }
 
 /**
