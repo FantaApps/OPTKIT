@@ -23,6 +23,8 @@ TEST(NYCrime_Regression_Test_1, Success)
                         " -c 100 -c 100 -c 0 "
                         " -l ny_crime_100_100_0_");
 
+
+    exit(1);
     ASSERT_EQ(status, 0);
 
     // check results 

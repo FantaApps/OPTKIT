@@ -199,6 +199,14 @@ public:
         return num;
     }
 
+    double one_cluster_coef()
+    {
+        ClusteringContainer coefs(num_vertices(m_udir));
+        ClusteringMap cm(coefs, m_udir);
+        double cc = all_clustering_coefficients(m_udir, cm);
+        return cc;
+    }
+
 private:
 
     void add_one_edge(int32_t v_from, int32_t v_to, NameMap &nm, map<std::string, UVertex> &verts)

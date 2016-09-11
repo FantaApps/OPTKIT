@@ -185,6 +185,7 @@ TEST(OutputAllCCTest_1, Success)
     g.output_all_CC(writer);
     fclose(writer);
 
+
     ASSERT_EQ(TstUtil::compareFile("../QA/unittest/CSR/CC.txt", 
                 "./CC.txt"), TstUtil::OPTKIT_TEST_PASS); 
 
