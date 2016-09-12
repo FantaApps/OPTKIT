@@ -114,7 +114,7 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val; 
                 split(val, content, is_any_of(",")); 
-                m_gProperty.m_numTrussCOE.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                m_gProperty.m_numTrussCOE.back().push_back(pair<int, double>(stoi(val[0]), stof(val[1])));
                 break;
             }
         case CLIQUE:
@@ -135,7 +135,7 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
-                m_gProperty.m_numCoreCOE.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                m_gProperty.m_numCoreCOE.back().push_back(pair<int, double>(stoi(val[0]), stof(val[1])));
                 break;
             }
         case DBSCAN:
@@ -149,7 +149,7 @@ void Stats::write_content_stmodel(int32_t option, string &content)
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
-                m_gProperty.m_numDBSCANCOE.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                m_gProperty.m_numDBSCANCOE.back().push_back(pair<int, double>(stoi(val[0]), stof(val[1])));
                 break;
             }
     }
@@ -157,17 +157,19 @@ void Stats::write_content_stmodel(int32_t option, string &content)
 
 void Stats::add_one_CC()
 {
-    int_pair_feature_l tmp;
+    int_pair_feature_l    tmp;
+    double_pair_feature_l tmp1;
+
     m_gProperty.m_numClique.push_back(tmp);
 
     m_gProperty.m_numDBSCAN.push_back(tmp);
-    m_gProperty.m_numDBSCANCOE.push_back(tmp);
+    m_gProperty.m_numDBSCANCOE.push_back(tmp1);
 
     m_gProperty.m_numCore.push_back(tmp);
-    m_gProperty.m_numCoreCOE.push_back(tmp);
+    m_gProperty.m_numCoreCOE.push_back(tmp1);
 
     m_gProperty.m_numTruss.push_back(tmp);
-    m_gProperty.m_numTrussCOE.push_back(tmp);
+    m_gProperty.m_numTrussCOE.push_back(tmp1);
 }
 
 /**
@@ -309,15 +311,15 @@ void Stats::serialize_stmodel()
     gp["dbscan"] = dbscan == "" ? "1" : dbscan;
 
     string truss_coe;
-    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numTrussCOE, truss_coe);
+    Utils::vec_vec_pair_to_string<int, double>(m_gProperty.m_numTrussCOE, truss_coe);
     gp["truss_coe"] = truss_coe == "" ? "1" : truss_coe;
 
     string core_coe;
-    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numCoreCOE, core_coe);
+    Utils::vec_vec_pair_to_string<int, double>(m_gProperty.m_numCoreCOE, core_coe);
     gp["core_coe"] = core_coe == "" ? "1" : core_coe;
 
     string dbscan_coe;
-    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numDBSCANCOE, dbscan_coe);
+    Utils::vec_vec_pair_to_string<int, double>(m_gProperty.m_numDBSCANCOE, dbscan_coe);
     gp["dbscan_coe"] = dbscan_coe == "" ? "1" : dbscan_coe;
 
     content["graph property"] = gp;
