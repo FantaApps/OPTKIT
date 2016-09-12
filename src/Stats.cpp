@@ -5,6 +5,7 @@
  *           The result could be serialized to a json file.  
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   09/11/16 - each cohesive subgraph now have clustering coefficient 
  *  stplaydog   03/20/16 - write function get_content_stmodel. 
  *  stplaydog   03/10/16 - Creation
  *
@@ -109,6 +110,13 @@ void Stats::write_content_stmodel(int32_t option, string &content)
                 m_gProperty.m_numTruss.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
+        case TRUSS_COE:
+            {
+                vector<string> val; 
+                split(val, content, is_any_of(",")); 
+                m_gProperty.m_numTrussCOE.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
+            }
         case CLIQUE:
             {
                 vector<string> val;
@@ -123,11 +131,25 @@ void Stats::write_content_stmodel(int32_t option, string &content)
                 m_gProperty.m_numCore.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
+        case CORE_COE:
+            {
+                vector<string> val;
+                split(val, content, is_any_of(",")); 
+                m_gProperty.m_numCoreCOE.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
+            }
         case DBSCAN:
             {
                 vector<string> val;
                 split(val, content, is_any_of(",")); 
                 m_gProperty.m_numDBSCAN.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
+                break;
+            }
+        case DBSCAN_COE:
+            {
+                vector<string> val;
+                split(val, content, is_any_of(",")); 
+                m_gProperty.m_numDBSCANCOE.back().push_back(pair<int, int>(stoi(val[0]), stoi(val[1])));
                 break;
             }
     }
@@ -136,10 +158,16 @@ void Stats::write_content_stmodel(int32_t option, string &content)
 void Stats::add_one_CC()
 {
     int_pair_feature_l tmp;
-    m_gProperty.m_numDBSCAN.push_back(tmp);
-    m_gProperty.m_numCore.push_back(tmp);
     m_gProperty.m_numClique.push_back(tmp);
+
+    m_gProperty.m_numDBSCAN.push_back(tmp);
+    m_gProperty.m_numDBSCANCOE.push_back(tmp);
+
+    m_gProperty.m_numCore.push_back(tmp);
+    m_gProperty.m_numCoreCOE.push_back(tmp);
+
     m_gProperty.m_numTruss.push_back(tmp);
+    m_gProperty.m_numTrussCOE.push_back(tmp);
 }
 
 /**
@@ -274,11 +302,23 @@ void Stats::serialize_stmodel()
 
     string core;
     Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numCore, core);
-    gp["core"] = truss == "" ? "1" : core;
+    gp["core"] = core == "" ? "1" : core;
 
     string dbscan;
     Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numDBSCAN, dbscan);
-    gp["dbscan"] = truss == "" ? "1" : dbscan;
+    gp["dbscan"] = dbscan == "" ? "1" : dbscan;
+
+    string truss_coe;
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numTrussCOE, truss_coe);
+    gp["truss_coe"] = truss_coe == "" ? "1" : truss_coe;
+
+    string core_coe;
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numCoreCOE, core_coe);
+    gp["core_coe"] = core_coe == "" ? "1" : core_coe;
+
+    string dbscan_coe;
+    Utils::vec_vec_pair_to_string<int, int>(m_gProperty.m_numDBSCANCOE, dbscan_coe);
+    gp["dbscan_coe"] = dbscan_coe == "" ? "1" : dbscan_coe;
 
     content["graph property"] = gp;
     

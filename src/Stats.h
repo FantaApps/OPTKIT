@@ -62,9 +62,12 @@ public:
         CLUSTERCOEFF,
         BETWEENCENTRL,
         TRUSS,
+        TRUSS_COE,
         CLIQUE,
         CORE,
-        DBSCAN
+        CORE_COE,
+        DBSCAN,
+        DBSCAN_COE
     };
 
     struct GraphProperty
@@ -76,10 +79,13 @@ public:
         int_feature_l         m_girth;           ///< native
         double_feature_l      m_clusterCoeff;    ///< boost
         double_feature_ll     m_betweenCentrl;   ///< boost
-        int_pair_feature_ll   m_numTruss;        ///< native
         int_pair_feature_ll   m_numClique;       ///< boost
+        int_pair_feature_ll   m_numTruss;        ///< native
         int_pair_feature_ll   m_numCore;         ///< boost
         int_pair_feature_ll   m_numDBSCAN;       ///< boost
+        int_pair_feature_ll   m_numTrussCOE;     ///< native
+        int_pair_feature_ll   m_numCoreCOE;      ///< boost
+        int_pair_feature_ll   m_numDBSCANCOE;    ///< boost
 
         GraphProperty() : m_numCC(0)
         {}
@@ -97,6 +103,9 @@ public:
             m_numClique.clear();
             m_numCore.clear();
             m_numDBSCAN.clear();
+            m_numTrussCOE.clear();
+            m_numCoreCOE.clear();
+            m_numDBSCANCOE.clear();
         }
 
         template<class Archive>

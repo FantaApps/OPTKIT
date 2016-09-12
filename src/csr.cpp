@@ -551,19 +551,22 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
             fprintf(writer, "\n");
 
             string kcomp;
-            kcomp = Config::instance()->get("kcomp") + "," + to_string(cnt) + "," + to_string(coe);
+            kcomp = Config::instance()->get("kcomp") + "," + to_string(cnt); 
 
             if(Config::instance()->get("comp") == "ktruss")
             {
                 Stats::instance()->write_content(Stats::TRUSS, kcomp); 
+                Stats::instance()->write_content(Stats::TRUSS_COE, kcomp); 
             }
             else if(Config::instance()->get("comp") == "kcore")
             {
                 Stats::instance()->write_content(Stats::CORE, kcomp); 
+                Stats::instance()->write_content(Stats::CORE_COE, kcomp); 
             }
             else if(Config::instance()->get("comp") == "dbscan")
             {
                 Stats::instance()->write_content(Stats::DBSCAN, kcomp); 
+                Stats::instance()->write_content(Stats::DBSCAN_COE, kcomp); 
             }
         }
     }
