@@ -16,6 +16,8 @@
 #include "Config.h"
 #include "Stats.h"
 #include "utils.h"
+#include "bgl.h"
+#include <queue>
 
 
 /**
@@ -544,29 +546,27 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
         {
             fprintf(writer, "Comp [%d] : ", count++);
             int32_t cnt = 0;
-            output_one_CC(writer, i, visited, cnt, c);
+            double  coe = 0.0;
+            output_one_CC(writer, i, visited, cnt, coe, c);
             fprintf(writer, "\n");
 
             string kcomp;
-            if(Config::instance()->get("kcomp") == "3comp")
-            {
-                kcomp = Config::instance()->get("kcomp")+","+to_string(cnt) + ",NEW";
-            }
-            else
-            {
-                kcomp = Config::instance()->get("kcomp")+","+to_string(cnt) + ",OLD";
-            }
+            kcomp = Config::instance()->get("kcomp") + "," + to_string(cnt); 
+
             if(Config::instance()->get("comp") == "ktruss")
             {
                 Stats::instance()->write_content(Stats::TRUSS, kcomp); 
+                Stats::instance()->write_content(Stats::TRUSS_COE, kcomp); 
             }
             else if(Config::instance()->get("comp") == "kcore")
             {
                 Stats::instance()->write_content(Stats::CORE, kcomp); 
+                Stats::instance()->write_content(Stats::CORE_COE, kcomp); 
             }
             else if(Config::instance()->get("comp") == "dbscan")
             {
                 Stats::instance()->write_content(Stats::DBSCAN, kcomp); 
+                Stats::instance()->write_content(Stats::DBSCAN_COE, kcomp); 
             }
         }
     }
@@ -636,39 +636,50 @@ void CSR::visualize()
  * @param[in]       v           the seed vertex 
  * @param[in]       visited     indicate which vertex has been visited
  * @param[out]      cnt         num of vertices in this CC
+ * @param[out]      coe         clustering coefficient of the CC 
  * @param[in]       c           which color 
  *
  * @return      N/A
 **/
-void CSR::output_one_CC(FILE *writer, int32_t v, bool *visited, 
-                        int32_t &cnt, int32_t c)
+void CSR::output_one_CC(FILE *writer, int32_t v,    bool *visited, 
+                        int32_t &cnt, double & coe, int32_t c)
 {
     assert(c < num_c);
     assert(writer  != NULL);
     assert(visited != NULL);
     assert(v >= 0 && v < num_v);
 
-    if(!visited[v])
+    std::queue<int32_t> q;
+    q.push(v);
+    edge_list el;
+
+    while(!q.empty())
     {
-        if(!rev_dic.size())
+        int32_t u = q.front();
+        q.pop();
+        if(!visited[u])
         {
-            fprintf(writer, "%d ", v);
+            if(!rev_dic.size())
+            {
+                fprintf(writer, "%d ", u);
+            }
+            else
+            {
+                fprintf(writer, "%d ", rev_dic[u]);
+            }
+
+            pair<int32_t, int32_t> rg = get_e_range(u);
+            for(int32_t i=rg.first; i<rg.second; ++i)
+            {
+                q.push(e_idx[c][i]);
+                el.push_back(pair<int32_t, int32_t>(u, e_idx[c][i]));
+            }
+
+            cnt++;
+            visited[u] = true;
         }
-        else
-        {
-            fprintf(writer, "%d ", rev_dic[v]);
-        }
-        cnt++;
-        visited[v] = true;
-    }
-    else
-    {
-        return;
     }
 
-    pair<int32_t, int32_t> rg = get_e_range(v);
-    for(int32_t i=rg.first; i<rg.second; ++i)
-    {
-        output_one_CC(writer, e_idx[c][i], visited, cnt);
-    }
+    BGL g(el);
+    g.one_cluster_coef();
 }

@@ -74,8 +74,7 @@ void Truss::truss_decomosition(CSR &g, const char* outfile, int32_t k_max, int32
         if(g.get_num_e() > 0)
         {
             fprintf(writer, "%d Truss: \n", k);
-            string ktruss = to_string(k)+"truss";
-            Config::instance()->set("ktruss", ktruss);
+            Config::instance()->set("kcomp", to_string(k));
             g.output_all_CC(writer, true);
         }
 

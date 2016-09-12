@@ -4,6 +4,7 @@
  * @brief    This is the main entry of OPTKIT. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   09/10/16 - Bug fixing to make core work 
  *  stplaydog   07/24/16 - Add context switching support 
  *  stplaydog   04/24/16 - Add logger support 
  *  stplaydog   04/16/16 - Fixed some minor bugs 
@@ -327,9 +328,14 @@ void process_without_context(const string & infile, const string &oufile)
     for(auto it = el_cc.begin(); it != el_cc.end(); ++it, i++)
     {
         LOG(INFO)<<"Computing the "<<i<<"th CC...";
+
+        Stats::instance()->add_one_CC(); 
+
         // compute truss
         LOG(INFO) << "Building CSR based on edges...";
         CSR g1(*it);
+        CSR g2(*it);
+        CSR g3(*it);
 
         LOG(INFO) << "Start initializing truss...";
         Truss t(g1.get_num_e(), g1.get_num_c());
@@ -341,15 +347,16 @@ void process_without_context(const string & infile, const string &oufile)
 
         LOG(INFO) << "Start performing core decomposition...";
         Config::instance()->set("comp", "kcore");
-        Core *core = new Core(g1.get_num_e(), g1.get_num_c());
+        Core *core = new Core(g2.get_num_v(), g2.get_num_c());
         string CC_core_out = oufile + "_" + to_string(i) + "_core.txt";
-        core->k_core(g1, CC_core_out.c_str(), 5);
+        core->k_core(g2, CC_core_out.c_str(), 5);
 
         LOG(INFO) << "Start performing dbscan decomposition...";
         Config::instance()->set("comp", "dbscan");
-        Core *dbscan = new DBSCAN(g1.get_num_e(), g1.get_num_c());
+        Core *dbscan = new DBSCAN(g3.get_num_v(), g3.get_num_c());
         string CC_dbscan_out = oufile + "_" + to_string(i) + "_dbscan.txt";
-        dbscan->k_core(g1, CC_dbscan_out.c_str(), 5);
+        dbscan->k_core(g3, CC_dbscan_out.c_str(), 5);
+
 
         LOG(INFO) << "Start performing graph computations...";
         if(bgl.isSet())

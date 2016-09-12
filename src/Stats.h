@@ -62,9 +62,12 @@ public:
         CLUSTERCOEFF,
         BETWEENCENTRL,
         TRUSS,
+        TRUSS_COE,
         CLIQUE,
         CORE,
-        DBSCAN
+        CORE_COE,
+        DBSCAN,
+        DBSCAN_COE
     };
 
     struct GraphProperty
@@ -76,8 +79,13 @@ public:
         int_feature_l         m_girth;           ///< native
         double_feature_l      m_clusterCoeff;    ///< boost
         double_feature_ll     m_betweenCentrl;   ///< boost
-        int_pair_feature_ll   m_numTruss;        ///< native
         int_pair_feature_ll   m_numClique;       ///< boost
+        int_pair_feature_ll   m_numTruss;        ///< native
+        int_pair_feature_ll   m_numCore;         ///< boost
+        int_pair_feature_ll   m_numDBSCAN;       ///< boost
+        int_pair_feature_ll   m_numTrussCOE;     ///< native
+        int_pair_feature_ll   m_numCoreCOE;      ///< boost
+        int_pair_feature_ll   m_numDBSCANCOE;    ///< boost
 
         GraphProperty() : m_numCC(0)
         {}
@@ -93,6 +101,11 @@ public:
             m_betweenCentrl.clear();
             m_numTruss.clear();
             m_numClique.clear();
+            m_numCore.clear();
+            m_numDBSCAN.clear();
+            m_numTrussCOE.clear();
+            m_numCoreCOE.clear();
+            m_numDBSCANCOE.clear();
         }
 
         template<class Archive>
@@ -147,6 +160,8 @@ public:
         return ret;
     }
 
+    void   add_one_CC();
+
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
@@ -165,14 +180,15 @@ public:
         m_application = "";
         m_dataName    = "";
         m_range.clear();
+        m_gProperty.clear();
     }
 
 private:
 
     Stats(string outFile); 
     Stats(); 
-    void serialize_stmodel();
-    void write_content_stmodel(int32_t option, string &content);
+    void   serialize_stmodel();
+    void   write_content_stmodel(int32_t option, string &content);
     string get_content_stmodel(int32_t option);
 
     static Stats*   m_instance;
@@ -189,7 +205,9 @@ private:
     FRIEND_TEST(BGLGraphProperty_1,       Success);
     FRIEND_TEST(BGLGraphProperty_2,       Success);
     FRIEND_TEST(BGLSTModel_1,             Success);
+    FRIEND_TEST(BGLInitGraph_2,           Success);
     FRIEND_TEST(StatsSerializationTest_1, Success);
+    FRIEND_TEST(BGLConnectedComponent_1,  Success);
 };
 
 #endif // __H_STATS__ 
