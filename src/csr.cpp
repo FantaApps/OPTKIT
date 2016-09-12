@@ -552,21 +552,23 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
 
             string kcomp;
             kcomp = Config::instance()->get("kcomp") + "," + to_string(cnt); 
+            string kstats;
+            kstats = Config::instance()->get("kcomp") + "," + to_string(coe); 
 
             if(Config::instance()->get("comp") == "ktruss")
             {
                 Stats::instance()->write_content(Stats::TRUSS, kcomp); 
-                Stats::instance()->write_content(Stats::TRUSS_COE, kcomp); 
+                Stats::instance()->write_content(Stats::TRUSS_COE, kstats); 
             }
             else if(Config::instance()->get("comp") == "kcore")
             {
                 Stats::instance()->write_content(Stats::CORE, kcomp); 
-                Stats::instance()->write_content(Stats::CORE_COE, kcomp); 
+                Stats::instance()->write_content(Stats::CORE_COE, kstats); 
             }
             else if(Config::instance()->get("comp") == "dbscan")
             {
                 Stats::instance()->write_content(Stats::DBSCAN, kcomp); 
-                Stats::instance()->write_content(Stats::DBSCAN_COE, kcomp); 
+                Stats::instance()->write_content(Stats::DBSCAN_COE, kstats); 
             }
         }
     }
@@ -681,5 +683,5 @@ void CSR::output_one_CC(FILE *writer, int32_t v,    bool *visited,
     }
 
     BGL g(el);
-    g.one_cluster_coef();
+    coe = g.one_cluster_coef();
 }

@@ -29,6 +29,8 @@ typedef vector<double>                          double_feature_l;
 typedef vector<double_feature_l>                double_feature_ll;
 typedef vector<pair<int32_t, int32_t>>          int_pair_feature_l;
 typedef vector<vector<pair<int32_t, int32_t>>>  int_pair_feature_ll;
+typedef vector<pair<int32_t, double>>           double_pair_feature_l;
+typedef vector<vector<pair<int32_t, double>>>   double_pair_feature_ll;
 
 /**
  * @class Stats
@@ -72,20 +74,20 @@ public:
 
     struct GraphProperty
     {
-        int32_t               m_numCC;           ///< native code
-        int_feature_l         m_numV;            ///< native code
-        int_feature_l         m_numE;            ///< native code
-        int_feature_l         m_diameter;        ///< boost
-        int_feature_l         m_girth;           ///< native
-        double_feature_l      m_clusterCoeff;    ///< boost
-        double_feature_ll     m_betweenCentrl;   ///< boost
-        int_pair_feature_ll   m_numClique;       ///< boost
-        int_pair_feature_ll   m_numTruss;        ///< native
-        int_pair_feature_ll   m_numCore;         ///< boost
-        int_pair_feature_ll   m_numDBSCAN;       ///< boost
-        int_pair_feature_ll   m_numTrussCOE;     ///< native
-        int_pair_feature_ll   m_numCoreCOE;      ///< boost
-        int_pair_feature_ll   m_numDBSCANCOE;    ///< boost
+        int32_t                m_numCC;           ///< native code
+        int_feature_l          m_numV;            ///< native code
+        int_feature_l          m_numE;            ///< native code
+        int_feature_l          m_diameter;        ///< boost
+        int_feature_l          m_girth;           ///< native
+        double_feature_l       m_clusterCoeff;    ///< boost
+        double_feature_ll      m_betweenCentrl;   ///< boost
+        int_pair_feature_ll    m_numClique;       ///< boost
+        int_pair_feature_ll    m_numTruss;        ///< native
+        int_pair_feature_ll    m_numCore;         ///< boost
+        int_pair_feature_ll    m_numDBSCAN;       ///< boost
+        double_pair_feature_ll m_numTrussCOE;     ///< native
+        double_pair_feature_ll m_numCoreCOE;      ///< boost
+        double_pair_feature_ll m_numDBSCANCOE;    ///< boost
 
         GraphProperty() : m_numCC(0)
         {}
