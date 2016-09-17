@@ -92,7 +92,7 @@ class JsonStats:
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
         plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
         plt.plot(self.dbscan['x'], self.clique['y'], color='k', linestyle='-', marker='v', label = 'dbscan')
-        plt.plot(self.core.['x'],  self.core['y'],   color='k', linestyle='-', marker='o', label = 'k-core')
+        plt.plot(self.core['x'],   self.core['y'],   color='k', linestyle='-', marker='o', label = 'k-core')
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
         plt.xlabel("K", fontsize=20)
@@ -103,7 +103,7 @@ class JsonStats:
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
                 str(self.numCC),       str(round(self.avgDiam,2)), str(round(self.varDiam,2)), \
-                str(round(self.avgCluCoeff,2)), str(round(self.varCluCoeff,2)]
+                str(round(self.avgCluCoeff,2)), str(round(self.varCluCoeff,2)) ]
         return ",".join(list)
 
 class JsonStatsCollections:
