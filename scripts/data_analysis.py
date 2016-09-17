@@ -67,6 +67,8 @@ class JsonStats:
         stats_item = {} 
         items = stats_str.split("\n")
         for item in items:
+            if item == "":
+                continue
             pair = item.split(",")
             if int(pair[0]) in stats_item:
                 if if_freq:
@@ -89,6 +91,7 @@ class JsonStats:
         return {'x':X,'y':Y} 
 
     def plot(self, ofname):
+        print self.dbscan
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
         plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
         plt.plot(self.dbscan['x'], self.clique['y'], color='k', linestyle='-', marker='v', label = 'dbscan')
