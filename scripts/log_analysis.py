@@ -68,7 +68,7 @@ class LogStats:
                 self.setEndTime(self.build_edge_listCC, line)
             elif re.search("Computing the .*th CC", line):
                 self.setStartTime(self.compute_truss, line)
-                if line.split(" ")[6].replace("th", "") != "0":
+                if line.split(" ")[7].replace("th", "") != "0":
                     self.setEndTime(self.compute_graph_prop, line)
             elif re.search("Start performing graph computations", line):
                 self.setStartTime(self.compute_graph_prop, line)
