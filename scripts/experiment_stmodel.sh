@@ -6,6 +6,7 @@
 # @brief    This script runs experiment for stmodel 
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   09/17/16 - Add options to output cohesive subgraphs or not. 
 #   stplaydog   08/28/16 - Run only on core data 
 #   stplaydog   08/20/16 - Avoid redundant computation 
 #   stplaydog   08/12/16 - Also copy log for time analysis 
@@ -53,13 +54,14 @@ func_run_experiment()
     local FILE=$2
     local XY=$3
     local TIME=$4
+    local OUTPUTALL=$5
 
     echo process ${DATA_HOME}stmodel/${WHICH_FILE}/$FILE with x $XY y $XY time $TIME 
 
-    timeout 600s ${OPTKIT_HOME}optkit --stmodel --bgl                               \
-                         -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}  \
+    timeout 600s ${OPTKIT_HOME}optkit --stmodel --bgl ${OUTPUTALL}                                                  \
+                         -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}                                               \
                          -o ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME} \
-                         -c ${XY} -c ${XY} -c ${TIME} \
+                         -c ${XY} -c ${XY} -c ${TIME}                                                               \
                          -l ${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_
 
     if [ -f ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ];
@@ -67,10 +69,10 @@ func_run_experiment()
         mv ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ${DATA_HOME}experiments/results/
         mv ${LOG_HOME}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}_* ${DATA_HOME}experiments/results/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.log
     else
-        ${OPTKIT_HOME}optkit --stmodel                \
-                     -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}  \
+        ${OPTKIT_HOME}optkit --stmodel ${OUTPUTALL}                                                             \
+                     -i ${DATA_HOME}stmodel/${WHICH_FILE}/${FILE}                                               \
                      -o ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME} \
-                     -c ${XY} -c ${XY} -c ${TIME} \
+                     -c ${XY} -c ${XY} -c ${TIME}                                                               \
                      -l ${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}
         if [ -f ${DATA_HOME}experiments/stmodel/${WHICH_FILE}/${WHICH_FILE}_${FILE}_${XY}_${XY}_${TIME}.json ];
         then
@@ -123,6 +125,7 @@ func_run_all()
 # run experiment only on core data
 func_run_core()
 {
+    local OUTPUTALL=$1
     for WHICH_FILE in DC NY CHI
     do
         for XY in 100 200 
@@ -135,7 +138,7 @@ func_run_core()
                 else
                     TIME=30
                 fi 
-                func_run_experiment ${WHICH_FILE} ${FILE} ${XY} ${TIME} & 
+                func_run_experiment ${WHICH_FILE} ${FILE} ${XY} ${TIME} ${OUTPUTALL} & 
     
                 while true;
                 do
@@ -154,4 +157,5 @@ func_run_core()
     done
 }
 
-func_run_core
+# func_run_core
+# func_run_core --outputall

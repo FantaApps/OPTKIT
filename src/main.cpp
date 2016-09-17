@@ -186,6 +186,11 @@ void parse_arguments(Parser &parser)
         Config::instance()->set(string("outputall"), 
                                 string("true"));
     }
+    else
+    {
+        Config::instance()->set(string("outputall"), 
+                                string("false"));
+    }
 }
 
 /**
