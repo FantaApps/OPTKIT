@@ -52,19 +52,32 @@ class JsonStats:
         self.avgCluCoeff = str(numpy.average(LClu))
         self.varCluCoeff = str(numpy.var(LClu))
 
-        self.clique      = self.reduce(data["content"]["graph property"]["clique"])
-        self.truss       = self.reduce(data["content"]["graph property"]["truss"])
+        self.clique      = self.reduce(data["content"]["graph property"]["clique"], True)
+        self.truss       = self.reduce(data["content"]["graph property"]["truss"],  True)
+        self.core        = self.reduce(data["content"]["graph property"]["dbscan"], True)
+        self.dbscan      = self.reduce(data["content"]["graph property"]["core"],   True)
+
+        self.cliqueSize  = self.reduce(data["content"]["graph property"]["clique"], False)
+        self.trussSize   = self.reduce(data["content"]["graph property"]["truss"],  False)
+        self.coreSize    = self.reduce(data["content"]["graph property"]["dbscan"], False)
+        self.dbscanSize  = self.reduce(data["content"]["graph property"]["core"],   False)
 
 
-    def reduce(self, stats_str):
+    def reduce(self, stats_str, if_freq):
         stats_item = {} 
         items = stats_str.split("\n")
         for item in items:
             pair = item.split(",")
             if int(pair[0]) in stats_item:
-                stats_item[int(pair[0])] += int(pair[1])
+                if if_freq:
+                    stats_item[int(pair[0])] += 1 
+                else:
+                    stats_item[int(pair[0])] += int(pair[1])
             else:
-                stats_item[int(pair[0])] = int(pair[1])
+                if if_freq:
+                    stats_item[int(pair[0])] = 1 
+                else:
+                    stats_item[int(pair[0])] = int(pair[1])
         X = [0] * len(stats_item)
         Y = [0] * len(stats_item)
         i=0
@@ -78,6 +91,8 @@ class JsonStats:
     def plot(self, ofname):
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
         plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
+        plt.plot(self.dbscan['x'], self.clique['y'], color='k', linestyle='-', marker='v', label = 'dbscan')
+        plt.plot(self.core.['x'],  self.core['y'],   color='k', linestyle='-', marker='o', label = 'k-core')
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
         plt.xlabel("K", fontsize=20)
