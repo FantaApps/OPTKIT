@@ -535,6 +535,11 @@ void CSR::output_all_CC(FILE *writer, bool with_edge, int32_t c)
     assert(c < num_c);
     assert(writer  != NULL);
 
+    if(Config::instance()->get("outputall") == "true")
+    {
+        return;
+    }
+
     bool *visited = new bool[num_v];
     memset(visited, false, num_v * sizeof(bool));
 
