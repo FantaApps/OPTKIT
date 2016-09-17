@@ -128,6 +128,8 @@ class JsonStatsCollections:
         for c in self.coll: 
             plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='-', marker=',', label = self.coll[c].name+'-clique')
             plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='-', marker='.', label = self.coll[c].name+'-truss')
+            plt.plot(self.coll[c].core['x'],   self.coll[c].core['y'],   color=colors[i], linestyle='-', marker='v', label = self.coll[c].name+'-core')
+            plt.plot(self.coll[c].dbscan['x'], self.coll[c].dbscan['y'], color=colors[i], linestyle='-', marker='o', label = self.coll[c].name+'-dbscan')
             i += 1
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
