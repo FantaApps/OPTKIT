@@ -178,7 +178,7 @@ def main(argv):
                 stats = JsonStats(file)  
                 print stats.summary()
                 ofname = file.replace("json", "") + "png"
-                #stats.plot(ofname)
+                stats.plot(ofname)
             except:
                 print "Data Corruption in " + file
     elif args.prefix:
