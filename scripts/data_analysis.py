@@ -112,6 +112,7 @@ class JsonStats:
         plt.ylabel("number of cohesive subgraphs", fontsize=20)
         plt.tight_layout()
         plt.savefig(ofname)
+        plt.close()
 
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
@@ -134,15 +135,18 @@ class JsonStatsCollections:
                 print "Data Corruption in " + file
 
     def plot(self, ofname, is_freq):
+        print ofname, is_freq
         colors = ['k', 'b', 'r', 'g']
         i = 0
         for c in self.coll: 
             if is_freq == False:
+                print "come 1"
                 plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
                 plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
                 plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
             elif is_freq == True:
+                print "come 2"
                 plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
                 plt.plot(self.coll[c].core['x'],   self.coll[c].core['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
@@ -154,6 +158,7 @@ class JsonStatsCollections:
         plt.ylabel("number of cohesive subgraphs", fontsize=20)
         plt.tight_layout()
         plt.savefig(ofname)
+        plt.close()
 
 def main(argv):
 
