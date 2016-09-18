@@ -189,12 +189,22 @@ class JsonStatsCollections:
         ret = []
         item = self.coll[c].truss
         for i in range(0, len(item['x'])):
-            trip = {'data': 'truss', 'x': item['x'][i], 'y' : item['y'][i]}
+            trip = {'data': self.coll[c].name+'truss', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
 
         item = self.coll[c].clique
         for i in range(0, len(item['x'])):
-            trip = {'data': 'clique', 'x': item['x'][i], 'y' : item['y'][i]}
+            trip = {'data': self.coll[c].name+'clique', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].core
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'core', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].dbscan
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
         return DataFrame(ret)
         
