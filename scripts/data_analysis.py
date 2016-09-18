@@ -112,6 +112,7 @@ class JsonStats:
         plt.ylabel("number of cohesive subgraphs", fontsize=20)
         plt.tight_layout()
         plt.savefig(ofname)
+        plt.close()
 
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
@@ -136,12 +137,12 @@ class JsonStatsCollections:
         colors = ['k', 'b', 'r', 'g']
         i = 0
         for c in self.coll: 
-            if is_freq:
+            if is_freq == False:
                 plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
                 plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
                 plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
-            else:
+            elif is_freq == True:
                 plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
                 plt.plot(self.coll[c].core['x'],   self.coll[c].core['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
@@ -153,6 +154,7 @@ class JsonStatsCollections:
         plt.ylabel("number of cohesive subgraphs", fontsize=20)
         plt.tight_layout()
         plt.savefig(ofname)
+        plt.close()
 
 def main(argv):
 
@@ -190,8 +192,8 @@ def main(argv):
         coll = JsonStatsCollections(dir, pfx)
         oname1 = dir + pfx + '.png'
         oname2 = dir + pfx + '_size.png'
-        coll.plot(oname2, True)
-        coll.plot(oname1, False)
+        coll.plot(oname2, False)
+        coll.plot(oname1, True)
 
 if __name__ == "__main__":
     main(sys.argv)
