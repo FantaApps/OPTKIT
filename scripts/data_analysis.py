@@ -178,27 +178,24 @@ class JsonStatsCollections:
         i = 0
         for c in self.coll: 
             if is_freq == False:
-                ggClique = self.transformDataGgPlot(self.coll[c].clique)
-                ggTruss  = self.transformDataGgPlot(self.coll[c].truss)
-                ggCore   = self.transformDataGgPlot(self.coll[c].core)
-                ggDbscan = self.transformDataGgPlot(self.coll[c].dbscan)
-                p = ggplot(aes(x='x', y='y'), data=ggClique) + \
-                        geom_point(color='lightblue') + \
-                        geom_line(alpha=0.25) + \
-                        stat_smooth(span=.05, color='black') + \
-                        ggtitle("Power comnsuption over 13 hours") + \
-                        xlab("x") + \
-                        ylab("y")
+                d = self.transformDataGgPlot(c)
+                p = ggplot(aes(x='x', y='y'), data = d) + geom_line();
                 print ofname
                 p.save(ofname)
 
 
 
-    def transformDataGgPlot(self, item):
+    def transformDataGgPlot(self, c):
         ret = []
+        item = self.coll[c].truss
         for i in range(0, len(item['x'])):
-            pair = {'x': item['x'][i], 'y' : item['y'][i]}
-            ret.append(pair)
+            trip = {'data': 'truss', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].clique
+        for i in range(0, len(item['x'])):
+            trip = {'data': 'clique', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
         return DataFrame(ret)
         
 
