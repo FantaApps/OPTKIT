@@ -148,7 +148,7 @@ class JsonStatsCollections:
                 plt.plot(self.coll[c].core['x'],   self.coll[c].core['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
                 plt.plot(self.coll[c].dbscan['x'], self.coll[c].dbscan['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
             i += 1
-        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        plt.legend( loc=0, numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
         plt.xlabel("K", fontsize=20)
         plt.ylabel("number of cohesive subgraphs", fontsize=20)
