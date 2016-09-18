@@ -31,6 +31,8 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from scipy.interpolate import spline
+from ggplot import *
+from pandas import DataFrame
 
 
 class JsonStats:
@@ -171,6 +173,35 @@ class JsonStatsCollections:
         plt.savefig(ofname)
         plt.close()
 
+    def gplot(self, ofname, is_freq):
+
+        i = 0
+        for c in self.coll: 
+            if is_freq == False:
+                ggClique = self.transformDataGgPlot(self.coll[c].clique)
+                ggTruss  = self.transformDataGgPlot(self.coll[c].truss)
+                ggCore   = self.transformDataGgPlot(self.coll[c].core)
+                ggDbscan = self.transformDataGgPlot(self.coll[c].dbscan)
+                p = ggplot(aes(x='x', y='y'), data=ggClique) + \
+                        geom_point(color='lightblue') + \
+                        geom_line(alpha=0.25) + \
+                        stat_smooth(span=.05, color='black') + \
+                        ggtitle("Power comnsuption over 13 hours") + \
+                        xlab("x") + \
+                        ylab("y")
+                print ofname
+                p.save(ofname)
+
+
+
+    def transformDataGgPlot(self, item):
+        ret = []
+        for i in range(0, len(item['x'])):
+            pair = {'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(pair)
+        return DataFrame(ret)
+        
+
 def main(argv):
 
     parser = argparse.ArgumentParser()
@@ -207,8 +238,10 @@ def main(argv):
         coll = JsonStatsCollections(dir, pfx)
         oname1 = dir + pfx + '.png'
         oname2 = dir + pfx + '_size.png'
-        coll.plot(oname2, False)
-        coll.plot(oname1, True)
+        #coll.plot(oname2, False)
+        #coll.plot(oname1, True)
+        coll.gplot(oname2, False)
+        coll.gplot(oname1, True)
 
 if __name__ == "__main__":
     main(sys.argv)
