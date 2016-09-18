@@ -30,6 +30,7 @@ import math
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
+from scipy.interpolate import spline
 
 
 class JsonStats:
@@ -101,6 +102,15 @@ class JsonStats:
             size['y'][i] = float(size['y'][i]) / float(freq['y'][i])
         return size
 
+    def smooth_plot(self, item, plt, c, ls, mar, la):
+        if len(item['x']) == 0:
+            return
+        arr = numpy.array(item['x'])
+        xnew   = numpy.linspace(arr.min(),arr.max(),300)
+        smooth = spline(item['x'], item['y'], xnew) 
+        plt.plot(item['x'], item['y'], color=c, linestyle=ls, marker=mar, label = la)
+
+
 
     def plot(self, ofname):
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
@@ -139,10 +149,11 @@ class JsonStatsCollections:
         i = 0
         for c in self.coll: 
             if is_freq == False:
-                plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
-                plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
-                plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
-                plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
+                self.coll[c].smooth_plot(self.coll[c].cliqueSize, plt, colors[i], '--', ',', self.coll[c].name+'-clique')
+                #plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
+                #plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
+                #plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
+                #plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
             elif is_freq == True:
                 plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
