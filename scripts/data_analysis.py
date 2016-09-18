@@ -62,11 +62,18 @@ class JsonStats:
         self.coreSize    = self.reduce(data["content"]["graph property"]["dbscan"], False)
         self.dbscanSize  = self.reduce(data["content"]["graph property"]["core"],   False)
 
+        self.cliqueSize  = self.getSizeMean(self.clique, self.cliqueSize)
+        self.trussSize   = self.getSizeMean(self.truss,  self.trussSize)
+        self.coreSize    = self.getSizeMean(self.core,   self.coreSize)
+        self.dbscanSize  = self.getSizeMean(self.dbscan, self.dbscanSize)
+
 
     def reduce(self, stats_str, if_freq):
         stats_item = {} 
         items = stats_str.split("\n")
         for item in items:
+            if item == "":
+                continue
             pair = item.split(",")
             if int(pair[0]) in stats_item:
                 if if_freq:
@@ -88,11 +95,17 @@ class JsonStats:
 
         return {'x':X,'y':Y} 
 
+    def getSizeMean(self, freq, size):
+        for i in range(0, len(freq['y'])):
+            size['y'][i] = float(size['y'][i]) / float(freq['y'][i])
+        return size
+
+
     def plot(self, ofname):
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
         plt.plot(self.truss['x'],  self.truss['y'],  color='k', linestyle='-', marker='.', label = 'k-truss')
         plt.plot(self.dbscan['x'], self.clique['y'], color='k', linestyle='-', marker='v', label = 'dbscan')
-        plt.plot(self.core.['x'],  self.core['y'],   color='k', linestyle='-', marker='o', label = 'k-core')
+        plt.plot(self.core['x'],   self.core['y'],   color='k', linestyle='-', marker='o', label = 'k-core')
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
         plt.xlabel("K", fontsize=20)
@@ -103,7 +116,7 @@ class JsonStats:
     def summary(self):
         list = [self.name,             str(self.numV),    str(self.numE), \
                 str(self.numCC),       str(round(self.avgDiam,2)), str(round(self.varDiam,2)), \
-                str(round(self.avgCluCoeff,2)), str(round(self.varCluCoeff,2)]
+                str(round(self.avgCluCoeff,2)), str(round(self.varCluCoeff,2)) ]
         return ",".join(list)
 
 class JsonStatsCollections:
@@ -119,12 +132,20 @@ class JsonStatsCollections:
             except:
                 print "Data Corruption in " + file
 
-    def plot(self, ofname):
+    def plot(self, ofname, is_freq):
         colors = ['k', 'b', 'r', 'g']
         i = 0
         for c in self.coll: 
-            plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='-', marker=',', label = self.coll[c].name+'-clique')
-            plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='-', marker='.', label = self.coll[c].name+'-truss')
+            if is_freq:
+                plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
+                plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
+                plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
+                plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
+            else:
+                plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
+                plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
+                plt.plot(self.coll[c].core['x'],   self.coll[c].core['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
+                plt.plot(self.coll[c].dbscan['x'], self.coll[c].dbscan['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
             i += 1
         plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
@@ -167,8 +188,10 @@ def main(argv):
             if line.find("prefix") != -1:
                 pfx = line.strip().split(" ")[1]
         coll = JsonStatsCollections(dir, pfx)
-        oname = dir + pfx + '.png'
-        coll.plot(oname)
+        oname1 = dir + pfx + '.png'
+        oname2 = dir + pfx + '_size.png'
+        coll.plot(oname2, True)
+        coll.plot(oname1, False)
 
 if __name__ == "__main__":
     main(sys.argv)

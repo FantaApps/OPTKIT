@@ -38,9 +38,9 @@ rm ${ANALYSIS_HOME}tmp*
 
 for PREFIX in NY_BUR CHI_BUR DC_BUR NY_ROB DC_ROB CHI_ROB NY_THEFT CHI_THEFT DC_THEFT  
 do
-    echo "directory /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/" > config
+    echo "directory ${RESULT_HOME}" > config
     echo "prefix $PREFIX" >> config
     python data_analysis.py -p ./config
-    mv /home/ec2-user/gitlocal/OPTKIT//data/experiments/results/${PREFIX}.png  ${ANALYSIS_HOME}
+    mv ${RESULT_HOME}/${PREFIX}.png  ${ANALYSIS_HOME}
 done
 
