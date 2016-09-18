@@ -42,5 +42,6 @@ do
     echo "prefix $PREFIX" >> config
     python data_analysis.py -p ./config
     mv ${RESULT_HOME}/${PREFIX}.png  ${ANALYSIS_HOME}
+    mv ${RESULT_HOME}/${PREFIX}_size.png  ${ANALYSIS_HOME}
 done
 
