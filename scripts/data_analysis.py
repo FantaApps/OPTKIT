@@ -39,7 +39,8 @@ class JsonStats:
         with open(file) as data_file:    
             data = json.load(data_file)
         
-        self.name        = basename(file).replace(".json", "")
+        name_items       = basename(file).replace(".json", "").split("_")
+        self.name        = name_items[2]+"_"+name_items[3]+"_"+name_items[4]
         self.numV        = data["content"]["graph property"]["numV"] 
         self.numE        = data["content"]["graph property"]["numE"]
         self.numCC       = data["content"]["graph property"]["numCC"] 
