@@ -108,7 +108,7 @@ class JsonStats:
         arr = numpy.array(item['x'])
         xnew   = numpy.linspace(arr.min(),arr.max(),300)
         smooth = spline(item['x'], item['y'], xnew) 
-        plt.plot(item['x'], item['y'], color=c, linestyle=ls, marker=mar, label = la)
+        plt.plot(xnew, smooth, color=c, linestyle=ls, marker=mar, label = la)
 
 
 
