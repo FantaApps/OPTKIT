@@ -150,6 +150,9 @@ class JsonStatsCollections:
         for c in self.coll: 
             if is_freq == False:
                 self.coll[c].smooth_plot(self.coll[c].cliqueSize, plt, colors[i], '--', ',', self.coll[c].name+'-clique')
+                self.coll[c].smooth_plot(self.coll[c].trussSize,  plt, colors[i], '--', '.', self.coll[c].name+'-truss')
+                self.coll[c].smooth_plot(self.coll[c].coreSize,   plt, colors[i], '-',  'v', self.coll[c].name+'-core')
+                self.coll[c].smooth_plot(self.coll[c].dbscanSize, plt, colors[i], '-',  'o', self.coll[c].name+'-dbscan')
                 #plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 #plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
                 #plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
