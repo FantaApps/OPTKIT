@@ -172,13 +172,14 @@ class JsonStatsCollections:
     def gplot(self, ofname, is_freq):
 
         i = 0
+        d = []
         for c in self.coll: 
-            d = []
             if is_freq == False:
                 d = self.transformDataGgPlotSize(c, d)
             elif is_freq == True:
                 d = self.transformDataGgPlotSize(c, d)
-            p = ggplot(aes(x='x', y='y', colour='data'), data = d) + geom_line();
+        f = DataFrame(d)
+        p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line();
         p.save(ofname)
 
 
@@ -203,7 +204,7 @@ class JsonStatsCollections:
         for i in range(0, len(item['x'])):
             trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
-        return DataFrame(ret)
+        return ret
 
     def transformDataGgPlot(self, c, ret):
         item = self.coll[c].truss
@@ -225,7 +226,7 @@ class JsonStatsCollections:
         for i in range(0, len(item['x'])):
             trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
-        return DataFrame(ret)
+        return ret
         
 
 def main(argv):
