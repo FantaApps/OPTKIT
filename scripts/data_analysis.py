@@ -43,7 +43,7 @@ class JsonStats:
             data = json.load(data_file)
         
         name_items       = basename(file).replace(".json", "").split("_")
-        self.name        = "long" if name_items[2] == "200" else "short" 
+        self.name        = "long_" if name_items[2] == "200" else "short_" 
         self.numV        = data["content"]["graph property"]["numV"] 
         self.numE        = data["content"]["graph property"]["numE"]
         self.numCC       = data["content"]["graph property"]["numCC"] 
