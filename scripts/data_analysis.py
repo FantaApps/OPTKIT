@@ -31,8 +31,17 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from scipy.interpolate import spline
-from ggplot import *
 from pandas import DataFrame
+
+import pandas as pd
+import rpy2.robjects as robj
+import rpy2.robjects.pandas2ri # for dataframe conversion
+from rpy2.robjects.packages import importr
+from rpy2.robjects.lib import ggplot2
+
+from subprocess import call
+
+import os
 
 
 class JsonStats:
@@ -179,8 +188,9 @@ class JsonStatsCollections:
             elif is_freq == True:
                 d = self.transformDataGgPlot(c, d)
         f = DataFrame(d)
-        p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line() + theme(legend_position="left");
-        p.save(ofname)
+        f.to_csv(ofname.replace("png", "csv"), sep=',')
+
+        call(["Rscript", "../../../scripts/data_analysis.R", ofname.replace("png", "csv"), ofname ])
 
 
 
