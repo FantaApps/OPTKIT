@@ -179,7 +179,7 @@ class JsonStatsCollections:
             elif is_freq == True:
                 d = self.transformDataGgPlot(c, d)
         f = DataFrame(d)
-        p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line();
+        p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line() + theme(legend_position="bottom");
         p.save(ofname)
 
 
