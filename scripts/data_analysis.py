@@ -155,10 +155,6 @@ class JsonStatsCollections:
                 self.coll[c].smooth_plot(self.coll[c].trussSize,  plt, colors[i], '--', '.', self.coll[c].name+'-truss')
                 self.coll[c].smooth_plot(self.coll[c].coreSize,   plt, colors[i], '-',  'v', self.coll[c].name+'-core')
                 self.coll[c].smooth_plot(self.coll[c].dbscanSize, plt, colors[i], '-',  'o', self.coll[c].name+'-dbscan')
-                #plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
-                #plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
-                #plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
-                #plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
             elif is_freq == True:
                 plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
@@ -178,12 +174,36 @@ class JsonStatsCollections:
         i = 0
         for c in self.coll: 
             if is_freq == False:
-                d = self.transformDataGgPlot(c)
-                p = ggplot(aes(x='x', y='y', colour='data'), data = d) + geom_line();
-                print ofname
-                p.save(ofname)
+                d = self.transformDataGgPlotSize(c)
+            elif is_freq == True:
+                d = self.transformDataGgPlotSize(c)
+            p = ggplot(aes(x='x', y='y', colour='data'), data = d) + geom_line();
+        p.save(ofname)
 
 
+
+    def transformDataGgPlotSize(self, c):
+        ret = []
+        item = self.coll[c].trussSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'truss', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].cliqueSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'clique', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].coreSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'core', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].dbscanSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+        return DataFrame(ret)
 
     def transformDataGgPlot(self, c):
         ret = []
