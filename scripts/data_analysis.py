@@ -177,7 +177,7 @@ class JsonStatsCollections:
             if is_freq == False:
                 d = self.transformDataGgPlotSize(c, d)
             elif is_freq == True:
-                d = self.transformDataGgPlotSize(c, d)
+                d = self.transformDataGgPlot(c, d)
         f = DataFrame(d)
         p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line();
         p.save(ofname)
