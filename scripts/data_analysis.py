@@ -43,7 +43,7 @@ class JsonStats:
             data = json.load(data_file)
         
         name_items       = basename(file).replace(".json", "").split("_")
-        self.name        = name_items[2]+"_"+name_items[3]+"_"+name_items[4]
+        self.name        = "long" if name_items[2] == "200" else "short" 
         self.numV        = data["content"]["graph property"]["numV"] 
         self.numE        = data["content"]["graph property"]["numE"]
         self.numCC       = data["content"]["graph property"]["numCC"] 
@@ -179,7 +179,7 @@ class JsonStatsCollections:
             elif is_freq == True:
                 d = self.transformDataGgPlot(c, d)
         f = DataFrame(d)
-        p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line() + theme(legend_position="bottom");
+        p = ggplot(aes(x='x', y='y', colour='data'), data = f) + geom_line() + theme(legend_position="left");
         p.save(ofname)
 
 
