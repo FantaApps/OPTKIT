@@ -29,6 +29,7 @@ using namespace std;
 **/
 TEST(SmallCrimeDataTest_1, Success)
 {
+    Config::instance()->set("outputall", "true");
     google::InitGoogleLogging("OPTKIT_TEST");
 
     string input_file = "../data/truss/crime_small_st.csv"; 

@@ -35,6 +35,7 @@ public:
         if(!m_instance)
         {
             m_instance = new Config;
+            m_instance->set("outputall", "true");
         }
         return m_instance;
     }

@@ -158,4 +158,4 @@ func_run_core()
 }
 
 # func_run_core
-# func_run_core --outputall
+# func_run_core --notoutputall

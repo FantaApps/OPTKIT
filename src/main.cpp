@@ -45,15 +45,15 @@ void process();
 void process_with_context(const string &infile, const string &oufile);
 void process_without_context(const string &infile, const string &oufile);
 
-BoolOption        truss         ('t', "truss",      false, "truss apllication");
-BoolOption        stmodel       ('s', "stmodel",    false, "stmodel application");
-BoolOption        resume        ('r', "resume",     false, "resume from a previous run");
-BoolOption        bgl           ('b', "bgl",        false, "enable BGL or not");
-BoolOption        outputall     ('a', "outputall",  false, "if output all or not");
-StringOption      logger        ('l', "logger",     false, "log file name");
-StringOption      input         ('i', "input",      true , "input file name");
-StringOption      output        ('o', "output",     true , "output file name");
-StringListOption  coord         ('c', "coord",      false, "spatial temporal coordinates");
+BoolOption        truss         ('t', "truss",        false, "truss apllication");
+BoolOption        stmodel       ('s', "stmodel",      false, "stmodel application");
+BoolOption        resume        ('r', "resume",       false, "resume from a previous run");
+BoolOption        bgl           ('b', "bgl",          false, "enable BGL or not");
+BoolOption        notoutputall  ('a', "notoutputall", false, "if output all or not");
+StringOption      logger        ('l', "logger",       false, "log file name");
+StringOption      input         ('i', "input",        true , "input file name");
+StringOption      output        ('o', "output",       true , "output file name");
+StringListOption  coord         ('c', "coord",        false, "spatial temporal coordinates");
 
 
 
@@ -132,7 +132,7 @@ void define_arguments(Parser &parser)
     parser.addOption(truss)
         .addOption(stmodel)
         .addOption(bgl)
-        .addOption(outputall)
+        .addOption(notoutputall)
         .addOption(input)
         .addOption(output)
         .addOption(logger)
@@ -181,12 +181,7 @@ void parse_arguments(Parser &parser)
     Config::instance()->set(key, val);
     LOG(INFO) << "Coord: "<<val;
 
-    if(outputall.isSet())
-    {
-        Config::instance()->set(string("outputall"), 
-                                string("true"));
-    }
-    else
+    if(notoutputall.isSet())
     {
         Config::instance()->set(string("outputall"), 
                                 string("false"));
