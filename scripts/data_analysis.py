@@ -30,6 +30,18 @@ import math
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
+from scipy.interpolate import spline
+from pandas import DataFrame
+
+import pandas as pd
+import rpy2.robjects as robj
+import rpy2.robjects.pandas2ri # for dataframe conversion
+from rpy2.robjects.packages import importr
+from rpy2.robjects.lib import ggplot2
+
+from subprocess import call
+
+import os
 
 
 class JsonStats:
@@ -39,7 +51,8 @@ class JsonStats:
         with open(file) as data_file:    
             data = json.load(data_file)
         
-        self.name        = basename(file).replace(".json", "")
+        name_items       = basename(file).replace(".json", "").split("_")
+        self.name        = "long_" if name_items[2] == "200" else "short_" 
         self.numV        = data["content"]["graph property"]["numV"] 
         self.numE        = data["content"]["graph property"]["numE"]
         self.numCC       = data["content"]["graph property"]["numCC"] 
@@ -100,6 +113,15 @@ class JsonStats:
             size['y'][i] = float(size['y'][i]) / float(freq['y'][i])
         return size
 
+    def smooth_plot(self, item, plt, c, ls, mar, la):
+        if len(item['x']) == 0:
+            return
+        arr = numpy.array(item['x'])
+        xnew   = numpy.linspace(arr.min(),arr.max(),300)
+        smooth = spline(item['x'], item['y'], xnew) 
+        plt.plot(xnew, smooth, color=c, linestyle=ls, marker=mar, label = la)
+
+
 
     def plot(self, ofname):
         plt.plot(self.clique['x'], self.clique['y'], color='k', linestyle='-', marker=',', label = 'k-clique')
@@ -138,23 +160,84 @@ class JsonStatsCollections:
         i = 0
         for c in self.coll: 
             if is_freq == False:
-                plt.plot(self.coll[c].cliqueSize['x'], self.coll[c].cliqueSize['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
-                plt.plot(self.coll[c].trussSize['x'],  self.coll[c].trussSize['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
-                plt.plot(self.coll[c].coreSize['x'],   self.coll[c].coreSize['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
-                plt.plot(self.coll[c].dbscanSize['x'], self.coll[c].dbscanSize['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
+                self.coll[c].smooth_plot(self.coll[c].cliqueSize, plt, colors[i], '--', ',', self.coll[c].name+'-clique')
+                self.coll[c].smooth_plot(self.coll[c].trussSize,  plt, colors[i], '--', '.', self.coll[c].name+'-truss')
+                self.coll[c].smooth_plot(self.coll[c].coreSize,   plt, colors[i], '-',  'v', self.coll[c].name+'-core')
+                self.coll[c].smooth_plot(self.coll[c].dbscanSize, plt, colors[i], '-',  'o', self.coll[c].name+'-dbscan')
             elif is_freq == True:
                 plt.plot(self.coll[c].clique['x'], self.coll[c].clique['y'], color=colors[i], linestyle='--', marker=',', label = self.coll[c].name+'-clique')
                 plt.plot(self.coll[c].truss['x'],  self.coll[c].truss['y'],  color=colors[i], linestyle='--', marker='.', label = self.coll[c].name+'-truss')
                 plt.plot(self.coll[c].core['x'],   self.coll[c].core['y'],   color=colors[i], linestyle='-',  marker='v', label = self.coll[c].name+'-core')
                 plt.plot(self.coll[c].dbscan['x'], self.coll[c].dbscan['y'], color=colors[i], linestyle='-',  marker='o', label = self.coll[c].name+'-dbscan')
             i += 1
-        plt.legend( loc='lower right', numpoints = 1, prop={'size':15} )
+        plt.legend( loc=0, numpoints = 1, prop={'size':15} )
         plt.tick_params(labelsize=15)
         plt.xlabel("K", fontsize=20)
         plt.ylabel("number of cohesive subgraphs", fontsize=20)
         plt.tight_layout()
         plt.savefig(ofname)
         plt.close()
+
+    def gplot(self, ofname, is_freq):
+
+        i = 0
+        d = []
+        for c in self.coll: 
+            if is_freq == False:
+                d = self.transformDataGgPlotSize(c, d)
+            elif is_freq == True:
+                d = self.transformDataGgPlot(c, d)
+        f = DataFrame(d)
+        f.to_csv(ofname.replace("png", "csv"), sep=',')
+
+        call(["Rscript", "../../../scripts/data_analysis.R", ofname.replace("png", "csv"), ofname ])
+
+
+
+    def transformDataGgPlotSize(self, c, ret):
+        item = self.coll[c].trussSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'truss', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].cliqueSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'clique', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].coreSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'core', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].dbscanSize
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+        return ret
+
+    def transformDataGgPlot(self, c, ret):
+        item = self.coll[c].truss
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'truss', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].clique
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'clique', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].core
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'core', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].dbscan
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+        return ret
+        
 
 def main(argv):
 
@@ -192,8 +275,10 @@ def main(argv):
         coll = JsonStatsCollections(dir, pfx)
         oname1 = dir + pfx + '.png'
         oname2 = dir + pfx + '_size.png'
-        coll.plot(oname2, False)
-        coll.plot(oname1, True)
+        #coll.plot(oname2, False)
+        #coll.plot(oname1, True)
+        coll.gplot(oname2, False)
+        coll.gplot(oname1, True)
 
 if __name__ == "__main__":
     main(sys.argv)
