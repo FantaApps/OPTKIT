@@ -4,6 +4,7 @@
  * @brief    This is the class for CSR formatted graph. 
  *
  *  MODIFIED   (MM/DD/YY)
+ *  stplaydog   10/06/16 - Fixed a critical time related bug. 
  *  stplaydog   07/24/16 - Add assignment operator 
  *  stplaydog   04/17/16 - Fixed a bug for union find algorithm
  *  stplaydog   04/11/16 - fix a bug in union find algorithm
@@ -42,7 +43,9 @@ void CrimeSTModel::read_data()
 
             n.id = serial_num++;
             strptime(file[i][0].c_str(),"%Y/%m/%d", &tm); 
-            n.coord[2] = tm.tm_mon * 30 + tm.tm_mday;
+            n.coord[2] = ((tm.tm_year-1900)*365) +
+                         tm.tm_mon * 30          +
+                         tm.tm_mday;
             n.coord[0] = stoi(file[i][1]);
             n.coord[1] = stoi(file[i][2]);
             n.freq = stoi(file[i][3]);
