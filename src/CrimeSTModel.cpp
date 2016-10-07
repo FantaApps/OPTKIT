@@ -42,7 +42,9 @@ void CrimeSTModel::read_data()
 
             n.id = serial_num++;
             strptime(file[i][0].c_str(),"%Y/%m/%d", &tm); 
-            n.coord[2] = tm.tm_mon * 30 + tm.tm_mday;
+            n.coord[2] = ((tm.tm_year-1900)*365) +
+                         tm.tm_mon * 30          +
+                         tm.tm_mday;
             n.coord[0] = stoi(file[i][1]);
             n.coord[1] = stoi(file[i][2]);
             n.freq = stoi(file[i][3]);

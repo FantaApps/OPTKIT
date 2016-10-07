@@ -46,6 +46,7 @@ void process_with_context(const string &infile, const string &oufile);
 void process_without_context(const string &infile, const string &oufile);
 
 BoolOption        truss         ('t', "truss",        false, "truss apllication");
+BoolOption        mrdata        ('m', "mrdata",       false, "prepare mapreduce data");
 BoolOption        stmodel       ('s', "stmodel",      false, "stmodel application");
 BoolOption        resume        ('r', "resume",       false, "resume from a previous run");
 BoolOption        bgl           ('b', "bgl",          false, "enable BGL or not");
