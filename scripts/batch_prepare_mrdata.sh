@@ -6,6 +6,7 @@
 # @brief    This script runs experiment for stmodel 
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   10/08/16 - Prepare configuration data
 #   stplaydog   10/07/16 - Support for CHI and NY 
 #   stplaydog   10/06/16 - Creation
 #
