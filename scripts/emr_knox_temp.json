@@ -1,0 +1,18 @@
+[
+{
+    "Name": "JSON Streaming Step",
+    "Type": "STREAMING",
+    "ActionOnFailure": "CONTINUE",
+    "Args": [
+        "-files",
+    "s3://optkit11/mapper.py,s3://optkit11/reducer.py",
+    "-mapper",
+    "mapper.py",
+    "-reducer",
+    "reducer.py",
+    "-input",
+    "s3://optkit11/CONFIG",
+    "-output",
+    "s3://optkit11/CONFIG"]
+}
+]
