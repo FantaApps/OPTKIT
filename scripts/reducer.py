@@ -1,82 +1,73 @@
-#
-# Copy right YMSys, 2015,2016 Zhaoming Yin
-#
-# @brief    This script turns SNAP data into OPTKIT format 
-#           
-#
-#   MODIFIED   (MM/DD/YY)
-#   stplaydog   10/07/16 - Creation
-#
+#!/usr/bin/env python
 
-
-from operator import itemgetter
 import sys
 import os
+import math
 
-os.system("aws s3 cp s3://optkit12/optkit/prepare_graph_conf .")
-
-reader = open("./prepare_graph_conf")
-lines = reader.readlines()
-for line in lines:
-    items = line.split(",")
-    if items[0] == 'x':
-        xstep = items[1]
-        xbin  = items[2]
-    if items[0] == 'y':
-        ystep = items[1]
-        ybin  = items[2]
-    if items[0] == 'z':
-        zstep = items[1]
-        zbin  = items[2]
-
-current_id = None
-id         = None
+step       = 128 
+current_id = -2
+id         = -1
+data       = []
 vet        = 0
-
-data = []
+table_temp = {0:{0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}, \
+              1:{0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}, \
+              2:{0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}, \
+              3:{0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}, \
+              4:{0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}}
+table      = table_temp
 
 def cal_dist(event1, event2):
-    t1    = event1[1].split("/")
-    time1 = (int(t1[0]) - 1900) * 365 + \
-            int(t1[1])*30             + \
-            int(t1[2])
-    x1    = int(event1[2])
-    y1    = int(event1[3])
+    t1    = event1[1] 
+    x1    = event1[2]
+    y1    = event1[3]
 
-    t2    = event2[1].split("/")
-    time2 = (int(t2[0]) - 1900) * 365 + \
-            int(t2[1])*30             + \
-            int(t2[2])
-    x2    = int(event2[2])
-    y2    = int(event2[3])
+    t2    = event2[1] 
+    x2    = event2[2]
+    y2    = event2[3]
 
-    dt = abs(t1-t2)
-    dx = abs(x1-x2)
-    dy = abs(y1-y2)
-
-    ret = dx + (dy/ystep)*xbin + (dz/zstep)*(xbin*ybin)
-    return ret
+    dist = math.sqrt(pow(x1-x2, 2)+ pow(y1,y2, 2))
+    #dist = 1
+    time = abs(t1 - t2)
+    tpos = int(time / 14)
+    dpos = int(dist / 100)
+    if tpos >4:
+        if dpos > 10:
+            table[4][10]+=1
+        else:
+            table[4][dpos]+=1
+    else:
+        if dpos > 10:
+            table[tpos][10]+=1
+        else:
+            table[tpos][dpos]+=1
 
 def cal_dist_mat(cur_id, step, data):
     i = 0
     for i in range(cur_id, len(data), step):
         for item in data:
-            which_bin = cal_dist(data[i], item)
-            print str(which_bin)+","+data[i][0]+","+item[0]
+            cal_dist(data[i], item)
+    for key1 in table:
+        for key2 in table:
+            print str(key1)+","+str(key2)+"\t" +str(table[key1][key2])
 
 for line in sys.stdin:
     line = line.strip()
 
-    items = line.split(",")
-    id    = items[0]
+    if line.find("time") != -1:
+        continue
+    key,value = line.split("\t", 1)
+    items = value.split(",")
+    id    = int(key)
 
     if current_id == id:
-        data.append([vet, items[1], items[2], items[3]])
+        data.append([vet, int(items[0]), int(items[1]), int(items[2])])
         vet += 1
     else:
-        if current_id:
-            cal_dist_mat(cur_id, step, data)
+        if current_id != -2:
+            cal_dist_mat(current_id, step, data)
+            data  = []
+            table = table_temp
         current_id = id
 
 if current_id == id:
-    cal_dist_mat(cur_id, step, data)
+    cal_dist_mat(current_id, step, data)

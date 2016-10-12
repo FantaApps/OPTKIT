@@ -13,6 +13,6 @@
     "-input",
     "s3://optkit11/CONFIG",
     "-output",
-    "s3://optkit11/CONFIG"]
+    "s3://optkit11/CONFIG_RES"]
 }
 ]

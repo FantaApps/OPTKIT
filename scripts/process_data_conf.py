@@ -12,7 +12,7 @@ import numpy as np
 
 class DataDescribe:
 
-    def __init__(self, file, outfile):
+    def __init__(self, file, outfile, step):
         reader = open(file)
         writer = open(outfile, "w")
         lines  = reader.readlines()
@@ -37,6 +37,7 @@ class DataDescribe:
         x_max = np.percentile(x_bin, 99) 
         y_min = np.percentile(y_bin, 1)
         y_max = np.percentile(y_bin, 99)
+        writer.write("step," +step)
         writer.write("t,10," +str(int((t_max-t_min)/10))+"\n")
         writer.write("x,100,"+str(int((x_max-x_min)/100))+"\n")
         writer.write("y,100,"+str(int((y_max-y_min)/100))+"\n")
@@ -44,7 +45,7 @@ class DataDescribe:
         writer.close()
 
 def main(argv):
-    ds = DataDescribe(argv[1], argv[2])
+    ds = DataDescribe(argv[1], argv[2], argv[3])
 
 if __name__ == "__main__":
     main(sys.argv)
