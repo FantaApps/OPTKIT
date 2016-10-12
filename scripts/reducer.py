@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+#
+# Copy right YMSys, 2015,2016 Zhaoming Yin
+#
+# @brief    This script turns SNAP data into OPTKIT format 
+#           
+#
+#   MODIFIED   (MM/DD/YY)
+#   stplaydog   10/11/16 - Bug fixing 
+#   stplaydog   10/10/16 - Creation
+#
+
+
 import sys
 import os
 import math
@@ -49,6 +61,8 @@ def cal_dist_mat(cur_id, step, data):
     for key1 in table:
         for key2 in table:
             print str(key1)+","+str(key2)+"\t" +str(table[key1][key2])
+    data  = []
+    table = table_temp
 
 for line in sys.stdin:
     line = line.strip()
@@ -65,8 +79,6 @@ for line in sys.stdin:
     else:
         if current_id != -2:
             cal_dist_mat(current_id, step, data)
-            data  = []
-            table = table_temp
         current_id = id
 
 if current_id == id:

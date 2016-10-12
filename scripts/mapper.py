@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+#
+# Copy right YMSys, 2015,2016 Zhaoming Yin
+#
+# @brief    This script turns SNAP data into OPTKIT format 
+#           
+#
+#   MODIFIED   (MM/DD/YY)
+#   stplaydog   10/11/16 - Bug fixing 
+#   stplaydog   10/10/16 - Creation
+#
+
+
 import sys
 import os
 
