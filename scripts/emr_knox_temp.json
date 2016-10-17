@@ -13,6 +13,10 @@
     "-input",
     "s3://optkit11/CONFIG",
     "-output",
-    "s3://optkit11/CONFIG_RES_SEQ"]
+    "s3://optkit11/CONFIG_RES_SEQ",
+    "-numReduceTasks",
+    "128",
+    "-jobconf",
+    "mapred.task.timeout=1000000000"]
 }
 ]
