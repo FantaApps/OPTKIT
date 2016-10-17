@@ -12,7 +12,7 @@
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DATA_HOME=${SCRIPT_HOME}/../data/
 CONFIG=$1
-SEQ=$1
+SEQ=$2
 
 # upload according files to s3
 aws s3 cp ${SCRIPT_HOME}/mapper.py  s3://optkit11/
