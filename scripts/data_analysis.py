@@ -9,6 +9,7 @@
 #           
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   10/21/16 - Clustering coefficient analysis
 #   stplaydog   08/27/16 - Add data plot functions 
 #   stplaydog   08/20/16 - Implementation 
 #   stplaydog   08/07/16 - Creation
@@ -79,6 +80,16 @@ class JsonStats:
         self.trussSize   = self.getSizeMean(self.truss,  self.trussSize)
         self.coreSize    = self.getSizeMean(self.core,   self.coreSize)
         self.dbscanSize  = self.getSizeMean(self.dbscan, self.dbscanSize)
+        
+        self.cliqueCoe   = self.reduce(data["content"]["graph property"]["clique_coe"], False)
+        self.trussCoe    = self.reduce(data["content"]["graph property"]["truss_coe"],  False)
+        self.coreCoe     = self.reduce(data["content"]["graph property"]["dbscan_coe"], False)
+        self.dbscanCoe   = self.reduce(data["content"]["graph property"]["core_coe"],   False)
+
+        self.cliqueCoe   = self.getSizeMean(self.clique, self.cliqueCoe)
+        self.trussCoe    = self.getSizeMean(self.truss,  self.trussCoe)
+        self.coreCoe     = self.getSizeMean(self.core,   self.coreCoe)
+        self.dbscanCoe   = self.getSizeMean(self.dbscan, self.dbscanCoe)
 
 
     def reduce(self, stats_str, if_freq):
@@ -213,6 +224,26 @@ class JsonStatsCollections:
         item = self.coll[c].dbscanSize
         for i in range(0, len(item['x'])):
             trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+            
+        item = self.coll[c].trussCoe
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'truss_coe', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].cliqueCoe
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'clique_coe', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].coreCoe
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'core_coe', 'x': item['x'][i], 'y' : item['y'][i]}
+            ret.append(trip)
+
+        item = self.coll[c].dbscanCoe
+        for i in range(0, len(item['x'])):
+            trip = {'data': self.coll[c].name+'dbscan_coe', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
         return ret
 
