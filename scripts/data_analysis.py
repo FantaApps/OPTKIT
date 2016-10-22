@@ -52,8 +52,9 @@ class JsonStats:
         with open(file) as data_file:    
             data = json.load(data_file)
         
-        name_items       = basename(file).replace(".json", "").split("_")
-        self.name        = "long_" if name_items[2] == "200" else "short_" 
+        #name_items       = basename(file).replace(".json", "").split("_")
+        #self.name        = "long_" if name_items[2] == "200" else "short_" 
+        self.name        = "" 
         self.numV        = data["content"]["graph property"]["numV"] 
         self.numE        = data["content"]["graph property"]["numE"]
         self.numCC       = data["content"]["graph property"]["numCC"] 
@@ -81,12 +82,10 @@ class JsonStats:
         self.coreSize    = self.getSizeMean(self.core,   self.coreSize)
         self.dbscanSize  = self.getSizeMean(self.dbscan, self.dbscanSize)
         
-        self.cliqueCoe   = self.reduce(data["content"]["graph property"]["clique_coe"], False)
         self.trussCoe    = self.reduce(data["content"]["graph property"]["truss_coe"],  False)
         self.coreCoe     = self.reduce(data["content"]["graph property"]["dbscan_coe"], False)
         self.dbscanCoe   = self.reduce(data["content"]["graph property"]["core_coe"],   False)
 
-        self.cliqueCoe   = self.getSizeMean(self.clique, self.cliqueCoe)
         self.trussCoe    = self.getSizeMean(self.truss,  self.trussCoe)
         self.coreCoe     = self.getSizeMean(self.core,   self.coreCoe)
         self.dbscanCoe   = self.getSizeMean(self.dbscan, self.dbscanCoe)
@@ -103,12 +102,12 @@ class JsonStats:
                 if if_freq:
                     stats_item[int(pair[0])] += 1 
                 else:
-                    stats_item[int(pair[0])] += int(pair[1])
+                    stats_item[int(pair[0])] += float(pair[1])
             else:
                 if if_freq:
                     stats_item[int(pair[0])] = 1 
                 else:
-                    stats_item[int(pair[0])] = int(pair[1])
+                    stats_item[int(pair[0])] = float(pair[1])
         X = [0] * len(stats_item)
         Y = [0] * len(stats_item)
         i=0
@@ -163,7 +162,8 @@ class JsonStatsCollections:
                 if file.find(prefix) != -1:
                     stats = JsonStats(file)  
                     self.coll[file] = stats
-            except:
+            except Exception, e:
+                print e
                 print "Data Corruption in " + file
 
     def plot(self, ofname, is_freq):
@@ -194,11 +194,14 @@ class JsonStatsCollections:
         i = 0
         d = []
         for c in self.coll: 
-            if is_freq == False:
-                d = self.transformDataGgPlotSize(c, d)
-            elif is_freq == True:
+            if is_freq == 1:
                 d = self.transformDataGgPlot(c, d)
+            elif is_freq == 2:
+                d = self.transformDataGgPlotSize(c, d)
+            elif is_freq == 3:
+                d = self.transformDataGgPlotCoe(c, d)
         f = DataFrame(d)
+        print ofname
         f.to_csv(ofname.replace("png", "csv"), sep=',')
 
         call(["Rscript", "../../../scripts/data_analysis.R", ofname.replace("png", "csv"), ofname ])
@@ -226,14 +229,10 @@ class JsonStatsCollections:
             trip = {'data': self.coll[c].name+'dbscan', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
             
+    def transformDataGgPlotCoe(self, c, ret):
         item = self.coll[c].trussCoe
         for i in range(0, len(item['x'])):
             trip = {'data': self.coll[c].name+'truss_coe', 'x': item['x'][i], 'y' : item['y'][i]}
-            ret.append(trip)
-
-        item = self.coll[c].cliqueCoe
-        for i in range(0, len(item['x'])):
-            trip = {'data': self.coll[c].name+'clique_coe', 'x': item['x'][i], 'y' : item['y'][i]}
             ret.append(trip)
 
         item = self.coll[c].coreCoe
@@ -306,10 +305,12 @@ def main(argv):
         coll = JsonStatsCollections(dir, pfx)
         oname1 = dir + pfx + '.png'
         oname2 = dir + pfx + '_size.png'
+        oname3 = dir + pfx + '_coe.png'
         #coll.plot(oname2, False)
         #coll.plot(oname1, True)
-        coll.gplot(oname2, False)
-        coll.gplot(oname1, True)
+        coll.gplot(oname1, 1)
+        coll.gplot(oname2, 2)
+        coll.gplot(oname3, 3)
 
 if __name__ == "__main__":
     main(sys.argv)

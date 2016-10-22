@@ -7,6 +7,7 @@
 #           
 #
 #   MODIFIED   (MM/DD/YY)
+#   stplaydog   10/16/16 - Exception handling, should file a bug on this. 
 #   stplaydog   10/11/16 - Bug fixing 
 #   stplaydog   10/10/16 - Creation
 #
