@@ -40,7 +40,6 @@ TEST(SmallCrimeDataTest_1, Success)
     int max1[3] = {2,2,1};
     int max2[3] = {2,2,2};
     int max3[3] = {2,2,3};
-    exit(1);
     
     ASSERT_EQ(stm.query_cont(min, max), 4);
     ASSERT_EQ(stm.query_cont(min, max1), 9);
