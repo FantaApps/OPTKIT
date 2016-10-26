@@ -49,6 +49,8 @@ class LogStats:
         self.build_edge_list    = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
         self.build_edge_listCC  = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
         self.compute_truss      = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
+        self.compute_core       = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
+        self.compute_dbscan     = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
         self.compute_graph_prop = [SetState.UNSET, SetState.UNSET, SetState.ZERO]
         self.done_all           = False
 
@@ -68,11 +70,17 @@ class LogStats:
                 self.setEndTime(self.build_edge_listCC, line)
             elif re.search("Computing the .*th CC", line):
                 self.setStartTime(self.compute_truss, line)
-                if line.split(" ")[7].replace("th", "") != "0":
+                if line.split(" ")[6].replace("th", "") != "0":
                     self.setEndTime(self.compute_graph_prop, line)
+            elif re.search("Start performing core decomposition", line):
+                self.setStartTime(self.compute_core, line)
+                self.setEndTime(self.compute_truss, line)
+            elif re.search("Start performing dbscan decomposition", line):
+                self.setStartTime(self.compute_dbscan, line)
+                self.setEndTime(self.compute_core, line)
             elif re.search("Start performing graph computations", line):
                 self.setStartTime(self.compute_graph_prop, line)
-                self.setEndTime(self.compute_truss, line)
+                self.setEndTime(self.compute_dbscan, line)
             elif re.search("Finishing OPTKIT", line):
                 self.setEndTime(self.compute_graph_prop, line)
                 self.done_all = True
@@ -135,6 +143,8 @@ class LogStats:
                str(self.build_edge_list[TimerType.SUMMARY])    + "," + \
                str(self.build_edge_listCC[TimerType.SUMMARY])  + "," + \
                str(self.compute_truss[TimerType.SUMMARY])      + "," + \
+               str(self.compute_core[TimerType.SUMMARY])       + "," + \
+               str(self.compute_dbscan[TimerType.SUMMARY])     + "," + \
                str(self.compute_graph_prop[TimerType.SUMMARY])
 
 def main(argv):
